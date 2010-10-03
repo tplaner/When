@@ -1,0 +1,119 @@
+-----------------------------------
+When 0.1
+
+Date/Calendar recursion library for PHP 5.3+
+
+by Thomas Planer
+
+-----------------------------------
+About:
+
+After a fairly comprehensive search I couldn't find a PHP library which could handle recursive dates.
+There is: http://phpicalendar.org/ however it would have been extremely difficult to extract the recursion
+portion of the script from the application.
+
+Oddly, there are extremely good date recursion libraries for both Ruby and Python:
+	
+Ruby:
+ice_cube: http://github.com/seejohnrun/ice_cube
+
+Python:
+dateutil: http://labix.org/python-dateutil
+
+Since I couldn't find an equivalent for PHP I created When.
+
+-----------------------------------
+Running Unit Tests:
+
+Tests were written in PHPUnit (http://www.phpunit.de/)
+
+Initial set of tests were created from the examples found within RFC5545 (http://tools.ietf.org/html/rfc5545).
+
+-----------------------------------
+Current Support
+
+Currently the script should support the following:
+
+Frequencies:
+yearly
+monthly
+weekly
+daily
+
+Limits:
+bymonth
+byweekno
+byyearday
+bymonthday
+byday
+bysetpos
+
+-----------------------------------
+Examples: (take a look at the unit tests for more examples)
+
+The next 5 occurrences of Friday the 13th:
+	
+	$r = new When();
+	$r->recur(new DateTime(), 'monthly')
+	  ->count(5)
+	  ->byday(array('FR'))
+	  ->bymonthday(array(13));
+	
+	while($result = $r->next())
+	{
+		echo $result->format('c') . '<br />';
+	}
+
+Every four years, the first Tuesday after a Monday in November, for the next 20 years (U.S. Presidential Election day):
+
+	// this is the next election date
+	$start = new DateTime('2012-09-06');
+	
+	$r = new When();
+	$r->recur($start, 'yearly')
+	  ->until($start->modify('+20 years'))
+	  ->interval(4)
+	  ->bymonth(array(11))
+	  ->byday(array('TU'))
+	  ->bymonthday(array(2,3,4,5,6,7,8));
+
+	while($result = $r->next())
+	{
+		echo $result->format('c') . '<br />';
+	}
+
+Warnings:
+* If you submit a pattern which has no results the script will loop infinitely.
+* If you do not specify an end date (until) or a count for your pattern you must limit the number of results within your script to avoid an infinite loop.
+
+-----------------------------------
+Contributing:
+
+If you would like to contribute please create a fork and upon making changes submit a pull request.
+
+Please ensure 100% pass of unit tests before submitting a pull request.
+
+There are 39 tests and 692 assertions currently.
+
+>>> phpunit --verbose Tests
+PHPUnit 3.4.15 by Sebastian Bergmann.
+
+Tests
+ When_Core_Tests
+ ..
+
+ When_Daily_Test
+ .....
+
+ When_Monthly_Test
+ ..............
+
+ When_Weekly_Test
+ ........
+
+ When_Yearly_Test
+ ..........
+
+Time: 1 second, Memory: 5.00Mb
+
+OK (39 tests, 692 assertions)

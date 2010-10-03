@@ -567,9 +567,6 @@ class When
 		}
 	}
 	
-	/**
-	 * @todo Clean this up
-	 */
 	public function next()
 	{		
 		// check the counter is set
