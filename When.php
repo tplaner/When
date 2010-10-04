@@ -31,8 +31,6 @@ class When
 	protected $gobyday;
 	protected $byday;
 	
-	protected $bysecond;
-	
 	protected $gobysetpos;
 	protected $bysetpos;
 		
@@ -55,30 +53,22 @@ class When
 	 */
 	public function __construct()
 	{
-		// no initial frequency
 		$this->frequency = null;
 		
 		$this->gobymonth = false;
-		// setup the valid months
 		$this->bymonth = range(1,12);
 		
 		$this->gobymonthday = false;
-		// setup the valid days
 		$this->bymonthday = range(1,31);
 		
 		$this->gobyday = false;
 		// setup the valid week days (0 = sunday)
 		$this->byday = range(0,6);
 		
-		// not currently supported
-		$this->bysecond = range(0,60);
-		
 		$this->gobyyearday = false;
-		// setup the range for year days
 		$this->byyearday = range(0,366);
 		
 		$this->gobysetpos = false;
-		// setup the range for valid position days
 		$this->bysetpos = range(1,366);
 		
 		$this->gobyweekno = false;
@@ -89,7 +79,7 @@ class When
 		
 		// this will be set if a count() is specified
 		$this->count = 0;
-		// this will keep track of how many results we returned
+		// how many *valid* results we returned
 		$this->counter = 0;
 		
 		// max date we'll return
@@ -101,16 +91,12 @@ class When
 		// what day does the week start on? (0 = sunday)
 		$this->wkst = 0;
 		
-		// valid weekdays
 		$this->valid_week_days = array('SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA');
 		
-		// valid frequencies
 		$this->valid_frequency = array('SECONDLY', 'MINUTELY', 'HOURLY', 'DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY');
 	}
 	
 	/**
-	 * Start a recursion
-	 *
 	 * @param DateTime|string $start_date of the recursion - also is the first return value.
 	 * @param string $frequency of the recrusion, valid frequencies: secondly, minutely, hourly, daily, weekly, monthly, yearly
 	 */
@@ -146,7 +132,7 @@ class When
 		return $this;
 	}
 	
-	// number of times to recur
+	//max number of items to return based on the pattern
 	public function count($count)
 	{
 		$this->count = (int)$count;
@@ -154,6 +140,7 @@ class When
 		return $this;
 	}
 	
+	// how often the recurrence rule repeats
 	public function interval($interval)
 	{
 		$this->interval = (int)$interval;
@@ -161,6 +148,7 @@ class When
 		return $this;
 	}
 	
+	// starting day of the week
 	public function wkst($day)
 	{
 		switch($day)
@@ -191,6 +179,7 @@ class When
 		return $this;
 	}
 	
+	// max date
 	public function until($end_date)
 	{		
 		try
@@ -211,13 +200,12 @@ class When
 		
 		return $this;
 	}
-	
+
 	public function bymonth($months)
-	{
-		$this->gobymonth = true;
-		
+	{	
 		if(is_array($months))
 		{
+			$this->gobymonth = true;
 			$this->bymonth = $months;
 		}
 		
@@ -225,11 +213,10 @@ class When
 	}
 	
 	public function bymonthday($days)
-	{
-		$this->gobymonthday = true;
-		
+	{	
 		if(is_array($days))
 		{
+			$this->gobymonthday = true;
 			$this->bymonthday = $days;
 		}
 		
@@ -564,52 +551,6 @@ class When
 		}
 	}
 	
-	public function next()
-	{		
-		// check the counter is set
-		if($this->count !== 0)
-		{
-			if($this->counter >= $this->count)
-			{
-				return false;
-			}
-		}
-		
-		// create initial set of suggested dates
-		if(count($this->suggestions) == 0)
-		{
-			$this->create_suggestions();
-		}
-		
-		// loop through the suggested dates
-		while(count($this->suggestions) > 0)
-		{
-			// get the first one on the array
-			$try_date = array_shift($this->suggestions);
-			
-			// make sure the date doesn't exceed the max date
-			if($try_date > $this->end_date)
-			{
-				return false;
-			}
-			
-			// make sure it falls within the allowed days
-			if($this->valid_date($try_date) === true)
-			{
-				$this->counter++;
-				return $try_date;
-			}
-			else
-			{
-				// we might be out of suggested days, so load some more
-				if(count($this->suggestions) == 0)
-				{
-					$this->create_suggestions();
-				}
-			}
-		}
-	}
-	
 	protected function valid_date($date)
 	{
 		$year = $date->format('Y');
@@ -654,6 +595,53 @@ class When
 		else
 		{
 			return false;
+		}
+	}
+
+	// return the next valid DateTime object which matches the pattern and follows the rules
+	public function next()
+	{		
+		// check the counter is set
+		if($this->count !== 0)
+		{
+			if($this->counter >= $this->count)
+			{
+				return false;
+			}
+		}
+		
+		// create initial set of suggested dates
+		if(count($this->suggestions) == 0)
+		{
+			$this->create_suggestions();
+		}
+		
+		// loop through the suggested dates
+		while(count($this->suggestions) > 0)
+		{
+			// get the first one on the array
+			$try_date = array_shift($this->suggestions);
+			
+			// make sure the date doesn't exceed the max date
+			if($try_date > $this->end_date)
+			{
+				return false;
+			}
+			
+			// make sure it falls within the allowed days
+			if($this->valid_date($try_date) === true)
+			{
+				$this->counter++;
+				return $try_date;
+			}
+			else
+			{
+				// we might be out of suggested days, so load some more
+				if(count($this->suggestions) == 0)
+				{
+					$this->create_suggestions();
+				}
+			}
 		}
 	}
 }
