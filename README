@@ -8,7 +8,7 @@ by Thomas Planer
 -----------------------------------
 About:
 
-After a fairly comprehensive search I couldn't find a PHP library which could handle recursive dates.
+After a comprehensive search I couldn't find a PHP library which could handle recursive dates.
 There is: http://phpicalendar.org/ however it would have been extremely difficult to extract the recursion
 portion of the script from the application.
 
