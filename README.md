@@ -1,55 +1,56 @@
------------------------------------
-When 0.1
-
+##When 0.1
 Date/Calendar recursion library for PHP 5.3+
 
 by Thomas Planer
 
------------------------------------
-About:
-
+---
+###About
 After a comprehensive search I couldn't find a PHP library which could handle recursive dates.
-There is: http://phpicalendar.org/ however it would have been extremely difficult to extract the recursion
+There is: [http://phpicalendar.org/][6] however it would have been extremely difficult to extract the recursion
 portion of the script from the application.
 
 Oddly, there are extremely good date recursion libraries for both Ruby and Python:
 	
-Ruby:
-ice_cube: http://github.com/seejohnrun/ice_cube
+Ruby: [http://github.com/seejohnrun/ice_cube][1]
 
-Python:
-dateutil: http://labix.org/python-dateutil
+Python: [http://labix.org/python-dateutil][2]
 
-Since I couldn't find an equivalent for PHP I created When.
+Since I couldn't find an equivalent for PHP I created [When][3].
 
------------------------------------
-Running Unit Tests:
+---
+###Unit Tests
 
-Tests were written in PHPUnit (http://www.phpunit.de/)
+Tests were written in PHPUnit ([http://www.phpunit.de/][4])
 
-Initial set of tests were created from the examples found within RFC5545 (http://tools.ietf.org/html/rfc5545).
+Initial set of tests were created from the examples found within RFC5545 ([http://tools.ietf.org/html/rfc5545][5]).
 
 -----------------------------------
-Current Support
+###Documentation
 
-Currently the script should support the following:
+Initializing the class
 
-Frequencies:
-yearly
-monthly
-weekly
-daily
+    $when = new When();
 
-Limits:
-bymonth
-byweekno
-byyearday
-bymonthday
-byday
-bysetpos
+Once you have initialized the class you can create a recurring event by calling on the recur method
 
------------------------------------
-Examples: (take a look at the unit tests for more examples)
+    $when->recur(<DateTime object|valid Date string>, <yearly|monthly|weekly|daily>);
+
+You can limit the number of dates to find by specifying a limit():
+
+	$when->limit(<int>);
+
+Alternatively you can specify an end date:
+
+	$when->until(<DateTime object|valid Date String>);
+
+Note: the end date does not have to match the recurring pattern.
+
+Also note that the script will stop returning results when either the limit or the end date is met.
+
+More documentation to come, please take a look at the unit tests for an understanding of what the class is capable of.
+
+---
+###Examples (take a look at the unit tests for more examples)
 
 The next 5 occurrences of Friday the 13th:
 	
@@ -82,12 +83,13 @@ Every four years, the first Tuesday after a Monday in November, for the next 20 
 		echo $result->format('c') . '<br />';
 	}
 
-Warnings:
+**Warnings:**
+
 * If you submit a pattern which has no results the script will loop infinitely.
 * If you do not specify an end date (until) or a count for your pattern you must limit the number of results within your script to avoid an infinite loop.
 
------------------------------------
-Contributing:
+---
+###Contributing
 
 If you would like to contribute please create a fork and upon making changes submit a pull request.
 
@@ -95,30 +97,31 @@ Please ensure 100% pass of unit tests before submitting a pull request.
 
 There are 39 tests and 692 assertions currently.
 
->>> phpunit --verbose Tests
-PHPUnit 3.4.15 by Sebastian Bergmann.
+    >>> phpunit --verbose Tests
+    PHPUnit 3.4.15 by Sebastian Bergmann.
+    
+    Tests
+     When_Core_Tests
+     ..
+    
+     When_Daily_Test
+     .....
+    
+     When_Monthly_Test
+     ..............
+    
+     When_Weekly_Test
+     ........
+    
+     When_Yearly_Test
+     ..........
+    
+    Time: 1 second, Memory: 5.00Mb
+    
+    OK (39 tests, 692 assertions)
 
-Tests
- When_Core_Tests
- ..
-
- When_Daily_Test
- .....
-
- When_Monthly_Test
- ..............
-
- When_Weekly_Test
- ........
-
- When_Yearly_Test
- ..........
-
-Time: 1 second, Memory: 5.00Mb
-
-OK (39 tests, 692 assertions)
------------------------------------
-License:
+---
+###License
 
 Copyright (c) 2010 Thomas Planer
 
@@ -139,3 +142,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+
+  [1]: http://github.com/seejohnrun/ice_cube
+  [2]: http://labix.org/python-dateutil
+  [3]: http://github.com/tplaner/When
+  [4]: http://www.phpunit.de/
+  [5]: http://tools.ietf.org/html/rfc5545
+  [6]: http://phpicalendar.org/
