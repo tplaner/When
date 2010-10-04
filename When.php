@@ -44,14 +44,8 @@ class When
 	protected $goenddate;
 	
 	protected $interval;
-	protected $interval_count;
-	
-	protected $pos_count;
 	
 	protected $wkst;
-
-	//protected $inf_counter;
-	//protected $inf_count;
 	
 	protected $valid_week_days;
 	protected $valid_frequency;
@@ -61,46 +55,51 @@ class When
 	 */
 	public function __construct()
 	{
-		$this->frequency = 1;
+		// no initial frequency
+		$this->frequency = null;
 		
 		$this->gobymonth = false;
+		// setup the valid months
 		$this->bymonth = range(1,12);
 		
 		$this->gobymonthday = false;
+		// setup the valid days
 		$this->bymonthday = range(1,31);
 		
 		$this->gobyday = false;
+		// setup the valid week days (0 = sunday)
 		$this->byday = range(0,6);
 		
+		// not currently supported
 		$this->bysecond = range(0,60);
 		
-		
 		$this->gobyyearday = false;
+		// setup the range for year days
 		$this->byyearday = range(0,366);
 		
 		$this->gobysetpos = false;
+		// setup the range for valid position days
 		$this->bysetpos = range(1,366);
+		
 		$this->gobyweekno = false;
+		// setup the range for valid weeks
 		$this->byweekno = range(0,54);
 		
 		$this->suggestions = array();
 		
+		// this will be set if a count() is specified
 		$this->count = 0;
+		// this will keep track of how many results we returned
 		$this->counter = 0;
 		
 		// max date we'll return
-		// will also prevent an infinite loop
 		$this->end_date = new DateTime('9999-12-31');
 		
+		// the interval to increase the pattern by
 		$this->interval = 1;
-		$this->interval_count = 0;
 		
-		$this->pos_count = 0;
-		
+		// what day does the week start on? (0 = sunday)
 		$this->wkst = 0;
-
-		//$this->inf_count = 10000;
-		//$this->inf_counter = 0;
 		
 		// valid weekdays
 		$this->valid_week_days = array('SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA');
@@ -407,9 +406,7 @@ class When
 							$day_from_end_of_month = $date_time->format('t') + 1 - $_mday;
 							
 							if(in_array($occur, $this->byday) || in_array($occur_zero, $this->byday) || in_array($occur_neg, $this->byday))
-							{
-								$this->pos_count++;
-								
+							{								
 								$tmp_array[] = clone $date_time;
 							}
 						}
