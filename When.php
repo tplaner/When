@@ -100,7 +100,7 @@ class When
 	 * @param DateTime|string $start_date of the recursion - also is the first return value.
 	 * @param string $frequency of the recrusion, valid frequencies: secondly, minutely, hourly, daily, weekly, monthly, yearly
 	 */
-	public function recur($start_date, $frequency)
+	public function recur($start_date, $frequency = "daily")
 	{
 		try
 		{
@@ -110,6 +110,8 @@ class When
 			}
 			else
 			{
+				// timestamps within the RFC have a 'Z' at the end of them, remove this.
+				$start_date = trim($start_date, 'Z');
 				$this->start_date = new DateTime($start_date);
 			}
 			
@@ -120,6 +122,13 @@ class When
 			throw new InvalidArgumentException('Invalid start date DateTime: ' . $e);
 		}
 		
+		$this->freq($frequency);
+		
+		return $this;
+	}
+
+	public function freq($frequency)
+	{
 		if(in_array(strtoupper($frequency), $this->valid_frequency))
 		{
 			$this->frequency = strtoupper($frequency);
@@ -128,7 +137,66 @@ class When
 		{
 			throw new InvalidArgumentException('Invalid frequency type.');
 		}
-		
+
+		return $this;
+	}
+
+	// accepts an rrule directly
+	public function rrule($rrule)
+	{
+		$parts = explode(";", $rrule);
+
+		foreach($parts as $part)
+		{
+			list($rule, $param) = explode("=", $part);
+
+			$rule = strtoupper($rule);
+			$param = strtoupper($param);
+
+			switch($rule)
+			{
+				case "FREQ":
+					$this->frequency = $param;
+					break;
+				case "UNTIL":
+					$this->until($param);
+					break;
+				case "COUNT":
+					$this->count($param);
+					break;
+				case "INTERVAL":
+					$this->interval($param);
+					break;
+				case "BYDAY":
+					$params = explode(",", $param);
+					$this->byday($params);
+					break;
+				case "BYMONTHDAY":
+					$params = explode(",", $param);
+					$this->bymonthday($params);
+					break;
+				case "BYYEARDAY":
+					$params = explode(",", $param);
+					$this->byyearday($params);
+					break;
+				case "BYWEEKNO":
+					$params = explode(",", $param);
+					$this->byweekno($params);
+					break;
+				case "BYMONTH":
+					$params = explode(",", $param);
+					$this->bymonth($params);
+					break;
+				case "BYSETPOS":
+					$params = explode(",", $param);
+					$this->bysetpos($params);
+					break;
+				case "WKST":
+					$this->wkst($param);
+					break;
+			}
+		}
+
 		return $this;
 	}
 	
@@ -190,6 +258,8 @@ class When
 			}
 			else
 			{
+				// timestamps within the RFC have a 'Z' at the end of them, remove this.
+				$end_date = trim($end_date, 'Z');
 				$this->end_date = new DateTime($end_date);
 			}
 		}

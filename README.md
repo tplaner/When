@@ -1,4 +1,4 @@
-##When 0.1
+##When v0.2
 Date/Calendar recursion library for PHP 5.3+
 
 by Thomas Planer
@@ -45,7 +45,7 @@ Alternatively you can specify an end date:
 
 Note: the end date does not have to match the recurring pattern.
 
-Also note that the script will stop returning results when either the limit or the end date is met.
+Note: the script will stop returning results when either the limit or the end date is met.
 
 More documentation to come, please take a look at the unit tests for an understanding of what the class is capable of.
 
@@ -83,6 +83,16 @@ Every four years, the first Tuesday after a Monday in November, for the next 20 
 		echo $result->format('c') . '<br />';
 	}
 
+You can now pass raw RRULE's to the class:
+
+	$r = new When();
+	$r->recur('19970922T090000')->rrule('FREQ=MONTHLY;COUNT=6;BYDAY=-2MO');
+
+	while($result = $r->next())
+	{
+		echo $result->format('c') . '<br />';
+	}
+
 **Warnings:**
 
 * If you submit a pattern which has no results the script will loop infinitely.
@@ -95,30 +105,42 @@ If you would like to contribute please create a fork and upon making changes sub
 
 Please ensure 100% pass of unit tests before submitting a pull request.
 
-There are 39 tests and 692 assertions currently.
+There are 76 tests, 1382 assertions currently.
 
-    >>> phpunit --verbose Tests
-    PHPUnit 3.4.15 by Sebastian Bergmann.
-    
-    Tests
-     When_Core_Tests
-     ..
-    
-     When_Daily_Test
-     .....
-    
-     When_Monthly_Test
-     ..............
-    
-     When_Weekly_Test
-     ........
-    
-     When_Yearly_Test
-     ..........
-    
-    Time: 1 second, Memory: 5.00Mb
-    
-    OK (39 tests, 692 assertions)
+    >>>phpunit --verbose Tests
+	PHPUnit 3.4.15 by Sebastian Bergmann.
+
+	Tests
+	When_Core_Tests
+	..
+
+	When_Daily_Rrule_Test
+	.....
+
+	When_Daily_Test
+	.....
+
+	When_Monthly_Rrule_Test
+	..............
+
+	When_Monthly_Test
+	..............
+
+	When_Weekly_Rrule_Test
+	........
+
+	When_Weekly_Test
+	........
+
+	When_Rrule_Test
+	..........
+
+	When_Yearly_Test
+	..........
+
+	Time: 1 second, Memory: 6.00Mb
+
+	OK (76 tests, 1382 assertions)
 
 ---
 ###License
