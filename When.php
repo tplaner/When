@@ -681,7 +681,7 @@ class When
 		}
 		
 		// create initial set of suggested dates
-		if(count($this->suggestions) == 0)
+		if(count($this->suggestions) === 0)
 		{
 			$this->create_suggestions();
 		}
@@ -707,7 +707,7 @@ class When
 			else
 			{
 				// we might be out of suggested days, so load some more
-				if(count($this->suggestions) == 0)
+				if(count($this->suggestions) === 0)
 				{
 					$this->create_suggestions();
 				}
