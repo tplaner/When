@@ -144,6 +144,9 @@ class When
 	// accepts an rrule directly
 	public function rrule($rrule)
 	{
+		// strip off a trailing semi-colon
+		$rrule = trim($rrule, ";");
+		
 		$parts = explode(";", $rrule);
 
 		foreach($parts as $part)
