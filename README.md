@@ -105,42 +105,45 @@ If you would like to contribute please create a fork and upon making changes sub
 
 Please ensure 100% pass of unit tests before submitting a pull request.
 
-There are 76 tests, 1382 assertions currently.
+There are 78 tests, 1410 assertions currently.
 
-    >>>phpunit --verbose Tests
+    >>>phpunit --verbose tests
 	PHPUnit 3.4.15 by Sebastian Bergmann.
 
-	Tests
-	When_Core_Tests
-	..
+	tests
+	 When_Core_Tests
+	 ..
 
-	When_Daily_Rrule_Test
-	.....
+	 When_Daily_Rrule_Test
+	 .....
 
-	When_Daily_Test
-	.....
+	 When_Daily_Test
+	 .....
 
-	When_Monthly_Rrule_Test
-	..............
+	 When_Iterator_Tests
+	 ..
 
-	When_Monthly_Test
-	..............
+	 When_Monthly_Rrule_Test
+	 ..............
 
-	When_Weekly_Rrule_Test
-	........
+	 When_Monthly_Test
+	 ..............
 
-	When_Weekly_Test
-	........
+	 When_Weekly_Rrule_Test
+	 ........
 
-	When_Rrule_Test
-	..........
+	 When_Weekly_Test
+	 ........
 
-	When_Yearly_Test
-	..........
+	 When_Rrule_Test
+	 ..........
 
-	Time: 1 second, Memory: 6.00Mb
+	 When_Yearly_Test
+	 ..........
 
-	OK (76 tests, 1382 assertions)
+	Time: 2 seconds, Memory: 6.00Mb
+
+	OK (78 tests, 1410 assertions)
 
 ---
 ###License
