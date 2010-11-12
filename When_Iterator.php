@@ -39,7 +39,7 @@ class When_Iterator extends When implements Iterator
 
 	public function rewind()
 	{
-		if($cache)
+		if($this->cache)
 		{
 			$this->position = 0;
 		}
