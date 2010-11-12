@@ -491,7 +491,8 @@ class When
 				if($_day >= 0)
 				{
 					$_day--;
-					$this->suggestions[] = DateTime::createFromFormat('Y-z H:i:s', $year . '-' . $_day . ' ' . $timestamp);	
+                                        $_time = strtotime('+' . $_day . ' days',mktime(0, 0, 0, 1, 1, $year));
+					$this->suggestions[] = new Datetime(date('Y-m-d',$_time).' '.$timestamp);
 				}
 				else
 				{
@@ -501,7 +502,8 @@ class When
 					{
 						$year_day_neg = 366 + $_day;
 					}
-					$this->suggestions[] = DateTime::createFromFormat('Y-z H:i:s', $year . '-' . $year_day_neg . ' ' . $timestamp);	
+                                        $_time = strtotime('+' . $year_day_neg . ' days',mktime(0, 0, 0, 1, 1, $year));
+					$this->suggestions[] = new Datetime(date('Y-m-d',$_time).' '.$timestamp);
 				}					
 			}
 		}
