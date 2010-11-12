@@ -1,7 +1,7 @@
-##When v0.2
-Date/Calendar recursion library for PHP 5.3+
+##When 
+Date/Calendar recursion library for PHP 5.2+
 
-by Thomas Planer
+by Thomas Planer, modified by James Paul Muir
 
 ---
 ###About
