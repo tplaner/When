@@ -491,8 +491,9 @@ class When
 				if($_day >= 0)
 				{
 					$_day--;
-                                        $_time = strtotime('+' . $_day . ' days',mktime(0, 0, 0, 1, 1, $year));
-					$this->suggestions[] = new Datetime(date('Y-m-d',$_time).' '.$timestamp);
+					
+					$_time = strtotime('+' . $_day . ' days', mktime(0, 0, 0, 1, 1, $year));
+					$this->suggestions[] = new Datetime(date('Y-m-d', $_time) . ' ' . $timestamp);
 				}
 				else
 				{
@@ -502,8 +503,9 @@ class When
 					{
 						$year_day_neg = 366 + $_day;
 					}
-                                        $_time = strtotime('+' . $year_day_neg . ' days',mktime(0, 0, 0, 1, 1, $year));
-					$this->suggestions[] = new Datetime(date('Y-m-d',$_time).' '.$timestamp);
+					
+					$_time = strtotime('+' . $year_day_neg . ' days', mktime(0, 0, 0, 1, 1, $year));
+					$this->suggestions[] = new Datetime(date('Y-m-d', $_time) . ' ' . $timestamp);
 				}					
 			}
 		}
