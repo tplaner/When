@@ -1,7 +1,9 @@
 ##When 
 Date/Calendar recursion library for PHP 5.2+
 
-by Thomas Planer, modified by James Paul Muir
+Author: Thomas Planer
+
+Contributors: Andrew Collington, James Paul Muir
 
 ---
 ###About
