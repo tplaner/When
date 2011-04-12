@@ -553,8 +553,9 @@ class When
 					}
 					else
 					{
-						$tmp_month = $month+1;
-						$tmp_date = new DateTime($year . '-' . $tmp_month . '-' . $overflow_count . ' ' . $timestamp);
+						//$tmp_month = $month+1;
+						$tmp_date = new DateTime($year . '-' . $month . '-' . $overflow_count . ' ' . $timestamp);
+						$tmp_date->modify('+1 month');
 						$overflow_count++;
 					}
 					
