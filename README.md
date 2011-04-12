@@ -3,8 +3,6 @@ Date/Calendar recursion library for PHP 5.2+
 
 Author: Thomas Planer
 
-Contributors: Andrew Collington, James Paul Muir
-
 ---
 ###About
 After a comprehensive search I couldn't find a PHP library which could handle recursive dates.
