@@ -2,7 +2,7 @@
 
 require_once 'PHPUnit/Framework.php';
 
-require_once './WHen.php';
+require_once './When.php';
 
 class When_Weekly_Test extends PHPUnit_Framework_TestCase
 {

@@ -2,7 +2,7 @@
 
 require_once 'PHPUnit/Framework.php';
 
-require_once './WHen.php';
+require_once './When.php';
 
 class When_Weekly_Rrule_Test extends PHPUnit_Framework_TestCase
 {
@@ -118,7 +118,7 @@ class When_Weekly_Rrule_Test extends PHPUnit_Framework_TestCase
 		$results[] = new DateTime('1997-10-02 09:00:00');
 		
 		$r = new When();
-		$r->recur('19970902T090000')->rrule('WEEKLY;UNTIL=19971007T000000Z;WKST=SU;BYDAY=TU,TH');
+		$r->recur('19970902T090000')->rrule('FREQ=WEEKLY;UNTIL=19971007T000000Z;WKST=SU;BYDAY=TU,TH');
 		
 		foreach($results as $result)
 		{
