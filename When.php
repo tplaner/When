@@ -166,6 +166,7 @@ class When
 					break;
 				case "COUNT":
 					$this->count($param);
+					$this->counter = 0;
 					break;
 				case "INTERVAL":
 					$this->interval($param);
