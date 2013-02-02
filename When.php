@@ -630,7 +630,7 @@ class When
 		}
 	}
 	
-	protected function valid_date($date)
+	public function valid_date($date)
 	{
 		$year = $date->format('Y');
 		$month = $date->format('n');
