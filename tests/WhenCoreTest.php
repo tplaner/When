@@ -280,6 +280,103 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $test->byweekno(55);
     }
 
+    public function testValidByMonth()
+    {
+        $test = new When;
+        $test->bymonth(12);
+
+        $this->assertEquals($test->bymonths, array(12));
+
+        // sloppy input works
+        $test = new When;
+        $test->bymonth('1, 2,3 ');
+
+        $this->assertEquals($test->bymonths, array(1, 2, 3));
+
+        // sloppier input works
+        $test = new When;
+        $test->bymonth('1, 2,3 ,');
+
+        $this->assertEquals($test->bymonths, array(1, 2, 3));
+
+        $test = new When;
+        $test->bymonth(array(1, 2, 3));
+
+        $this->assertEquals($test->bymonths, array(1, 2, 3));
+
+        // different delimeter
+        $test = new When;
+        $test->bymonth('1; 2; 3', ";");
+
+        $this->assertEquals($test->bymonths, array(1, 2, 3));
+
+        // different delimeter sloppy
+        $test = new When;
+        $test->bymonth(';1; 2; 3;', ";");
+
+        $this->assertEquals($test->bymonths, array(1, 2, 3));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testInvalidByMonth()
+    {
+        $test = new When;
+        $test->bymonth(-1);
+    }
+
+    public function testValidBySetPos()
+    {
+        $test = new When;
+        $test->bysetpos(12);
+
+        $this->assertEquals($test->bysetpos, array(12));
+
+        $test = new When;
+        $test->bysetpos(-12);
+
+        $this->assertEquals($test->bysetpos, array(-12));
+
+        // sloppy input works
+        $test = new When;
+        $test->bysetpos('1, 2,3 ');
+
+        $this->assertEquals($test->bysetpos, array(1, 2, 3));
+
+        // sloppier input works
+        $test = new When;
+        $test->bysetpos('1, 2,-3 ,');
+
+        $this->assertEquals($test->bysetpos, array(1, 2, -3));
+
+        $test = new When;
+        $test->bysetpos(array(-1, 2, 3));
+
+        $this->assertEquals($test->bysetpos, array(-1, 2, 3));
+
+        // different delimeter
+        $test = new When;
+        $test->bysetpos('1; 2; 3', ";");
+
+        $this->assertEquals($test->bysetpos, array(1, 2, 3));
+
+        // different delimeter sloppy
+        $test = new When;
+        $test->bysetpos(';1; 2; 3;', ";");
+
+        $this->assertEquals($test->bysetpos, array(1, 2, 3));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testInvalidBySetPos()
+    {
+        $test = new When;
+        $test->bysetpos(367);
+    }
+
     public function testValidbyDay()
     {
         $test = new When;

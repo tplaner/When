@@ -172,9 +172,10 @@ class When extends \DateTime
         throw new \InvalidArgumentException("byweekno: Accepts positive and negative values between 1 and 53");
     }
 
-    public function bymonth($bymolist)
+    // tested
+    public function bymonth($bymolist, $delimiter = ",")
     {
-        if($this->bymonth = self::prepareItemsList($bymolist, $delimiter, 'monthNum'))
+        if($this->bymonths = self::prepareItemsList($bymolist, $delimiter, 'monthNum'))
         {
             return $this;
         }
@@ -182,7 +183,8 @@ class When extends \DateTime
         throw new \InvalidArgumentException("bymonth: Accepts values between 1 and 12");
     }
 
-    public function bysetpos($bysplist)
+    // tested
+    public function bysetpos($bysplist, $delimiter = ",")
     {
         if ($this->bysetpos = self::prepareItemsList($bysplist, $delimiter, 'setPosDay'))
         {
