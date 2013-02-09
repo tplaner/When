@@ -79,24 +79,6 @@ class When extends \DateTime
     }
 
     // tested
-    // this can be an array, comma seperated list, or individual number
-    /*public function bysecond($seconds, $delimiter = ",")
-    {
-        if (!is_array($seconds))
-        {
-            $seconds = self::prepareItemsList($seconds, $delimiter);
-        }
-
-        if (is_array($seconds) && Valid::itemsList($seconds, 'second'))
-        {
-            $this->byseconds = $seconds;
-
-            return $this;
-        }
-
-        throw new \InvalidArgumentException("bysecond: Accepts numeric values between 0 and 60");
-    }*/
-
     public function bysecond($seconds, $delimiter = ",")
     {
         if ($this->byseconds = self::prepareItemsList($seconds, $delimiter, 'second'))
@@ -108,23 +90,6 @@ class When extends \DateTime
     }
 
     // tested
-    /*public function byminute($minutes, $delimiter = ",")
-    {
-        if (!is_array($minutes))
-        {
-            $minutes = self::prepareItemsList($minutes, $delimiter);
-        }
-
-        if (is_array($minutes) && Valid::itemsList($minutes, 'minute'))
-        {
-            $this->byminutes = $minutes;
-
-            return $this;
-        }
-
-        throw new \InvalidArgumentException("byminute: Accepts numeric values between 0 and 59");
-    }*/
-
     public function byminute($minutes, $delimiter = ",")
     {
         if ($this->byminutes = self::prepareItemsList($minutes, $delimiter, 'minute'))
@@ -136,23 +101,6 @@ class When extends \DateTime
     }
 
     // tested
-    /*public function byhour($hours, $delimiter = ",")
-    {
-        if (!is_array($hours))
-        {
-            $hours = self::prepareItemsList($hours, $delimiter);
-        }
-
-        if (is_array($hours) && Valid::itemsList($hours, 'hour'))
-        {
-            $this->byhours = $hours;
-
-            return $this;
-        }
-
-        throw new \InvalidArgumentException("byhour: Accepts numeric values between 0 and 23");
-    }*/
-
     public function byhour($hours, $delimiter = ",")
     {
         if ($this->byhours = self::prepareItemsList($hours, $delimiter, 'hour'))
@@ -192,23 +140,6 @@ class When extends \DateTime
     }
 
     // tested
-    /*public function bymonthday($bymodaylist, $delimiter = ",")
-    {
-        if (!is_array($bymodaylist))
-        {
-            $bymodaylist = self::prepareItemsList($bymodaylist, $delimiter);
-        }
-
-        if (is_array($bymodaylist) && Valid::itemsList($bymodaylist, 'monthDayNum'))
-        {
-            $this->bymonthdays = $bymodaylist;
-
-            return $this;
-        }
-
-        throw new \InvalidArgumentException("bymonthday: Accepts positive and negative values between 1 and 31");
-    }*/
-
     public function bymonthday($bymodaylist, $delimiter = ",")
     {
         if($this->bymonthdays = self::prepareItemsList($bymodaylist, $delimiter, 'monthDayNum'))
@@ -220,23 +151,6 @@ class When extends \DateTime
     }
 
     // tested
-    /*public function byyearday($byyrdaylist, $delimiter = ",")
-    {
-        if (!is_array($byyrdaylist))
-        {
-            $byyrdaylist = self::prepareItemsList($byyrdaylist, $delimiter);
-        }
-
-        if (is_array($byyrdaylist) && Valid::itemsList($byyrdaylist, 'yearDayNum'))
-        {
-            $this->byyeardays = $byyrdaylist;
-
-            return $this;
-        }
-
-        throw new \InvalidArgumentException("byyearday: Accepts positive and negative values between 1 and 366");
-    }*/
-
     public function byyearday($byyrdaylist, $delimiter = ",")
     {
         if($this->byyeardays = self::prepareItemsList($byyrdaylist, $delimiter, 'yearDayNum'))
@@ -248,23 +162,6 @@ class When extends \DateTime
     }
 
     // tested
-    /*public function byweekno($bywknolist, $delimiter = ",")
-    {
-        if (!is_array($bywknolist))
-        {
-            $bywknolist = self::prepareItemsList($bywknolist, $delimiter);
-        }
-
-        if (is_array($bywknolist) && Valid::itemsList($bywknolist, 'weekNum'))
-        {
-            $this->byweeknos = $bywknolist;
-
-            return $this;
-        }
-
-        throw new \InvalidArgumentException("byweekno: Accepts positive and negative values between 1 and 53");
-    }*/
-
     public function byweekno($bywknolist, $delimiter = ",")
     {
         if($this->byweeknos = self::prepareItemsList($bywknolist, $delimiter, 'weekNum'))
@@ -275,23 +172,6 @@ class When extends \DateTime
         throw new \InvalidArgumentException("byweekno: Accepts positive and negative values between 1 and 53");
     }
 
-    /*public function bymonth($bymolist)
-    {
-        if (!is_array($bymolist))
-        {
-            $bymolist = self::prepareItemsList($bymolist, $delimiter);
-        }
-
-        if (is_array($bymolist) && Valid::itemsList($bymolist, 'monthNum'))
-        {
-            $this->bymonth = $bymolist;
-
-            return $this;
-        }
-
-        throw new \InvalidArgumentException("bymonth: Accepts values between 1 and 12");
-    }*/
-
     public function bymonth($bymolist)
     {
         if($this->bymonth = self::prepareItemsList($bymolist, $delimiter, 'monthNum'))
@@ -301,23 +181,6 @@ class When extends \DateTime
 
         throw new \InvalidArgumentException("bymonth: Accepts values between 1 and 12");
     }
-
-    /*public function bysetpos($bysplist)
-    {
-        if (!is_array($bysplist))
-        {
-            $bysplist = self::prepareItemsList($bysplist, $delimiter);
-        }
-
-        if (is_array($bysplist) && Valid::itemsList($bysplist, 'setPosDay'))
-        {
-            $this->bysetpos = $bysplist;
-
-            return $this;
-        }
-
-        throw new \InvalidArgumentException("bysetpos: Accepts positive and negative values between 1 and 366");
-    }*/
 
     public function bysetpos($bysplist)
     {
