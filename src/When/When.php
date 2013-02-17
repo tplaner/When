@@ -209,6 +209,143 @@ class When extends \DateTime
         }
     }
 
+    // returns true or false depending on if it occurs on the date or not
+    //
+    public function occursOn($date)
+    {
+        if (!Valid::dateTimeObject($date))
+        {
+            throw new \InvalidArgumentException("occursOn: Accepts valid DateTime objects");
+        }
+
+        // breakdown the date
+        $year = $date->format('Y');
+        $month = $date->format('n');
+        $day = $date->format('j');
+        $dayFromEndOfMonth = (int)$date->format('t') + 1 - (int)$day;
+
+        $leapYear = (int)$date->format('L');
+
+        $yearDay = $date->format('z') + 1;
+        $yearDayNeg = -366 + (int)$yearDay;
+        if ($leapYear)
+        {
+            $yearDayNeg = -367 + (int)$yearDay;
+        }
+
+        // this is the nth occurence of the date
+        $occur = ceil($day / 7);
+        $occurNeg = -1 * ceil($dayFromEndOfMonth / 7);
+
+        $week = $date->format('W');
+
+        $dayOfWeek = $date->format('l');
+        $dayOfWeekAbr = strtolower(substr($dayOfWeek, 0, 2));
+
+        $hour = (int)$date->format('G');
+        $minute = (int)$date->format('i');
+        $second = (int)$date->format('s');
+
+        // if the there is an end date, make sure date is under
+        if (isset($this->until))
+        {
+            if ($date > $this->until)
+            {
+                return false;
+            }
+        }
+
+        if (isset($this->bymonths))
+        {
+            if (!in_array($month, $this->bymonths))
+            {
+                return false;
+            }
+        }
+
+        if (isset($this->bydays))
+        {
+            if (!in_array(0 . $dayOfWeek, $this->bydays) &&
+                !in_array($occur . $dayOfWeek, $this->bydays) &&
+                !in_array($occurNeg . $dayOfWeek, $this->bydays))
+            {
+                return false;
+            }
+        }
+
+        if (isset($this->byweeknos))
+        {
+            if (!in_array($week, $this->byweeknos))
+            {
+                return false;
+            }
+        }
+
+        if (isset($this->bymonthdays))
+        {
+            if (!in_array($day, $this->bymonthdays) &&
+                !in_array($dayFromEndOfMonth, $this->bymonthdays))
+            {
+                return false;
+            }
+        }
+
+        if (isset($this->byyeardays))
+        {
+            if (!in_array($yearDay, $this->byyeardays) &&
+                !in_array($yearDayNeg, $this->byyeardays))
+            {
+                return false;
+            }
+        }
+
+        if (isset($this->byhours))
+        {
+            if (!in_array($hour, $this->byhours))
+            {
+                return false;
+            }
+        }
+
+        if (isset($this->byminutes))
+        {
+            if (!in_array($minute, $this->byminutes))
+            {
+                return false;
+            }
+        }
+
+        if (isset($this->byseconds))
+        {
+            if (!in_array($second, $this->byseconds))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function byFreqValid()
+    {
+        if (isset($this->byweeknos) && $this->freq !== "yearly")
+        {
+            throw new InvalidCombination();
+        }
+
+        if (isset($this->byyeardays) && !in_array($this->freq, array("daily", "weekly", "monthly")))
+        {
+            throw new InvalidCombination();
+        }
+
+        if (isset($this->bymonthdays) && $this->freq === "weekly")
+        {
+            throw new InvalidCombination();
+        }
+
+        return true;
+    }
+
     protected static function createItemsList($list, $delimiter)
     {
         $items = explode($delimiter, $list);
@@ -257,7 +394,7 @@ class When extends \DateTime
             $day = ltrim($day, "+");
             $day = trim($day);
 
-            $ordwk = 1;
+            $ordwk = 0;
             $weekday = false;
 
             if (strlen($day) === 2)
@@ -273,5 +410,13 @@ class When extends \DateTime
         }
 
         return $_days;
+    }
+}
+
+class InvalidCombination extends \Exception 
+{
+    public function __construct($message = "Invalid combination.", $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
     }
 }

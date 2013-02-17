@@ -382,29 +382,29 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $test = new When;
         $test->byday(array("+5MO", "-20MO", "31TU", "SA"));
 
-        $this->assertEquals($test->bydays, array("5mo", "-20mo", "31tu", "1sa"));
+        $this->assertEquals($test->bydays, array("5mo", "-20mo", "31tu", "0sa"));
 
         $test = new When;
         $test->byday(array("+5mo", "-20MO", "31tU", "SA"));
 
-        $this->assertEquals($test->bydays, array("5mo", "-20mo", "31tu", "1sa"));
+        $this->assertEquals($test->bydays, array("5mo", "-20mo", "31tu", "0sa"));
 
         $test = new When;
         $test->byday("+5mo, -10MO, 31tU, SA");
 
-        $this->assertEquals($test->bydays, array("5mo", "-10mo", "31tu", "1sa"));
+        $this->assertEquals($test->bydays, array("5mo", "-10mo", "31tu", "0sa"));
 
         // trailing delimeter
         $test = new When;
         $test->byday(", +5mo, -10MO, 31tU, SA,");
 
-        $this->assertEquals($test->bydays, array("5mo", "-10mo", "31tu", "1sa"));
+        $this->assertEquals($test->bydays, array("5mo", "-10mo", "31tu", "0sa"));
 
         // different delimeter
         $test = new When;
         $test->byday("+5mo; -10MO; 31tU; SA;", ";");
 
-        $this->assertEquals($test->bydays, array("5mo", "-10mo", "31tu", "1sa"));
+        $this->assertEquals($test->bydays, array("5mo", "-10mo", "31tu", "0sa"));
 
         $test = new When;
         $test->byday("+5mo");
