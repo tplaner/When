@@ -213,7 +213,9 @@ class When
 		if($this->end_date) $rrule['UNTIL']=$this->end_date->format('Ymd\THis\Z');
 		if($this->count) $rrule['COUNT']=$this->count;
 		if($this->interval) $rrule['INTERVAL']=$this->interval;
-		if($this->gobyday) $rrule['BYDAY']=implode(',', $this->byday);
+		$byday = array();
+		array_walk($this->byday, function($item, $key) use (&$byday) {$byday[]=substr($item, -2, 2);});
+		if($this->gobyday) $rrule['BYDAY']=implode(',', $byday);
 		if($this->gobymonthday) $rrule['BYMONTHDAY']=implode(',', $this->bymonthday);
 		if($this->gobyyearday) $rrule['BYYEARDAY']=implode(',', $this->byyearday);
 		if($this->gobyweekno) $rrule['BYWEEKNO']=implode(',', $this->byweekno);
