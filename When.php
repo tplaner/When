@@ -204,6 +204,33 @@ class When
 		return $this;
 	}
 	
+	//make rrule format
+	public function torrule()
+	{
+		$rrule = array();
+		
+		if($this->frequency) $rrule['FREQ']=$this->frequency;
+		if($this->end_date) $rrule['UNTIL']=$this->end_date->format('Ymd\THis\Z');
+		if($this->count) $rrule['COUNT']=$this->count;
+		if($this->interval) $rrule['INTERVAL']=$this->interval;
+		$byday = array();
+		array_walk($this->byday, function($item, $key) use (&$byday) {$byday[]=substr($item, -2, 2);});
+		if($this->gobyday) $rrule['BYDAY']=implode(',', $byday);
+		if($this->gobymonthday) $rrule['BYMONTHDAY']=implode(',', $this->bymonthday);
+		if($this->gobyyearday) $rrule['BYYEARDAY']=implode(',', $this->byyearday);
+		if($this->gobyweekno) $rrule['BYWEEKNO']=implode(',', $this->byweekno);
+		if($this->gobymonth) $rrule['BYMONTH']=implode(',', $this->bymonth);
+		if($this->gobysetpos) $rrule['BYSETPOS']=implode(',', $this->bysetpos);
+		if(isset($this->wkst) && isset($this->valid_week_days[$this->wkst])) $rrule['WKST']=$this->valid_week_days[$this->wkst];
+		
+		$data = array();
+		foreach($rrule as $key => $val) {
+			$data[] = $key.'='.(string)$val;
+		}
+		$data = implode(';', $data);
+		return $data;
+	}
+	
 	//max number of items to return based on the pattern
 	public function count($count)
 	{
