@@ -5,10 +5,27 @@ namespace When;
 class When extends \DateTime
 {
     public $startDate;
+    public $freq;
+    public $until;
+    public $count;
+    public $interval;
+
+    public $byseconds;
+    public $byminutes;
+    public $byhours;
+    public $bydays;
+    public $bymonthdays;
+    public $byyeardays;
+    public $byweeknos;
+    public $bymonths;
+    public $bysetpos;
+    public $wkst;
+
+    public $occurences;
 
     public function __construct($time = "now", $timezone = NULL)
     {
-        //parent::__construct($time, $timezone);
+        $this->startDate = parent::__construct($time, $timezone);
     }
 
     // tested
@@ -45,7 +62,6 @@ class When extends \DateTime
         if (Valid::dateTimeObject($endDate))
         {
             $this->until = clone $endDate;
-
             return $this;
         }
 
@@ -222,7 +238,7 @@ class When extends \DateTime
         $year = $date->format('Y');
         $month = $date->format('n');
         $day = $date->format('j');
-        $dayFromEndOfMonth = (int)$date->format('t') + 1 - (int)$day;
+        $dayFromEndOfMonth = -((int)$date->format('t') + 1 - (int)$day);
 
         $leapYear = (int)$date->format('L');
 
@@ -235,16 +251,22 @@ class When extends \DateTime
 
         // this is the nth occurence of the date
         $occur = ceil($day / 7);
-        $occurNeg = -1 * ceil($dayFromEndOfMonth / 7);
+        $occurNeg = -1 * ceil(abs($dayFromEndOfMonth) / 7);
 
         $week = $date->format('W');
 
         $dayOfWeek = $date->format('l');
         $dayOfWeekAbr = strtolower(substr($dayOfWeek, 0, 2));
 
-        $hour = (int)$date->format('G');
+        /*$hour = (int)$date->format('G');
         $minute = (int)$date->format('i');
-        $second = (int)$date->format('s');
+        $second = (int)$date->format('s');*/
+
+        // the date has to be greater then the start date
+        if ($date < $this->startDate)
+        {
+            return false;
+        }
 
         // if the there is an end date, make sure date is under
         if (isset($this->until))
@@ -265,9 +287,9 @@ class When extends \DateTime
 
         if (isset($this->bydays))
         {
-            if (!in_array(0 . $dayOfWeek, $this->bydays) &&
-                !in_array($occur . $dayOfWeek, $this->bydays) &&
-                !in_array($occurNeg . $dayOfWeek, $this->bydays))
+            if (!in_array(0 . $dayOfWeekAbr, $this->bydays) &&
+                !in_array($occur . $dayOfWeekAbr, $this->bydays) &&
+                !in_array($occurNeg . $dayOfWeekAbr, $this->bydays))
             {
                 return false;
             }
@@ -299,6 +321,35 @@ class When extends \DateTime
             }
         }
 
+        if (isset($this->bysetpos))
+        {
+            switch ($this->freq)
+            {
+                case "yearly":
+
+                    break;
+                case "monthly":
+                    $setPos = $day;
+                    $setPosNeg = $dayFromEndOfMonth;
+                    break;
+            }
+
+            if (!in_array($setPos, $this->bysetpos) &&
+                !in_array($setPosNeg, $this->bysetpos))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function occursAt($date)
+    {
+        $hour = (int)$date->format('G');
+        $minute = (int)$date->format('i');
+        $second = (int)$date->format('s');
+
         if (isset($this->byhours))
         {
             if (!in_array($hour, $this->byhours))
@@ -322,8 +373,274 @@ class When extends \DateTime
                 return false;
             }
         }
+    }
 
-        return true;
+    public function generateOccurences()
+    {
+        self::prepareDateElements();
+
+        $count = 0;
+
+        $dateLooper = clone $this->startDate;
+        while ($dateLooper < $this->until && count($this->occurences) < $this->count)
+        {
+            if ($this->freq === "yearly")
+            {
+                if (isset($this->bymonths))
+                {
+                    foreach ($this->bymonths as $month)
+                    {
+                        if (isset($this->bydays))
+                        {
+                            $dateLooper->setDate($dateLooper->format("Y"), $month, 1);
+
+                            // get the number of days
+                            $totalDays = $dateLooper->format("t");
+                            $today = 0;
+
+                            while ($today < $totalDays)
+                            {
+                                if ($this->occursOn($dateLooper))
+                                {
+                                    $this->generateTimeOccurences($dateLooper);
+                                }
+
+                                $dateLooper->add(new \DateInterval('P1D'));
+                                $today++;
+                            }
+                        }
+                        else
+                        {
+                            $dateLooper->setDate($dateLooper->format("Y"), $month, $dateLooper->format("j"));
+
+                            if ($this->occursOn($dateLooper))
+                            {
+                                $this->generateTimeOccurences($dateLooper);
+                            }
+                        }
+                    }
+                }
+                //else if (isset($this->byyeardays) || isset($this->byweeknos))
+                else
+                {
+                    $dateLooper->setDate($dateLooper->format("Y"), 1, 1);
+
+                    $leapYear = (int)$dateLooper->format("L");
+                    if ($leapYear)
+                    {
+                        $days = 366;
+                    }
+                    else
+                    {
+                        $days = 365;
+                    }
+
+                    $day = 0;
+                    while ($day < $days)
+                    {
+                        if ($this->occursOn($dateLooper))
+                        {
+                            $this->generateTimeOccurences($dateLooper);
+                        }
+                        $dateLooper->add(new \DateInterval('P1D'));
+                        $day++;
+                    }
+                }
+
+                $dateLooper = clone $this->startDate;
+                $dateLooper->add(new \DateInterval('P' . ($this->interval * ++$count) . 'Y'));
+            }
+            else if ($this->freq === "monthly")
+            {
+                $dateLooper->setDate($dateLooper->format("Y"), $dateLooper->format("n"), 1);
+
+                $days = (int)$dateLooper->format("t");
+
+                $day = 0;
+                while ($day < $days)
+                {
+                    if ($this->occursOn($dateLooper))
+                    {
+                        $this->generateTimeOccurences($dateLooper);
+                    }
+                    $dateLooper->add(new \DateInterval('P1D'));
+                    $day++;
+                }
+
+                $dateLooper = clone $this->startDate;
+                $dateLooper->setDate($dateLooper->format("Y"), $dateLooper->format("n"), 1);
+                $dateLooper->add(new \DateInterval('P' . ($this->interval * ++$count) . 'M'));
+            }
+            else if ($this->freq === "weekly")
+            {
+                $dateLooper->setDate($dateLooper->format("Y"), $dateLooper->format("n"), $dateLooper->format("j"));
+
+                $days = 7;
+
+                $day = 0;
+                while ($day < $days)
+                {
+                    if ($this->occursOn($dateLooper))
+                    {
+                        $this->generateTimeOccurences($dateLooper);
+                    }
+                    $dateLooper->add(new \DateInterval('P1D'));
+                    $day++;
+                }
+
+                $dateLooper = clone $this->startDate;
+                $dateLooper->setDate($dateLooper->format("Y"), $dateLooper->format("n"), 1);
+                $dateLooper->add(new \DateInterval('P' . ($this->interval * ++$count) . 'W'));
+            }
+            else if ($this->freq === "daily")
+            {
+                if ($this->occursOn($dateLooper))
+                {
+                    $this->generateTimeOccurences($dateLooper);
+                }
+
+                $dateLooper = clone $this->startDate;
+                $dateLooper->setDate($dateLooper->format("Y"), $dateLooper->format("n"), $dateLooper->format('j'));
+                $dateLooper->add(new \DateInterval('P' . ($this->interval * ++$count) . 'D'));
+            }
+            else if ($this->freq === "hourly")
+            {
+                if ($this->occursOn($dateLooper))
+                {
+                    $this->occurences[] = $dateLooper;
+                }
+
+                $dateLooper = clone $this->startDate;
+                $dateLooper->add(new \DateInterval('PT' . ($this->interval * ++$count) . 'H'));
+            }
+            else if ($this->freq === "minutely")
+            {
+                if ($this->occursOn($dateLooper))
+                {
+                    $this->occurences[] = $dateLooper;
+                }
+
+                $dateLooper = clone $this->startDate;
+                $dateLooper->add(new \DateInterval('PT' . ($this->interval * ++$count) . 'M'));
+            }
+            else if ($this->freq === "secondly")
+            {
+                if ($this->occursOn($dateLooper))
+                {
+                    $this->occurences[] = $dateLooper;
+                }
+
+                $dateLooper = clone $this->startDate;
+                $dateLooper->add(new \DateInterval('PT' . ($this->interval * ++$count) . 'S'));
+            }
+        }
+    }
+
+    // not happy with this.
+    protected function generateTimeOccurences($dateLooper)
+    {
+        foreach ($this->byhours as $hour)
+        {
+            foreach ($this->byminutes as $minute)
+            {
+                foreach ($this->byseconds as $second)
+                {
+                    if (count($this->occurences) < $this->count)
+                    {
+                        $occurence = clone $dateLooper;
+                        $occurence->setTime($hour, $minute, $second);
+                        $this->occurences[] = $occurence;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
+    public function prepareDateElements()
+    {
+        // if the interval isn't set, set it.
+        if (!isset($this->interval))
+        {
+            $this->interval = 1;
+        }
+
+        // must have a frequency
+        if (!isset($this->freq) && $this->byFreqValid())
+        {
+            throw new FrequencyRequired();
+        }
+
+        if (!isset($this->count))
+        {
+            $this->count = 200;
+        }
+
+        // "Similarly, if the BYMINUTE, BYHOUR, BYDAY,
+        // BYMONTHDAY, or BYMONTH rule part were missing, the appropriate
+        // minute, hour, day, or month would have been retrieved from the
+        // "DTSTART" property."
+
+        // if there is no startDate, make it now
+        if (!$this->startDate)
+        {
+            $this->startDate = new \DateTime();
+        }
+
+        // the calendar repeats itself every 400 years, so if a date
+        if (!isset($this->until))
+        {
+            $this->until = new \DateTime();
+            $this->until->add(new \DateInterval('P400Y'));
+        }
+
+        if (!isset($this->byminutes))
+        {
+            $this->byminutes = array((int)$this->startDate->format('i'));
+        }
+
+        if (!isset($this->byhours))
+        {
+            $this->byhours = array((int)$this->startDate->format('G'));
+        }
+
+        if (!isset($this->byseconds))
+        {
+            $this->byseconds = array((int)$this->startDate->format('s'));
+        }
+
+        /*if (!isset($this->bydays))
+        {
+            $dayOfWeek = $this->startDate->format('l');
+            $dayOfWeekAbr = strtolower(substr($dayOfWeek, 0, 2));
+            $this->bydays = array($dayOfWeekAbr);
+        }*/
+
+        if ($this->freq === "monthly")
+        {
+            if (!isset($this->bymonthdays) && !isset($this->bydays))
+            {
+                $this->bymonthdays = array((int)$this->startDate->format('j'));
+            }
+        }
+
+        if ($this->freq === "weekly")
+        {
+            if (!isset($this->bymonthdays) && !isset($this->bydays))
+            {
+                $dayOfWeek = $this->startDate->format('l');
+                $dayOfWeekAbr = strtolower(substr($dayOfWeek, 0, 2));
+                $this->bydays = array("0" . $dayOfWeekAbr);
+            }
+        }
+
+        /*if (!isset($this->bymonths))
+        {
+            $this->bymonths = array((int)$this->startDate->format('n'));
+        }*/
     }
 
     public function byFreqValid()
@@ -413,9 +730,17 @@ class When extends \DateTime
     }
 }
 
-class InvalidCombination extends \Exception 
+class InvalidCombination extends \Exception
 {
     public function __construct($message = "Invalid combination.", $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
+}
+
+class FrequencyRequired extends \Exception
+{
+    public function __construct($message = "You are required to set a frequency.", $code = 0, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
