@@ -1,6 +1,6 @@
 <?php
 
-require_once 'PHPUnit/Framework.php';
+
 
 require_once './When.php';
 
@@ -22,16 +22,16 @@ class When_Yearly_Test extends PHPUnit_Framework_TestCase
 		$results[] = new DateTime('2000-07-10 09:00:00');
 		$results[] = new DateTime('2001-06-10 09:00:00');
 		$results[] = new DateTime('2001-07-10 09:00:00');
-		
+
 		$r = new When();
 		$r->recur('19970610T090000', 'yearly')->count(10)->bymonth(array(6,7));
-		
+
 		foreach($results as $result)
 		{
 			$this->assertEquals($result, $r->next());
 		}
 	}
-	
+
 	/**
 	 * DTSTART;TZID=US-Eastern:19970101T090000
 	 * RRULE:FREQ=YEARLY;INTERVAL=3;COUNT=10;BYYEARDAY=1,100,200
@@ -48,16 +48,16 @@ class When_Yearly_Test extends PHPUnit_Framework_TestCase
 		$results[] = new DateTime('2003-04-10 09:00:00');
 		$results[] = new DateTime('2003-07-19 09:00:00');
 		$results[] = new DateTime('2006-01-01 09:00:00');
-		
+
 		$r = new When();
 		$r->recur('19970101T090000', 'yearly')->interval(3)->count(10)->byyearday(array(1,100,200));
-		
+
 		foreach($results as $result)
 		{
 			$this->assertEquals($result, $r->next());
 		}
 	}
-	
+
 	/**
 	 * DTSTART;TZID=US-Eastern:19970310T090000
 	 * RRULE:FREQ=YEARLY;INTERVAL=2;COUNT=10;BYMONTH=1,2,3
@@ -74,16 +74,16 @@ class When_Yearly_Test extends PHPUnit_Framework_TestCase
 		$results[] = new DateTime('2003-01-10 09:00:00');
 		$results[] = new DateTime('2003-02-10 09:00:00');
 		$results[] = new DateTime('2003-03-10 09:00:00');
-		
+
 		$r = new When();
 		$r->recur('19970310T090000', 'yearly')->interval(2)->count(10)->bymonth(array(1,2,3));
-		
+
 		foreach($results as $result)
 		{
 			$this->assertEquals($result, $r->next());
 		}
 	}
-	
+
 	/**
 	 * DTSTART;TZID=US-Eastern:19980101T090000
 	 * RRULE:FREQ=YEARLY;UNTIL=20000131T090000Z;BYMONTH=1;BYDAY=SU,MO,TU,WE,TH,FR,SA
@@ -183,16 +183,16 @@ class When_Yearly_Test extends PHPUnit_Framework_TestCase
 		$results[] = new DateTime('2000-01-29 09:00:00');
 		$results[] = new DateTime('2000-01-30 09:00:00');
 		$results[] = new DateTime('2000-01-31 09:00:00');
-		
+
 		$r = new When();
 		$r->recur('19980101T090000', 'yearly')->until('20000131T090000')->bymonth(array(1))->byday(array('SU','MO','TU','WE','TH','FR','SA'));
-		
+
 		foreach($results as $result)
 		{
 			$this->assertEquals($result, $r->next());
 		}
 	}
-	
+
 	/**
 	 * Monday of week number 20 (where the default start of the week is Monday), forever:
 	 * DTSTART;TZID=US-Eastern:19970512T090000
@@ -211,17 +211,17 @@ class When_Yearly_Test extends PHPUnit_Framework_TestCase
 		$results[] = new DateTime('2004-05-10 09:00:00');
 		$results[] = new DateTime('2005-05-16 09:00:00');
 		$results[] = new DateTime('2006-05-15 09:00:00');
-		
+
 		$r = new When();
 		$r->recur('19970512T090000', 'yearly')->count(10)->byweekno(array(20))->byday(array('MO'));
-		
+
 		foreach($results as $result)
 		{
 			$this->assertEquals($result, $r->next());
 		}
 	 }
-	 
-	 /** 
+
+	 /**
 	  * Every Thursday in March, forever:
 	  * DTSTART;TZID=US-Eastern:19970313T090000
 	  * RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=TH
@@ -238,16 +238,16 @@ class When_Yearly_Test extends PHPUnit_Framework_TestCase
 		$results[] = new DateTime('1999-03-04 09:00:00');
 		$results[] = new DateTime('1999-03-11 09:00:00');
 		$results[] = new DateTime('1999-03-18 09:00:00');
-		
+
 		$r = new When();
 		$r->recur('19970313T090000', 'yearly')->count(10)->bymonth(array(3))->byday(array('TH'));
-		
+
 		foreach($results as $result)
 		{
 			$this->assertEquals($result, $r->next());
 		}
 	 }
-	 
+
 	/**
 	 * Every Thursday, but only during June, July, and August, forever:
 	 * DTSTART;TZID=US-Eastern:19970605T090000
@@ -294,16 +294,16 @@ class When_Yearly_Test extends PHPUnit_Framework_TestCase
 		$results[] = new DateTime('1999-08-12 09:00:00');
 		$results[] = new DateTime('1999-08-19 09:00:00');
 		$results[] = new DateTime('1999-08-26 09:00:00');
-		
+
 		$r = new When();
 		$r->recur('19970605T090000', 'yearly')->count(39)->byday(array('TH'))->bymonth(array(6,7,8));
-		
+
 		foreach($results as $result)
 		{
 			$this->assertEquals($result, $r->next());
 		}
 	}
-	
+
 	/**
 	 * Every four years, the first Tuesday after a Monday in November, forever (U.S. Presidential Election day):
 	 * DTSTART;TZID=US-Eastern:19961105T090000
@@ -321,16 +321,16 @@ class When_Yearly_Test extends PHPUnit_Framework_TestCase
 		$results[] = new DateTime('2024-11-05 09:00:00');
 		$results[] = new DateTime('2028-11-07 09:00:00');
 		$results[] = new DateTime('2032-11-02 09:00:00');
-		
+
 		$r = new When();
 		$r->recur('19961105T090000', 'yearly')->count(10)->interval(4)->bymonth(array(11))->byday(array('TU'))->bymonthday(array(2,3,4,5,6,7,8));
-		
+
 		foreach($results as $result)
 		{
 			$this->assertEquals($result, $r->next());
 		}
 	}
-	
+
 	/**
 	 * Every third year on the 1st, 100th, and 200th day for 10 occurrences:
 	 * DTSTART;TZID=America/New_York:19970101T090000
@@ -348,16 +348,16 @@ class When_Yearly_Test extends PHPUnit_Framework_TestCase
 		$results[] = new DateTime('2003-04-10 09:00:00');
 		$results[] = new DateTime('2003-07-19 09:00:00');
 		$results[] = new DateTime('2006-01-01 09:00:00');
-		
+
 		$r = new When();
 		$r->recur('19970101T090000', 'yearly')->interval(3)->count(10)->byyearday(array(1,100,200));
-		
+
 		foreach($results as $result)
 		{
 			$this->assertEquals($result, $r->next());
 		}
 	}
-	
+
 	/**
 	 * Every year on the -1th, -100th, and -200th day for 5 occurrences (checked via google calendar import below)
 	 * BEGIN:VCALENDAR
@@ -405,14 +405,14 @@ class When_Yearly_Test extends PHPUnit_Framework_TestCase
 		$results[] = new DateTime('2010-06-15 09:00:00');
 		$results[] = new DateTime('2011-12-31 09:00:00');
 		$results[] = new DateTime('2011-09-23 09:00:00');
-		
+
 		$r = new When();
 		$r->recur('20101231T090000', 'yearly')->count(5)->byyearday(array(-1, -100, -200));
-		
+
 		foreach($results as $result)
 		{
 			$this->assertEquals($result, $r->next());
 		}
 	}
-	
+
 }
