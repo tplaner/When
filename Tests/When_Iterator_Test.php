@@ -5,7 +5,7 @@ require_once 'PHPUnit/Framework.php';
 require_once './When_Iterator.php';
 
 class When_Iterator_Tests extends PHPUnit_Framework_TestCase
-{	
+{
 
 	function testDateWithoutCache()
 	{
@@ -16,10 +16,10 @@ class When_Iterator_Tests extends PHPUnit_Framework_TestCase
 		$results[] = new DateTime('1998-01-29 09:00:00');
 		$results[] = new DateTime('1998-02-26 09:00:00');
 		$results[] = new DateTime('1998-03-30 09:00:00');
-		
+
 		$r = new When_Iterator();
 		$r->recur('19970929T090000', 'monthly')->count(7)->byday(array('MO', 'TU', 'WE', 'TH', 'FR'))->bysetpos(array(-2));
-		
+
 		$counter = 0;
 		foreach($r as $result)
 		{
@@ -47,10 +47,10 @@ class When_Iterator_Tests extends PHPUnit_Framework_TestCase
 		$results[] = new DateTime('1998-01-29 09:00:00');
 		$results[] = new DateTime('1998-02-26 09:00:00');
 		$results[] = new DateTime('1998-03-30 09:00:00');
-		
+
 		$r = new When_Iterator(true);
 		$r->recur('19970929T090000', 'monthly')->count(7)->byday(array('MO', 'TU', 'WE', 'TH', 'FR'))->bysetpos(array(-2));
-		
+
 		$counter = 0;
 		foreach($r as $result)
 		{
