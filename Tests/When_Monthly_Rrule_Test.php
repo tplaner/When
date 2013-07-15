@@ -391,4 +391,35 @@ class When_Monthly_Rrule_Test extends PHPUnit_Framework_TestCase
 			$this->assertEquals($result, $date);
 		}
 	}
+
+	/**
+	 * The same day every two months:
+	 * RRULE:FREQ=MONTHLY;INTERVAL=2
+	 */
+	function testTwentyFour()
+	{
+		$results[] = new DateTime('1997-09-14 09:00:00');
+		$results[] = new DateTime('1997-11-14 09:00:00');
+		$results[] = new DateTime('1998-01-14 09:00:00');
+		$results[] = new DateTime('1998-03-14 09:00:00');
+		$results[] = new DateTime('1998-05-14 09:00:00');
+		$results[] = new DateTime('1998-07-14 09:00:00');
+		$results[] = new DateTime('1998-09-14 09:00:00');
+		$results[] = new DateTime('1998-11-14 09:00:00');
+		$results[] = new DateTime('1999-01-14 09:00:00');
+		$results[] = new DateTime('1999-03-14 09:00:00');
+		$results[] = new DateTime('1999-05-14 09:00:00');
+		$results[] = new DateTime('1999-07-14 09:00:00');
+		$results[] = new DateTime('1999-09-14 09:00:00');
+		$results[] = new DateTime('1998-11-14 09:00:00');
+
+		$r = new When();
+		$r->recur('19970914T090000')->count(14)->rrule('FREQ=MONTHLY;INTERVAL=2');
+
+		foreach($results as $result)
+		{
+			$date = $r->next();
+			$this->assertEquals($result, $date);
+		}
+	}
 }
