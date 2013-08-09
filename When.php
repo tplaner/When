@@ -647,7 +647,11 @@ class When
 
 		if($interval == "month")
 		{
-			$this->try_date->modify('last day of ' . $this->interval . ' ' . $interval);
+                        for ($i=0; $i< $this->interval; $i++)
+                        {
+                            $this->try_date->modify('+ 28 days');
+                            $this->try_date->setDate($this->try_date->format('Y'), $this->try_date->format('m'), $this->try_date->format('t'));
+                        }
 		}
 		else
 		{
