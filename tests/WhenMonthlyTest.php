@@ -24,10 +24,10 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970905T090000"))
-        ->freq("monthly")
-        ->count(10)
-        ->byday('1FR')
-        ->generateOccurences();
+          ->freq("monthly")
+          ->count(10)
+          ->byday('1FR')
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 
@@ -51,10 +51,10 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970905T090000"))
-        ->until(new DateTime("19971224T000000Z"))
-        ->freq("monthly")
-        ->byday('1FR')
-        ->generateOccurences();
+          ->until(new DateTime("19971224T000000Z"))
+          ->freq("monthly")
+          ->byday('1FR')
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 
@@ -142,7 +142,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
         $results[] = new DateTime('1998-02-26 09:00:00');
 
         $r = new When();
-        $r->startDate(new DateTime("19970902T090000"))
+        $r->startDate(new DateTime("19970928T090000"))
           ->freq("monthly")
           ->count(6)
           ->bymonthday(-3)
@@ -301,7 +301,11 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
     /**
      * Every Friday the 13th, forever:
      * DTSTART;TZID=US-Eastern:19970902T090000
+     * EXDATE;TZID=America/New_York:19970902T090000
      * RRULE:FREQ=MONTHLY;BYDAY=FR;BYMONTHDAY=13
+     *
+     * TODO: When we add in the ability to EXDATE
+     *       this DTSTART needs to be changed
      */
     function testMonhtlyTen()
     {
@@ -312,7 +316,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
         $results[] = new DateTime('2000-10-13 09:00:00');
 
         $r = new When();
-        $r->startDate(new DateTime("19970902T090000"))
+        $r->startDate(new DateTime("19980213T090000"))
           ->freq("monthly")
           ->count(5)
           ->byday("fr")
@@ -416,29 +420,37 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    // /**
-    //  * The second-to-last weekday of the month:
-    //  * DTSTART;TZID=America/New_York:19970929T090000
-    //  * RRULE:FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-2
-    //  */
-    // function testTwentyTwo()
-    // {
-    //     $results[] = new DateTime('1997-09-29 09:00:00');
-    //     $results[] = new DateTime('1997-10-30 09:00:00');
-    //     $results[] = new DateTime('1997-11-27 09:00:00');
-    //     $results[] = new DateTime('1997-12-30 09:00:00');
-    //     $results[] = new DateTime('1998-01-29 09:00:00');
-    //     $results[] = new DateTime('1998-02-26 09:00:00');
-    //     $results[] = new DateTime('1998-03-30 09:00:00');
+    /**
+     * The second-to-last weekday of the month:
+     * DTSTART;TZID=America/New_York:19970929T090000
+     * RRULE:FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-2
+     */
+    function testMonthylFourteen()
+    {
+        $results[] = new DateTime('1997-09-29 09:00:00');
+        $results[] = new DateTime('1997-10-30 09:00:00');
+        $results[] = new DateTime('1997-11-27 09:00:00');
+        $results[] = new DateTime('1997-12-30 09:00:00');
+        $results[] = new DateTime('1998-01-29 09:00:00');
+        $results[] = new DateTime('1998-02-26 09:00:00');
+        $results[] = new DateTime('1998-03-30 09:00:00');
 
-    //     $r = new When();
-    //     $r->recur('19970929T090000', 'monthly')->count(7)->byday(array('MO', 'TU', 'WE', 'TH', 'FR'))->bysetpos(array(-2));
+        $r = new When();
+        $r->startDate(new DateTime("19970929T090000"))
+          ->freq("monthly")
+          ->count(7)
+          ->byday(array('MO', 'TU', 'WE', 'TH', 'FR'))
+          ->bysetpos(array(-2))
+          ->generateOccurences();
+        //$r->recur('19970929T090000', 'monthly')->count(7)->byday(array('MO', 'TU', 'WE', 'TH', 'FR'))->bysetpos(array(-2));
 
-    //     foreach($results as $result)
-    //     {
-    //         $this->assertEquals($result, $r->next());
-    //     }
-    // }
+        $occurences = $r->occurences;
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurences[$key]);
+        }
+    }
 
     /**
      * FREQ=MONTHLY recur rule breaks (ticket #8)
@@ -513,6 +525,33 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->freq("monthly")
           ->interval(1)
           ->until(new DateTime("2016-09-15T10:00:00+0100"))
+          ->generateOccurences();
+
+        $occurences = $r->occurences;
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurences[$key]);
+        }
+    }
+
+    /**
+     * The third instance into the month of one of Tuesday, Wednesday, or Thursday, for the next 3 months:
+     * DTSTART;TZID=America/New_York:19970904T090000
+     * RRULE:FREQ=MONTHLY;COUNT=3;BYDAY=TU,WE,TH;BYSETPOS=3
+     */
+    function testMonthlySixteen()
+    {
+        $results[] = new DateTime('1997-09-04 09:00:00');
+        $results[] = new DateTime('1997-10-07 09:00:00');
+        $results[] = new DateTime('1997-11-06 09:00:00');
+
+        $r = new When();
+        $r->startDate(new DateTime("19970904T090000"))
+          ->freq("monthly")
+          ->count(3)
+          ->byday("tu, we, th")
+          ->bysetpos(3)
           ->generateOccurences();
 
         $occurences = $r->occurences;

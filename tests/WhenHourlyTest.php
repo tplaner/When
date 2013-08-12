@@ -19,10 +19,10 @@ class WhenHourlyTest extends \PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970902T090000Z"))
-            ->freq("hourly")
-            ->interval(3)
-            ->until(new DateTime("19970902T170000Z"))
-            ->generateOccurences();
+          ->freq("hourly")
+          ->interval(3)
+          ->until(new DateTime("19970902T170000Z"))
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 

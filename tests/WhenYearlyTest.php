@@ -23,10 +23,10 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970610T090000"))
-            ->freq("yearly")
-            ->count(10)
-            ->bymonth("6, 7")
-            ->generateOccurences();
+          ->freq("yearly")
+          ->count(10)
+          ->bymonth("6, 7")
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 
@@ -55,11 +55,11 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970101T090000"))
-            ->freq("yearly")
-            ->interval(3)
-            ->count(10)
-            ->byyearday("1,100,200")
-            ->generateOccurences();
+          ->freq("yearly")
+          ->interval(3)
+          ->count(10)
+          ->byyearday("1,100,200")
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 
@@ -88,11 +88,11 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970310T090000"))
-            ->freq("yearly")
-            ->interval(2)
-            ->count(10)
-            ->bymonth("1,2,3")
-            ->generateOccurences();
+          ->freq("yearly")
+          ->interval(2)
+          ->count(10)
+          ->bymonth("1,2,3")
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 
@@ -205,11 +205,11 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
         $r = new When();
 
         $r->startDate(new DateTime("19980101T090000"))
-            ->freq("yearly")
-            ->until(new DateTime("20000131T090000"))
-            ->bymonth("1")
-            ->byday("su,mo,tu,we,th,fr,sa")
-            ->generateOccurences();
+          ->freq("yearly")
+          ->until(new DateTime("20000131T090000"))
+          ->bymonth("1")
+          ->byday("su,mo,tu,we,th,fr,sa")
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 
@@ -241,11 +241,11 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
         $r = new When();
 
         $r->startDate(new DateTime("19970512T090000"))
-            ->freq("yearly")
-            ->count(10)
-            ->byweekno(20)
-            ->byday('mo')
-            ->generateOccurences();
+          ->freq("yearly")
+          ->count(10)
+          ->byweekno(20)
+          ->byday('mo')
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 
@@ -275,11 +275,11 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970313T090000"))
-            ->freq("yearly")
-            ->count(10)
-            ->bymonth(3)
-            ->byday('th')
-            ->generateOccurences();
+          ->freq("yearly")
+          ->count(10)
+          ->bymonth(3)
+          ->byday('th')
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 
@@ -338,11 +338,11 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970605T090000"))
-            ->freq("yearly")
-            ->count(39)
-            ->bymonth("6,7,8")
-            ->byday('th')
-            ->generateOccurences();
+          ->freq("yearly")
+          ->count(39)
+          ->bymonth("6,7,8")
+          ->byday('th')
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 
@@ -372,13 +372,13 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19961105T090000"))
-            ->freq("yearly")
-            ->count(10)
-            ->interval(4)
-            ->bymonth(11)
-            ->byday('tu')
-            ->bymonthday("2,3,4,5,6,7,8")
-            ->generateOccurences();
+          ->freq("yearly")
+          ->count(10)
+          ->interval(4)
+          ->bymonth(11)
+          ->byday('tu')
+          ->bymonthday("2,3,4,5,6,7,8")
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 
@@ -408,11 +408,11 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970101T090000"))
-            ->freq("yearly")
-            ->count(10)
-            ->interval(3)
-            ->byyearday("1,100,200")
-            ->generateOccurences();
+          ->freq("yearly")
+          ->count(10)
+          ->interval(3)
+          ->byyearday("1,100,200")
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 
@@ -474,10 +474,10 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("20101231T090000"))
-            ->freq("yearly")
-            ->count(5)
-            ->byyearday("-1, -100, -200")
-            ->generateOccurences();
+          ->freq("yearly")
+          ->count(5)
+          ->byyearday("-1, -100, -200")
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 
@@ -507,14 +507,14 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970105T083000"))
-            ->freq("yearly")
-            ->interval(2)
-            ->bymonth(1)
-            ->byday("su")
-            ->byhour("8,9")
-            ->byminute("30")
-            ->count(10)
-            ->generateOccurences();
+          ->freq("yearly")
+          ->interval(2)
+          ->bymonth(1)
+          ->byday("su")
+          ->byhour("8,9")
+          ->byminute("30")
+          ->count(10)
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 

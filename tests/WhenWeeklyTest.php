@@ -253,7 +253,7 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
      * DTSTART;TZID=America/New_York:19970805T090000
      * RRULE:FREQ=WEEKLY;INTERVAL=2;COUNT=4;BYDAY=TU,SU;WKST=MO
      */
-    /*function testThirtyOne()
+    function testThirtyOne()
     {
         $results[] = new DateTime('1997-08-05 09:00:00');
         $results[] = new DateTime('1997-08-10 09:00:00');
@@ -263,7 +263,6 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970805T090000"))
           ->freq("weekly")
-          ->wkst("SU")
           ->interval(2)
           ->count(4)
           ->byday(array('TU', 'SU'))
@@ -276,26 +275,34 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
         {
             $this->assertEquals($result, $occurences[$key]);
         }
-    }*/
+    }
 
-    // /**
-    //  * changing only WKST from MO to SU, yields different results...
-    //  * DTSTART;TZID=America/New_York:19970805T090000
-    //  * RRULE:FREQ=WEEKLY;INTERVAL=2;COUNT=4;BYDAY=TU,SU;WKST=SU
-    //  */
-    // function testThirtyTwo()
-    // {
-    //     $results[] = new DateTime('1997-08-05 09:00:00');
-    //     $results[] = new DateTime('1997-08-17 09:00:00');
-    //     $results[] = new DateTime('1997-08-19 09:00:00');
-    //     $results[] = new DateTime('1997-08-31 09:00:00');
+    /**
+     * changing only WKST from MO to SU, yields different results...
+     * DTSTART;TZID=America/New_York:19970805T090000
+     * RRULE:FREQ=WEEKLY;INTERVAL=2;COUNT=4;BYDAY=TU,SU;WKST=SU
+     */
+    function testThirtyTwo()
+    {
+        $results[] = new DateTime('1997-08-05 09:00:00');
+        $results[] = new DateTime('1997-08-17 09:00:00');
+        $results[] = new DateTime('1997-08-19 09:00:00');
+        $results[] = new DateTime('1997-08-31 09:00:00');
 
-    //     $r = new When();
-    //     $r->recur('19970805T090000', 'weekly')->interval(2)->count(4)->byday(array('TU', 'SU'))->wkst('SU');
+        $r = new When();
+        $r->startDate(new DateTime("19970805T090000"))
+          ->freq("weekly")
+          ->interval(2)
+          ->count(4)
+          ->byday(array('TU', 'SU'))
+          ->wkst('SU')
+          ->generateOccurences();
 
-    //     foreach($results as $result)
-    //     {
-    //         $this->assertEquals($result, $r->next());
-    //     }
-    // }
+        $occurences = $r->occurences;
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurences[$key]);
+        }
+    }
 }

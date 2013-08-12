@@ -261,4 +261,9 @@ class WhenValidTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse(Valid::ordMoDay("99"));
         $this->assertFalse(Valid::ordMoDay(32));
     }
+
+    public function testByFreqValid()
+    {
+
+    }
 }

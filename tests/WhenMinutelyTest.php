@@ -18,10 +18,10 @@ class WhenMinutelyTest extends \PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
-            ->freq("minutely")
-            ->interval(90)
-            ->count(4)
-            ->generateOccurences();
+          ->freq("minutely")
+          ->interval(90)
+          ->count(4)
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 
@@ -47,10 +47,10 @@ class WhenMinutelyTest extends \PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
-            ->freq("minutely")
-            ->interval(15)
-            ->count(6)
-            ->generateOccurences();
+          ->freq("minutely")
+          ->interval(15)
+          ->count(6)
+          ->generateOccurences();
 
         $occurences = $r->occurences;
 

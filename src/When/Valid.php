@@ -4,12 +4,19 @@ namespace When;
 
 class Valid
 {
-    public static $frequencies = array('secondly', 'minutely', 'hourly',
-                                    'daily', 'weekly', 'monthly', 'yearly');
+    public static $frequencies = array(
+                                    'secondly', 'minutely', 'hourly',
+                                    'daily', 'weekly', 'monthly', 'yearly'
+                                );
 
     public static  $weekDays = array('su', 'mo', 'tu', 'we', 'th', 'fr', 'sa');
 
-
+    /**
+     * Test if array of days is valid
+     *
+     * @param  array    $days
+     * @return bool
+     */
     public static function daysList($days)
     {
         foreach($days as $day)
@@ -54,6 +61,26 @@ class Valid
             {
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    public function byFreqValid($freq, $byweeknos, $byyeardays, $bymonthdays)
+    {
+        if (isset($byweeknos) && $freq !== "yearly")
+        {
+            throw new InvalidCombination();
+        }
+
+        if (isset($byyeardays) && !in_array($freq, array("daily", "weekly", "monthly")))
+        {
+            throw new InvalidCombination();
+        }
+
+        if (isset($bymonthdays) && $freq === "weekly")
+        {
+            throw new InvalidCombination();
         }
 
         return true;
