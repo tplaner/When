@@ -2,7 +2,7 @@
 
 use \When\When;
 
-class WhenMonthlyTest extends PHPUnit_Framework_TestCase
+class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Monthly on the 1st Friday for ten occurrences:
@@ -24,9 +24,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970905T090000"))
-          ->freq("monthly")
-          ->count(10)
-          ->byday('1FR')
+          ->rrule("FREQ=MONTHLY;COUNT=10;BYDAY=1FR")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -51,9 +49,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970905T090000"))
-          ->until(new DateTime("19971224T000000Z"))
-          ->freq("monthly")
-          ->byday('1FR')
+          ->rrule("FREQ=MONTHLY;UNTIL=19971224T000000Z;BYDAY=1FR")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -84,10 +80,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970907T090000"))
-          ->freq("monthly")
-          ->interval(2)
-          ->count(10)
-          ->byday('1SU,-1SU')
+          ->rrule("FREQ=MONTHLY;INTERVAL=2;COUNT=10;BYDAY=1SU,-1SU")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -114,9 +107,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970922T090000"))
-          ->freq("monthly")
-          ->count(6)
-          ->byday('-2MO')
+          ->rrule("FREQ=MONTHLY;COUNT=6;BYDAY=-2MO")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -143,9 +134,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970928T090000"))
-          ->freq("monthly")
-          ->count(6)
-          ->bymonthday(-3)
+          ->rrule("FREQ=MONTHLY;BYMONTHDAY=-3")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -176,9 +165,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
-          ->freq("monthly")
-          ->count(10)
-          ->bymonthday("2, 15")
+          ->rrule("FREQ=MONTHLY;COUNT=10;BYMONTHDAY=2,15")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -209,9 +196,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970930T090000"))
-          ->freq("monthly")
-          ->count(10)
-          ->bymonthday("1, -1")
+          ->rrule("FREQ=MONTHLY;COUNT=10;BYMONTHDAY=1,-1")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -242,10 +227,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970910T090000"))
-          ->freq("monthly")
-          ->interval(18)
-          ->count(10)
-          ->bymonthday("10,11,12,13,14,15")
+          ->rrule("FREQ=MONTHLY;INTERVAL=18;COUNT=10;BYMONTHDAY=10,11,12,13,14,15")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -284,10 +266,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
-          ->freq("monthly")
-          ->interval(2)
-          ->count(18)
-          ->byday("tu")
+          ->rrule("FREQ=MONTHLY;INTERVAL=2;BYDAY=TU")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -317,10 +296,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19980213T090000"))
-          ->freq("monthly")
-          ->count(5)
-          ->byday("fr")
-          ->bymonthday(13)
+          ->rrule("FREQ=MONTHLY;BYDAY=FR;BYMONTHDAY=13")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -351,10 +327,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970913T090000"))
-          ->freq("monthly")
-          ->count(10)
-          ->byday("sa")
-          ->bymonthday("7,8,9,10,11,12,13")
+          ->rrule("FREQ=MONTHLY;BYDAY=SA;BYMONTHDAY=7,8,9,10,11,12,13")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -378,10 +351,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970904T090000"))
-          ->freq("monthly")
-          ->count(3)
-          ->byday("TU, WE, TH")
-          ->bysetpos("3")
+          ->rrule("FREQ=MONTHLY;COUNT=3;BYDAY=TU,WE,TH;BYSETPOS=3")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -407,9 +377,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("20070115T090000"))
-          ->freq("monthly")
-          ->count(5)
-          ->bymonthday("15,30")
+          ->rrule("FREQ=MONTHLY;BYMONTHDAY=15,30;COUNT=5")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -437,12 +405,8 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970929T090000"))
-          ->freq("monthly")
-          ->count(7)
-          ->byday(array('MO', 'TU', 'WE', 'TH', 'FR'))
-          ->bysetpos(array(-2))
+          ->rrule("FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-2")
           ->generateOccurences();
-        //$r->recur('19970929T090000', 'monthly')->count(7)->byday(array('MO', 'TU', 'WE', 'TH', 'FR'))->bysetpos(array(-2));
 
         $occurences = $r->occurences;
 
@@ -522,9 +486,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("2011-09-15 10:00:00"))
-          ->freq("monthly")
-          ->interval(1)
-          ->until(new DateTime("2016-09-15T10:00:00+0100"))
+          ->rrule("INTERVAL=1;FREQ=MONTHLY;UNTIL=2016-09-15T10:00:00+0100")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -548,10 +510,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970904T090000"))
-          ->freq("monthly")
-          ->count(3)
-          ->byday("tu, we, th")
-          ->bysetpos(3)
+          ->rrule("FREQ=MONTHLY;COUNT=3;BYDAY=TU,WE,TH;BYSETPOS=3")
           ->generateOccurences();
 
         $occurences = $r->occurences;

@@ -210,8 +210,49 @@ class When extends \DateTime
         }
     }
 
-    // returns true or false depending on if it occurs on the date or not
-    //
+    public function rrule($rrule)
+    {
+        // strip off a trailing semi-colon
+        $rrule = trim($rrule, ";");
+
+        $parts = explode(";", $rrule);
+
+        foreach($parts as $part)
+        {
+            list($rule, $param) = explode("=", $part);
+
+            $rule = strtoupper($rule);
+            $param = strtoupper($param);
+
+            switch($rule)
+            {
+                case "UNTIL":
+                    $this->until(new \DateTime($param));
+                    break;
+                case "FREQ":
+                case "COUNT":
+                case "INTERVAL":
+                case "WKST":
+                    $this->{$rule}($param);
+                    break;
+                case "BYDAY":
+                case "BYMONTHDAY":
+                case "BYYEARDAY":
+                case "BYWEEKNO":
+                case "BYMONTH":
+                case "BYSETPOS":
+                case "BYHOUR":
+                case "BYMINUTE":
+                case "BYSECOND":
+                    $params = explode(",", $param);
+                    $this->{$rule}($params);
+                    break;
+            }
+        }
+
+        return $this;
+    }
+
     public function occursOn($date)
     {
         if (!Valid::dateTimeObject($date))
@@ -583,7 +624,7 @@ class When extends \DateTime
         }
     }
 
-    public function addOccurence($occurences)
+    protected function addOccurence($occurences)
     {
         foreach ($occurences as $occurence)
         {
@@ -623,7 +664,7 @@ class When extends \DateTime
         return $occurences;
     }
 
-    public function prepareDateElements()
+    protected function prepareDateElements()
     {
         // if the interval isn't set, set it.
         if (!isset($this->interval))

@@ -2,7 +2,7 @@
 
 use \When\When;
 
-class WhenWeeklyTest extends PHPUnit_Framework_TestCase
+class WhenWeeklyRruleTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Weekly for 10 occurrences:
@@ -24,8 +24,7 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
-          ->freq("weekly")
-          ->count(10)
+          ->rrule("FREQ=WEEKLY;COUNT=10")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -63,8 +62,7 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
-          ->freq("weekly")
-          ->until(new DateTime("19971224T000000"))
+          ->rrule("FREQ=WEEKLY;UNTIL=19971224T000000Z")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -98,10 +96,7 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
-          ->freq("weekly")
-          ->count(13)
-          ->interval(2)
-          ->wkst("SU")
+          ->rrule("FREQ=WEEKLY;INTERVAL=2;WKST=SU")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -134,10 +129,7 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
-          ->freq("weekly")
-          ->until(new DateTime("19971007T000000"))
-          ->wkst("SU")
-          ->byday(array('TU', 'TH'))
+          ->rrule("FREQ=WEEKLY;UNTIL=19971007T000000Z;WKST=SU;BYDAY=TU,TH")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -151,10 +143,7 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
-          ->freq("weekly")
-          ->count(10)
-          ->wkst("SU")
-          ->byday(array('TU', 'TH'))
+          ->rrule("FREQ=WEEKLY;COUNT=10;WKST=SU;BYDAY=TU,TH")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -200,11 +189,7 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970901T090000"))
-          ->freq("weekly")
-          ->until(new DateTime("19971224T000000"))
-          ->wkst("SU")
-          ->interval(2)
-          ->byday(array('MO', 'WE', 'FR'))
+          ->rrule("FREQ=WEEKLY;INTERVAL=2;UNTIL=19971224T000000Z;WKST=SU;BYDAY=MO,WE,FR")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -233,11 +218,7 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
-          ->freq("weekly")
-          ->wkst("SU")
-          ->interval(2)
-          ->count(8)
-          ->byday(array('TU', 'TH'))
+          ->rrule("FREQ=WEEKLY;INTERVAL=2;COUNT=8;WKST=SU;BYDAY=TU,TH")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -262,11 +243,7 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970805T090000"))
-          ->freq("weekly")
-          ->interval(2)
-          ->count(4)
-          ->byday(array('TU', 'SU'))
-          ->wkst('MO')
+          ->rrule("FREQ=WEEKLY;INTERVAL=2;COUNT=4;BYDAY=TU,SU;WKST=MO")
           ->generateOccurences();
 
         $occurences = $r->occurences;
@@ -291,11 +268,7 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
 
         $r = new When();
         $r->startDate(new DateTime("19970805T090000"))
-          ->freq("weekly")
-          ->interval(2)
-          ->count(4)
-          ->byday(array('TU', 'SU'))
-          ->wkst('SU')
+          ->rrule("FREQ=WEEKLY;INTERVAL=2;COUNT=4;BYDAY=TU,SU;WKST=SU")
           ->generateOccurences();
 
         $occurences = $r->occurences;
