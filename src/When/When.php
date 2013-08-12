@@ -720,7 +720,7 @@ class When extends \DateTime
 
         if (!isset($this->wkst))
         {
-            $this->wkst = "su";
+            $this->wkst = "mo";
         }
 
         /*if (!isset($this->bydays))
