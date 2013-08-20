@@ -7,7 +7,28 @@ Author: Tom Planer
 The second version of When.
 
 ###Current Features
-Currently the script is able to determine valid date occurences. It can not generate them at this time. It also can not determine if a date time is beyond the max count (if there is one set).
+Currently this version does everything version 1 was capable of, it also supports byhour, byminute, and bysecond. Please check the [unit tests](https://github.com/tplaner/When/tree/develop/tests) for information about how to use it.
+
+I will be replacing version 1 with this as soon as I complete the documentation. Until then here are some simple examples:
+
+    // friday the 13th for the next 5 occurences
+    $r = new When();
+    $r->startDate(new DateTime("19980213T090000"))
+      ->freq("monthly")
+      ->count(5)
+      ->byday("fr")
+      ->bymonthday(13)
+      ->generateOccurences();
+
+    print_r($r->occurences);
+
+    // friday the 13th for the next 5 occurences rrule
+    $r = new When();
+    $r->startDate(new DateTime("19980213T090000"))
+      ->rrule("FREQ=MONTHLY;BYDAY=FR;BYMONTHDAY=13")
+      ->generateOccurences();
+
+    print_r($r->occurences);
 
 ###License
 When is licensed under the MIT License, see `LICENSE` for specific details.
