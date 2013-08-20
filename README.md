@@ -1,4 +1,7 @@
-##When 
+##When
+
+**If you are considering using When, please use the [develop branch](https://github.com/tplaner/When/tree/develop) it will replace this branch when the documentation is complete, functionally it offers everything this version does, it supports PHP 5.3+.**
+
 Date/Calendar recursion library for PHP 5.2+
 
 Author: Thomas Planer
@@ -10,7 +13,7 @@ There is: [http://phpicalendar.org/][6] however it would have been extremely dif
 portion of the script from the application.
 
 Oddly, there are extremely good date recursion libraries for both Ruby and Python:
-	
+
 Ruby: [http://github.com/seejohnrun/ice_cube][1]
 
 Python: [http://labix.org/python-dateutil][2]
@@ -53,13 +56,13 @@ More documentation to come, please take a look at the unit tests for an understa
 ###Examples (take a look at the unit tests for more examples)
 
 The next 5 occurrences of Friday the 13th:
-	
+
 	$r = new When();
 	$r->recur(new DateTime(), 'monthly')
 	  ->count(5)
 	  ->byday(array('FR'))
 	  ->bymonthday(array(13));
-	
+
 	while($result = $r->next())
 	{
 		echo $result->format('c') . '<br />';
@@ -69,7 +72,7 @@ Every four years, the first Tuesday after a Monday in November, for the next 20 
 
 	// this is the next election date
 	$start = new DateTime('2012-09-06');
-	
+
 	$r = new When();
 	$r->recur($start, 'yearly')
 	  ->until($start->modify('+20 years'))
