@@ -1,6 +1,8 @@
 ##When
 Date/Calendar recursion library for PHP 5.3+
 
+[![Build Status](https://travis-ci.org/tplaner/When.png?branch=develop)](https://travis-ci.org/tplaner/When)
+
 Author: Tom Planer
 
 ###About
@@ -21,6 +23,8 @@ I will be replacing version 1 with this as soon as I complete the documentation.
       ->generateOccurences();
 
     print_r($r->occurences);
+
+
 
     // friday the 13th for the next 5 occurences rrule
     $r = new When();
