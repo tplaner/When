@@ -16,6 +16,7 @@ class When extends \DateTime
     public $bydays;
     public $bymonthdays;
     public $byyeardays;
+    public $byyeardates;
     public $byweeknos;
     public $bymonths;
     public $bysetpos;
@@ -166,6 +167,23 @@ class When extends \DateTime
         throw new \InvalidArgumentException("byyearday: Accepts positive and negative values between 1 and 366");
     }
 
+    public function byyeardate($byyrdatelist, $delimiter = ",")
+    {
+        if (!is_array($byyrdatelist)) {
+            $byyrdatelist = array($byyrdatelist);
+        }
+        array_walk($byyrdatelist, function(&$date) {
+            $date = explode('/', $date);
+        });
+
+        if($this->byyeardates = self::prepareItemsList($byyrdatelist, $delimiter, 'yearDateNum'))
+        {
+            return $this;
+        }
+
+        throw new \InvalidArgumentException("byyeardate: Accepts month & day indexes");
+    }
+
     public function byweekno($bywknolist, $delimiter = ",")
     {
         if($this->byweeknos = self::prepareItemsList($bywknolist, $delimiter, 'weekNum'))
@@ -238,6 +256,7 @@ class When extends \DateTime
                 case "BYDAY":
                 case "BYMONTHDAY":
                 case "BYYEARDAY":
+                case "BYYEARDATE":
                 case "BYWEEKNO":
                 case "BYMONTH":
                 case "BYSETPOS":
@@ -341,6 +360,19 @@ class When extends \DateTime
             if (!in_array($yearDay, $this->byyeardays) &&
                 !in_array($yearDayNeg, $this->byyeardays))
             {
+                return false;
+            }
+        }
+
+        if (isset($this->byyeardates))
+        {
+            $found = false;
+            foreach ($this->byyeardates as $offset) {
+                if ($month == $offset[0] && $day == $offset[1]) {
+                    $found = true;
+                }
+            }
+            if (!$found) {
                 return false;
             }
         }
