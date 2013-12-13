@@ -397,7 +397,7 @@ class When extends \DateTime
             throw new InvalidStartDate();
         }
 
-        while (($this->until && $dateLooper < $this->until) || ($this->count && count($this->occurences) < $this->count))
+        while ((!$this->until || ($this->until && $dateLooper < $this->until)) && (!$this->count || ($this->count && count($this->occurences) < $this->count)))
         {
             if ($this->freq === "yearly")
             {
