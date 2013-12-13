@@ -750,7 +750,7 @@ class When extends \DateTime
 
         if ($this->freq === "yearly")
         {
-            if (!isset($this->bymonthdays) && !isset($this->bymonths))
+            if (!isset($this->bymonthdays) && !isset($this->bydays) && !isset($this->bymonths) && !isset($this->byyeardays) && !isset($this->byweeknos))
             {
             	$this->bymonths = array($this->startDate->format('n'));
                 $this->bymonthdays = array($this->startDate->format('j'));
