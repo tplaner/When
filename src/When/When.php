@@ -55,7 +55,7 @@ class When extends \DateTime
 
         // move start forwards until we have a match
 
-        if (isset($this->bydays) || isset($this->bymonthdays) || isset($this->bymonthdayoffsets) || isset($this->byyeardays) || isset($this->byyeardates)) {
+        if (isset($this->bydays) || isset($this->bymonthdays) || isset($this->byyeardays)) {
             while (!$this->occursOn($this->startDate) && $this->startDate <= $this->until) {
                 $this->startDate->add(new \DateInterval('P1D'));
                 list($year, $month, $day, $dayFromEndOfMonth, $week, $weekDay, $dayOfWeek, $dayOfWeekAbr, $yearDay, $yearDayNeg, $leapYear) = self::getDateComponents($this->startDate);
