@@ -19,13 +19,13 @@ class WhenMinutelyRruleTest extends \PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=MINUTELY;INTERVAL=90;COUNT=4")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -46,13 +46,13 @@ class WhenMinutelyRruleTest extends \PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=MINUTELY;INTERVAL=15;COUNT=6")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 

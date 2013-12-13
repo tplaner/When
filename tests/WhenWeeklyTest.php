@@ -26,13 +26,13 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
         $r->startDate(new DateTime("19970902T090000"))
           ->freq("weekly")
           ->count(10)
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -65,13 +65,13 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
         $r->startDate(new DateTime("19970902T090000"))
           ->freq("weekly")
           ->until(new DateTime("19971224T000000"))
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -102,13 +102,13 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
           ->count(13)
           ->interval(2)
           ->wkst("SU")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -138,13 +138,13 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
           ->until(new DateTime("19971007T000000"))
           ->wkst("SU")
           ->byday(array('TU', 'TH'))
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
 
         unset($r);
@@ -155,13 +155,13 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
           ->count(10)
           ->wkst("SU")
           ->byday(array('TU', 'TH'))
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -205,13 +205,13 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
           ->wkst("SU")
           ->interval(2)
           ->byday(array('MO', 'WE', 'FR'))
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -238,13 +238,13 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
           ->interval(2)
           ->count(8)
           ->byday(array('TU', 'TH'))
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -267,13 +267,13 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
           ->count(4)
           ->byday(array('TU', 'SU'))
           ->wkst('MO')
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -296,13 +296,13 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
           ->count(4)
           ->byday(array('TU', 'SU'))
           ->wkst('SU')
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 }

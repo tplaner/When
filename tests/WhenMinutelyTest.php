@@ -21,13 +21,13 @@ class WhenMinutelyTest extends \PHPUnit_Framework_TestCase
           ->freq("minutely")
           ->interval(90)
           ->count(4)
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -50,13 +50,13 @@ class WhenMinutelyTest extends \PHPUnit_Framework_TestCase
           ->freq("minutely")
           ->interval(15)
           ->count(6)
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 

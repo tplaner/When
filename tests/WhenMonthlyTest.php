@@ -27,13 +27,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->freq("monthly")
           ->count(10)
           ->byday('1FR')
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -54,13 +54,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->until(new DateTime("19971224T000000Z"))
           ->freq("monthly")
           ->byday('1FR')
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -88,13 +88,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->interval(2)
           ->count(10)
           ->byday('1SU,-1SU')
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -117,13 +117,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->freq("monthly")
           ->count(6)
           ->byday('-2MO')
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -146,13 +146,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->freq("monthly")
           ->count(6)
           ->bymonthday(-3)
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -179,13 +179,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->freq("monthly")
           ->count(10)
           ->bymonthday("2, 15")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -212,13 +212,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->freq("monthly")
           ->count(10)
           ->bymonthday("1, -1")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -246,13 +246,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->interval(18)
           ->count(10)
           ->bymonthday("10,11,12,13,14,15")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -288,13 +288,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->interval(2)
           ->count(18)
           ->byday("tu")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -321,13 +321,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->count(5)
           ->byday("fr")
           ->bymonthday(13)
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -355,13 +355,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->count(10)
           ->byday("sa")
           ->bymonthday("7,8,9,10,11,12,13")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -382,13 +382,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->count(3)
           ->byday("TU, WE, TH")
           ->bysetpos("3")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -410,13 +410,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->freq("monthly")
           ->count(5)
           ->bymonthday("15,30")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -441,14 +441,14 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->count(7)
           ->byday(array('MO', 'TU', 'WE', 'TH', 'FR'))
           ->bysetpos(array(-2))
-          ->generateOccurences();
+          ->generateOccurrences();
         //$r->recur('19970929T090000', 'monthly')->count(7)->byday(array('MO', 'TU', 'WE', 'TH', 'FR'))->bysetpos(array(-2));
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -525,13 +525,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->freq("monthly")
           ->interval(1)
           ->until(new DateTime("2016-09-15T10:00:00+0100"))
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -552,13 +552,13 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
           ->count(3)
           ->byday("tu, we, th")
           ->bysetpos(3)
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 }

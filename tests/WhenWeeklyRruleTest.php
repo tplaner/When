@@ -25,13 +25,13 @@ class WhenWeeklyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY;COUNT=10")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -63,13 +63,13 @@ class WhenWeeklyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY;UNTIL=19971224T000000Z")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -97,13 +97,13 @@ class WhenWeeklyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY;INTERVAL=2;WKST=SU")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -130,13 +130,13 @@ class WhenWeeklyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY;UNTIL=19971007T000000Z;WKST=SU;BYDAY=TU,TH")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
 
         unset($r);
@@ -144,13 +144,13 @@ class WhenWeeklyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY;COUNT=10;WKST=SU;BYDAY=TU,TH")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -190,13 +190,13 @@ class WhenWeeklyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970901T090000"))
           ->rrule("FREQ=WEEKLY;INTERVAL=2;UNTIL=19971224T000000Z;WKST=SU;BYDAY=MO,WE,FR")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -219,13 +219,13 @@ class WhenWeeklyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY;INTERVAL=2;COUNT=8;WKST=SU;BYDAY=TU,TH")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -244,13 +244,13 @@ class WhenWeeklyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970805T090000"))
           ->rrule("FREQ=WEEKLY;INTERVAL=2;COUNT=4;BYDAY=TU,SU;WKST=MO")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -269,13 +269,13 @@ class WhenWeeklyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970805T090000"))
           ->rrule("FREQ=WEEKLY;INTERVAL=2;COUNT=4;BYDAY=TU,SU;WKST=SU")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 }

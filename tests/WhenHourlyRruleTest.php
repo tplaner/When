@@ -20,13 +20,13 @@ class WhenHourlyRruleTest extends \PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000Z"))
           ->rrule("FREQ=HOURLY;INTERVAL=3;UNTIL=19970902T170000Z")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 

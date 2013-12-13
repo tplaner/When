@@ -22,13 +22,13 @@ class WhenHourlyTest extends \PHPUnit_Framework_TestCase
           ->freq("hourly")
           ->interval(3)
           ->until(new DateTime("19970902T170000Z"))
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 

@@ -26,13 +26,13 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
           ->freq("yearly")
           ->count(10)
           ->bymonth("6, 7")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -59,13 +59,13 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
           ->interval(3)
           ->count(10)
           ->byyearday("1,100,200")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -92,13 +92,13 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
           ->interval(2)
           ->count(10)
           ->bymonth("1,2,3")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -209,13 +209,13 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
           ->until(new DateTime("20000131T090000"))
           ->bymonth("1")
           ->byday("su,mo,tu,we,th,fr,sa")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -245,13 +245,13 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
           ->count(10)
           ->byweekno(20)
           ->byday('mo')
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
      }
 
@@ -279,13 +279,13 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
           ->count(10)
           ->bymonth(3)
           ->byday('th')
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
      }
 
@@ -342,13 +342,13 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
           ->count(39)
           ->bymonth("6,7,8")
           ->byday('th')
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -378,13 +378,13 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
           ->bymonth(11)
           ->byday('tu')
           ->bymonthday("2,3,4,5,6,7,8")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -412,13 +412,13 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
           ->count(10)
           ->interval(3)
           ->byyearday("1,100,200")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -477,13 +477,13 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
           ->freq("yearly")
           ->count(5)
           ->byyearday("-1, -100, -200")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -514,13 +514,13 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
           ->byhour("8,9")
           ->byminute("30")
           ->count(10)
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 

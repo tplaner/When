@@ -21,7 +21,7 @@ class When extends \DateTime
     public $bysetpos;
     public $wkst;
 
-    public $occurences = array();
+    public $occurrences = array();
 
     public function __construct($time = "now", $timezone = NULL)
     {
@@ -275,7 +275,7 @@ class When extends \DateTime
             $yearDayNeg = -367 + (int)$yearDay;
         }
 
-        // this is the nth occurence of the date
+        // this is the nth occurrence of the date
         $occur = ceil($day / 7);
         $occurNeg = -1 * ceil(abs($dayFromEndOfMonth) / 7);
 
@@ -379,7 +379,7 @@ class When extends \DateTime
         }
     }
 
-    public function generateOccurences()
+    public function generateOccurrences()
     {
         self::prepareDateElements();
 
@@ -387,17 +387,17 @@ class When extends \DateTime
 
         $dateLooper = clone $this->startDate;
 
-        // add the start date to the list of occurences
+        // add the start date to the list of occurrences
         if ($this->occursOn($dateLooper))
         {
-            $this->addOccurence($this->generateTimeOccurences($dateLooper));
+            $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
         }
         else
         {
             throw new InvalidStartDate();
         }
 
-        while ($dateLooper < $this->until && count($this->occurences) < $this->count)
+        while ($dateLooper < $this->until && count($this->occurrences) < $this->count)
         {
             if ($this->freq === "yearly")
             {
@@ -417,7 +417,7 @@ class When extends \DateTime
                             {
                                 if ($this->occursOn($dateLooper))
                                 {
-                                    $this->addOccurence($this->generateTimeOccurences($dateLooper));
+                                    $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
 
                                 }
 
@@ -431,7 +431,7 @@ class When extends \DateTime
 
                             if ($this->occursOn($dateLooper))
                             {
-                                $this->addOccurence($this->generateTimeOccurences($dateLooper));
+                                $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
 
                             }
                         }
@@ -456,7 +456,7 @@ class When extends \DateTime
                     {
                         if ($this->occursOn($dateLooper))
                         {
-                            $this->addOccurence($this->generateTimeOccurences($dateLooper));
+                            $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
 
                         }
                         $dateLooper->add(new \DateInterval('P1D'));
@@ -473,12 +473,12 @@ class When extends \DateTime
 
                 $day = (int)$dateLooper->format("j");
 
-                $occurences = array();
+                $occurrences = array();
                 while ($day <= $days)
                 {
                     if ($this->occursOn($dateLooper))
                     {
-                        $occurences = array_merge($occurences, $this->generateTimeOccurences($dateLooper));
+                        $occurrences = array_merge($occurrences, $this->generateTimeOccurrences($dateLooper));
                     }
 
                     $dateLooper->add(new \DateInterval('P1D'));
@@ -486,30 +486,30 @@ class When extends \DateTime
                 }
 
                 // if bysetpos is set we need to limit the
-                // number of occurences to only those which
+                // number of occurrences to only those which
                 // meet the setpos
                 if (isset($this->bysetpos))
                 {
                     if ($count > 0)
                     {
-                        $occurenceCount = count($occurences);
+                        $occurrenceCount = count($occurrences);
 
                         foreach ($this->bysetpos as $setpos)
                         {
                             if ($setpos > 0)
                             {
-                                $this->occurences[] = $occurences[$setpos - 1];
+                                $this->occurrences[] = $occurrences[$setpos - 1];
                             }
                             else
                             {
-                                $this->occurences[] = $occurences[$occurenceCount + $setpos];
+                                $this->occurrences[] = $occurrences[$occurrenceCount + $setpos];
                             }
                         }
                     }
                 }
                 else
                 {
-                    $this->addOccurence($occurences);
+                    $this->addOccurrence($occurrences);
                 }
 
                 $dateLooper = clone $this->startDate;
@@ -563,7 +563,7 @@ class When extends \DateTime
                 {
                     if ($this->occursOn($dateLooper))
                     {
-                        $this->addOccurence($this->generateTimeOccurences($dateLooper));
+                        $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
                     }
                     $dateLooper->add(new \DateInterval('P1D'));
                     $daysLeft--;
@@ -577,7 +577,7 @@ class When extends \DateTime
             {
                 if ($this->occursOn($dateLooper))
                 {
-                    $this->addOccurence($this->generateTimeOccurences($dateLooper));
+                    $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
                 }
 
                 $dateLooper = clone $this->startDate;
@@ -586,11 +586,11 @@ class When extends \DateTime
             }
             else if ($this->freq === "hourly")
             {
-                $occurence = array();
+                $occurrence = array();
                 if ($this->occursOn($dateLooper))
                 {
-                    $occurence[] = $dateLooper;
-                    $this->addOccurence($occurence);
+                    $occurrence[] = $dateLooper;
+                    $this->addOccurrence($occurrence);
                 }
 
                 $dateLooper = clone $this->startDate;
@@ -598,11 +598,11 @@ class When extends \DateTime
             }
             else if ($this->freq === "minutely")
             {
-                $occurence = array();
+                $occurrence = array();
                 if ($this->occursOn($dateLooper))
                 {
-                    $occurence[] = $dateLooper;
-                    $this->addOccurence($occurence);
+                    $occurrence[] = $dateLooper;
+                    $this->addOccurrence($occurrence);
                 }
 
                 $dateLooper = clone $this->startDate;
@@ -610,11 +610,11 @@ class When extends \DateTime
             }
             else if ($this->freq === "secondly")
             {
-                $occurence = array();
+                $occurrence = array();
                 if ($this->occursOn($dateLooper))
                 {
-                    $occurence[] = $dateLooper;
-                    $this->addOccurence($occurence);
+                    $occurrence[] = $dateLooper;
+                    $this->addOccurrence($occurrence);
                 }
 
                 $dateLooper = clone $this->startDate;
@@ -624,22 +624,22 @@ class When extends \DateTime
         }
     }
 
-    protected function addOccurence($occurences)
+    protected function addOccurrence($occurrences)
     {
-        foreach ($occurences as $occurence)
+        foreach ($occurrences as $occurrence)
         {
-            // make sure that this occurence isn't already in the list
-            if (!in_array($occurence, $this->occurences))
+            // make sure that this occurrence isn't already in the list
+            if (!in_array($occurrence, $this->occurrences))
             {
-                $this->occurences[] = $occurence;
+                $this->occurrences[] = $occurrence;
             }
         }
     }
 
     // not happy with this.
-    protected function generateTimeOccurences($dateLooper)
+    protected function generateTimeOccurrences($dateLooper)
     {
-        $occurences = array();
+        $occurrences = array();
 
         foreach ($this->byhours as $hour)
         {
@@ -647,11 +647,11 @@ class When extends \DateTime
             {
                 foreach ($this->byseconds as $second)
                 {
-                    if (count($this->occurences) < $this->count)
+                    if (count($this->occurrences) < $this->count)
                     {
-                        $occurence = clone $dateLooper;
-                        $occurence->setTime($hour, $minute, $second);
-                        $occurences[] = $occurence;
+                        $occurrence = clone $dateLooper;
+                        $occurrence->setTime($hour, $minute, $second);
+                        $occurrences[] = $occurrence;
                     }
                     else
                     {
@@ -661,7 +661,7 @@ class When extends \DateTime
             }
         }
 
-        return $occurences;
+        return $occurrences;
     }
 
     protected function prepareDateElements()
@@ -834,7 +834,7 @@ class FrequencyRequired extends \Exception
 
 class InvalidStartDate extends \Exception
 {
-    public function __construct($message = "The start date must be the first occurence.", $code = 0, Exception $previous = null)
+    public function __construct($message = "The start date must be the first occurrence.", $code = 0, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

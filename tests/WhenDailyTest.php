@@ -26,13 +26,13 @@ class WhenDailyTest extends PHPUnit_Framework_TestCase
         $r->startDate(new DateTime("19970902T090000"))
           ->freq("daily")
           ->count(10)
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -161,13 +161,13 @@ class WhenDailyTest extends PHPUnit_Framework_TestCase
         $r->startDate(new DateTime("19970902T090000"))
           ->freq("daily")
           ->until(new DateTime("19971224T000000"))
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -231,13 +231,13 @@ class WhenDailyTest extends PHPUnit_Framework_TestCase
           ->freq("daily")
           ->interval(2)
           ->count(47)
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -259,13 +259,13 @@ class WhenDailyTest extends PHPUnit_Framework_TestCase
           ->freq("daily")
           ->interval(10)
           ->count(5)
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -375,13 +375,13 @@ class WhenDailyTest extends PHPUnit_Framework_TestCase
           ->freq("daily")
           ->bymonth(array(1))
           ->until(new DateTime("20000131T140000"))
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 }

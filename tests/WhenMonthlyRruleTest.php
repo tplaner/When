@@ -25,13 +25,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970905T090000"))
           ->rrule("FREQ=MONTHLY;COUNT=10;BYDAY=1FR")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -50,13 +50,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970905T090000"))
           ->rrule("FREQ=MONTHLY;UNTIL=19971224T000000Z;BYDAY=1FR")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -81,13 +81,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970907T090000"))
           ->rrule("FREQ=MONTHLY;INTERVAL=2;COUNT=10;BYDAY=1SU,-1SU")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -108,13 +108,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970922T090000"))
           ->rrule("FREQ=MONTHLY;COUNT=6;BYDAY=-2MO")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -135,13 +135,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970928T090000"))
           ->rrule("FREQ=MONTHLY;BYMONTHDAY=-3")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -166,13 +166,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=MONTHLY;COUNT=10;BYMONTHDAY=2,15")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -197,13 +197,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970930T090000"))
           ->rrule("FREQ=MONTHLY;COUNT=10;BYMONTHDAY=1,-1")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -228,13 +228,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970910T090000"))
           ->rrule("FREQ=MONTHLY;INTERVAL=18;COUNT=10;BYMONTHDAY=10,11,12,13,14,15")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -267,13 +267,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=MONTHLY;INTERVAL=2;BYDAY=TU")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -297,13 +297,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19980213T090000"))
           ->rrule("FREQ=MONTHLY;BYDAY=FR;BYMONTHDAY=13")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -328,13 +328,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970913T090000"))
           ->rrule("FREQ=MONTHLY;BYDAY=SA;BYMONTHDAY=7,8,9,10,11,12,13")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -352,13 +352,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970904T090000"))
           ->rrule("FREQ=MONTHLY;COUNT=3;BYDAY=TU,WE,TH;BYSETPOS=3")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -378,13 +378,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("20070115T090000"))
           ->rrule("FREQ=MONTHLY;BYMONTHDAY=15,30;COUNT=5")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -406,13 +406,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970929T090000"))
           ->rrule("FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-2")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -487,13 +487,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("2011-09-15 10:00:00"))
           ->rrule("INTERVAL=1;FREQ=MONTHLY;UNTIL=2016-09-15T10:00:00+0100")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -511,13 +511,13 @@ class WhenMonthlyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970904T090000"))
           ->rrule("FREQ=MONTHLY;COUNT=3;BYDAY=TU,WE,TH;BYSETPOS=3")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 }

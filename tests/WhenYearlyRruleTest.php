@@ -24,13 +24,13 @@ class WhenYearlyRruleTest extends \PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970610T090000"))
           ->rrule("FREQ=YEARLY;COUNT=10;BYMONTH=6,7")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -54,13 +54,13 @@ class WhenYearlyRruleTest extends \PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970101T090000"))
           ->rrule("FREQ=YEARLY;INTERVAL=3;COUNT=10;BYYEARDAY=1,100,200")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -84,13 +84,13 @@ class WhenYearlyRruleTest extends \PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970310T090000"))
           ->rrule("FREQ=YEARLY;INTERVAL=2;COUNT=10;BYMONTH=1,2,3")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -198,13 +198,13 @@ class WhenYearlyRruleTest extends \PHPUnit_Framework_TestCase
 
         $r->startDate(new DateTime("19980101T090000"))
           ->rrule("FREQ=YEARLY;UNTIL=20000131T090000;BYMONTH=1;BYDAY=SU,MO,TU,WE,TH,FR,SA")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -231,13 +231,13 @@ class WhenYearlyRruleTest extends \PHPUnit_Framework_TestCase
 
         $r->startDate(new DateTime("19970512T090000"))
           ->rrule("FREQ=YEARLY;BYWEEKNO=20;BYDAY=MO;COUNT=10")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
      }
 
@@ -262,13 +262,13 @@ class WhenYearlyRruleTest extends \PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970313T090000"))
           ->rrule("FREQ=YEARLY;BYMONTH=3;BYDAY=TH;COUNT=10")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
      }
 
@@ -322,13 +322,13 @@ class WhenYearlyRruleTest extends \PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970605T090000"))
           ->rrule("FREQ=YEARLY;BYDAY=TH;BYMONTH=6,7,8;COUNT=39")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -353,13 +353,13 @@ class WhenYearlyRruleTest extends \PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19961105T090000"))
           ->rrule("FREQ=YEARLY;INTERVAL=4;BYMONTH=11;BYDAY=TU;BYMONTHDAY=2,3,4,5,6,7,8")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -384,13 +384,13 @@ class WhenYearlyRruleTest extends \PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970101T090000"))
           ->rrule("FREQ=YEARLY;INTERVAL=3;COUNT=10;BYYEARDAY=1,100,200")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -447,13 +447,13 @@ class WhenYearlyRruleTest extends \PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("20101231T090000"))
           ->rrule("FREQ=YEARLY;COUNT=5;BYYEARDAY=-1,-100,-200")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -478,13 +478,13 @@ class WhenYearlyRruleTest extends \PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970105T083000"))
           ->rrule("FREQ=YEARLY;INTERVAL=2;BYMONTH=1;BYDAY=SU;BYHOUR=8,9;BYMINUTE=30")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 

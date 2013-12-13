@@ -25,13 +25,13 @@ class WhenDailyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=DAILY;COUNT=10")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -159,13 +159,13 @@ class WhenDailyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=DAILY;UNTIL=19971224T000000Z")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -227,13 +227,13 @@ class WhenDailyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=DAILY;INTERVAL=2")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -253,13 +253,13 @@ class WhenDailyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=DAILY;INTERVAL=10;COUNT=5")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -369,13 +369,13 @@ class WhenDailyRruleTest extends PHPUnit_Framework_TestCase
         $r = new When();
         $r->startDate(new DateTime("19980101T090000"))
           ->rrule("FREQ=DAILY;UNTIL=20000131T140000;BYMONTH=1")
-          ->generateOccurences();
+          ->generateOccurrences();
 
-        $occurences = $r->occurences;
+        $occurrences = $r->occurrences;
 
         foreach ($results as $key => $result)
         {
-            $this->assertEquals($result, $occurences[$key]);
+            $this->assertEquals($result, $occurrences[$key]);
         }
     }
 }
