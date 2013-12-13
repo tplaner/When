@@ -20,6 +20,7 @@ class When extends \DateTime
     public $bymonths;
     public $bysetpos;
     public $wkst;
+    public $shouldadjustmonthend = false;
 
     public $occurences = array();
 
@@ -210,6 +211,11 @@ class When extends \DateTime
         }
     }
 
+    public function adjustmonthend($adjust)
+    {
+    	$this->shouldadjustmonthend = !!$adjust;
+    }
+
     public function rrule($rrule)
     {
         // strip off a trailing semi-colon
@@ -233,6 +239,7 @@ class When extends \DateTime
                 case "COUNT":
                 case "INTERVAL":
                 case "WKST":
+                case "ADJUSTMONTHEND":
                     $this->{$rule}($param);
                     break;
                 case "BYDAY":
@@ -329,11 +336,30 @@ class When extends \DateTime
 
         if (isset($this->bymonthdays))
         {
+            $realMonthDays = false;
+            if ($this->shouldadjustmonthend) {
+            	$monthLen = $date->format("t");
+            	$realMonthDays = $this->bymonthdays;
+            	foreach ($this->bymonthdays as &$dayOffset) {
+            		if ($dayOffset > $monthLen) {
+            			$dayOffset = $monthLen;
+            		}
+            	}
+            }
+
             if (!in_array($day, $this->bymonthdays) &&
                 !in_array($dayFromEndOfMonth, $this->bymonthdays))
             {
-                return false;
+                $ok = false;
+            } else {
+            	$ok = true;
             }
+
+            if ($realMonthDays) {
+            	$this->bymonthdays = $realMonthDays;
+            }
+
+            return $ok;
         }
 
         if (isset($this->byyeardays))
