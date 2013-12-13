@@ -397,7 +397,7 @@ class When extends \DateTime
             throw new InvalidStartDate();
         }
 
-        while ($dateLooper < $this->until && count($this->occurences) < $this->count)
+        while ((!$this->until || ($this->until && $dateLooper < $this->until)) && (!$this->count || ($this->count && count($this->occurences) < $this->count)))
         {
             if ($this->freq === "yearly")
             {
@@ -647,7 +647,7 @@ class When extends \DateTime
             {
                 foreach ($this->byseconds as $second)
                 {
-                    if (count($this->occurences) < $this->count)
+                    if (!$this->count || ($this->count && count($this->occurences) < $this->count))
                     {
                         $occurence = clone $dateLooper;
                         $occurence->setTime($hour, $minute, $second);
@@ -678,7 +678,7 @@ class When extends \DateTime
             throw new FrequencyRequired();
         }
 
-        if (!isset($this->count))
+        if (!isset($this->count) && !isset($this->until))
         {
             $this->count = 200;
         }
