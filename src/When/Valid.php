@@ -91,6 +91,17 @@ class Valid
         return self::ordYrDay(abs($day));
     }
 
+    public static function yearDateNum($date)
+    {
+        @list($month, $date) = $date;
+
+        if (!$month || !$date) {
+            return false;
+        }
+
+        return self::monthNum($month) && self::monthDayNum($date);
+    }
+
     public static function ordYrDay($ordyrday)
     {
         return ($ordyrday >= 1 && $ordyrday <= 366);
