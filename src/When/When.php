@@ -551,12 +551,11 @@ class When extends \DateTime
                 if ($count === 0)
                 {
                     $startWeekDay = clone $this->startDate;
+                    $startWeekDay->modify("next " . $wkst);
+
+                    $daysLeft = $dateLooper->diff($startWeekDay)->format("%a") + 1;
+
                     $startWeekDay->modify("last " . $wkst);
-                    $startWeekDay->modify("+7 days");
-
-                    $daysLeft = intval($startWeekDay->format('j')) - intval($dateLooper->format("j"));
-
-                    $startWeekDay->modify("-7 days");
                 }
 
                 while ($daysLeft > 0)
@@ -565,6 +564,7 @@ class When extends \DateTime
                     {
                         $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
                     }
+
                     $dateLooper->add(new \DateInterval('P1D'));
                     $daysLeft--;
                 }
