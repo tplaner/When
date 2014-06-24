@@ -42,6 +42,37 @@ class When extends \DateTime
         }
     }
 
+    // set start date to the first occurence
+    public function adjustStartDate()
+    {
+        if (!$this->startDate || $this->occursOn($this->startDate)) {
+            return;
+        }
+
+        // breakdown the date
+
+        list($year, $month, $day, $dayFromEndOfMonth, $week, $weekDay, $dayOfWeek, $dayOfWeekAbr, $yearDay, $yearDayNeg, $leapYear) = self::getDateComponents($this->startDate);
+
+        // move start forwards until we have a match
+
+        if (isset($this->bydays) || isset($this->bymonthdays) || isset($this->byyeardays)) {
+            while (!$this->occursOn($this->startDate) && $this->startDate <= $this->until) {
+                $this->startDate->add(new \DateInterval('P1D'));
+                list($year, $month, $day, $dayFromEndOfMonth, $week, $weekDay, $dayOfWeek, $dayOfWeekAbr, $yearDay, $yearDayNeg, $leapYear) = self::getDateComponents($this->startDate);
+            }
+        } else if (isset($this->byweeknos)) {
+            while (!$this->occursOn($this->startDate) && $this->startDate <= $this->until) {
+                $this->startDate->add(new \DateInterval('P1W'));
+                list($year, $month, $day, $dayFromEndOfMonth, $week, $weekDay, $dayOfWeek, $dayOfWeekAbr, $yearDay, $yearDayNeg, $leapYear) = self::getDateComponents($this->startDate);
+            }
+        } else if (isset($this->bymonths)) {
+            while (!$this->occursOn($this->startDate) && $this->startDate <= $this->until) {
+                $this->startDate->add(new \DateInterval('P1M'));
+                list($year, $month, $day, $dayFromEndOfMonth, $week, $weekDay, $dayOfWeek, $dayOfWeekAbr, $yearDay, $yearDayNeg, $leapYear) = self::getDateComponents($this->startDate);
+            }
+        }
+    }
+
     public function freq($frequency)
     {
         if (Valid::freq($frequency))
@@ -261,30 +292,11 @@ class When extends \DateTime
         }
 
         // breakdown the date
-        $year = $date->format('Y');
-        $month = $date->format('n');
-        $day = $date->format('j');
-        $dayFromEndOfMonth = -((int)$date->format('t') + 1 - (int)$day);
-
-        $leapYear = (int)$date->format('L');
-
-        $yearDay = $date->format('z') + 1;
-        $yearDayNeg = -366 + (int)$yearDay;
-        if ($leapYear)
-        {
-            $yearDayNeg = -367 + (int)$yearDay;
-        }
+        list($year, $month, $day, $dayFromEndOfMonth, $week, $weekDay, $dayOfWeek, $dayOfWeekAbr, $yearDay, $yearDayNeg, $leapYear) = self::getDateComponents($date);
 
         // this is the nth occurrence of the date
         $occur = ceil($day / 7);
         $occurNeg = -1 * ceil(abs($dayFromEndOfMonth) / 7);
-
-        // starting on a monday
-        $week = $date->format('W');
-        $weekDay = strtolower($date->format('D'));
-
-        $dayOfWeek = $date->format('l');
-        $dayOfWeekAbr = strtolower(substr($dayOfWeek, 0, 2));
 
         // the date has to be greater then the start date
         if ($date < $this->startDate)
@@ -813,6 +825,37 @@ class When extends \DateTime
         }
 
         return $_days;
+    }
+
+    protected static function getDateComponents(\DateTime $date)
+    {
+        $day = $date->format('j');
+
+        $leapYear = (int)$date->format('L');
+        $yearDay = $date->format('z') + 1;
+        $yearDayNeg = -366 + (int)$yearDay;
+        if ($leapYear) {
+            $yearDayNeg = -367 + (int)$yearDay;
+        }
+
+        $dayOfWeek = $date->format('l');
+        $dayOfWeekAbr = strtolower(substr($dayOfWeek, 0, 2));
+
+        return array(
+            $date->format('Y'),
+            $date->format('n'),
+            $day,
+            -((int)$date->format('t') + 1 - (int)$day),
+
+            $date->format('W'),
+            strtolower($date->format('D')),
+            $dayOfWeek,
+            $dayOfWeekAbr,
+
+            $yearDay,
+            $yearDayNeg,
+            $leapYear,
+        );
     }
 }
 
