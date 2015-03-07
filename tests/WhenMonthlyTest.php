@@ -1,6 +1,6 @@
 <?php
 
-use \When\When;
+use When\When;
 
 class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 {

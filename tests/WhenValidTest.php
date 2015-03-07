@@ -1,6 +1,6 @@
 <?php
 
-use \When\Valid;
+use When\Valid;
 
 class WhenValidTest extends \PHPUnit_Framework_TestCase {
 

@@ -1,6 +1,6 @@
 <?php
 
-use \When\When;
+use When\When;
 
 class WhenWeeklyTest extends PHPUnit_Framework_TestCase
 {

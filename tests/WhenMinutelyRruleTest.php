@@ -1,6 +1,6 @@
 <?php
 
-use \When\When;
+use When\When;
 
 class WhenMinutelyRruleTest extends \PHPUnit_Framework_TestCase
 {
