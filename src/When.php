@@ -36,10 +36,8 @@ class When extends \DateTime
 
             return $this;
         }
-        else
-        {
-            throw new \InvalidArgumentException("startDate: Accepts valid DateTime objects");
-        }
+
+	    throw new \InvalidArgumentException("startDate: Accepts valid DateTime objects");
     }
 
     public function freq($frequency)
@@ -204,10 +202,8 @@ class When extends \DateTime
 
             return $this;
         }
-        else
-        {
-            throw new \InvalidArgumentException("wkst: Accepts " . rtrim(implode(Valid::$weekDays, ", "), ","));
-        }
+
+	    throw new \InvalidArgumentException("wkst: Accepts " . rtrim(implode(Valid::$weekDays, ", "), ","));
     }
 
     public function rrule($rrule)
@@ -782,10 +778,8 @@ class When extends \DateTime
         {
             return $_items;
         }
-        else
-        {
-            return false;
-        }
+
+	    return false;
     }
 
     protected static function createDaysList($days)
