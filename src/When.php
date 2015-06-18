@@ -222,6 +222,9 @@ class When extends \DateTime
 
             switch($rule)
             {
+                case "DTSTART":
+                    $this->startDate(new \DateTime($param));
+                    break;
                 case "UNTIL":
                     $this->until(new \DateTime($param));
                     break;
