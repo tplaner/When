@@ -55,7 +55,7 @@ class When extends \DateTime
 
     public $wkst;
 
-    public $occurrences = array();
+    public $occurrences = [];
 
     /**
      * @inheritdoc
@@ -217,7 +217,7 @@ class When extends \DateTime
             // remove any accidental delimiters
             $bywdaylist = trim($bywdaylist, $delimiter);
 
-            $bywdaylist = array($bywdaylist);
+            $bywdaylist = [$bywdaylist];
         }
 
         if (is_array($bywdaylist) && Valid::daysList($bywdaylist))
@@ -612,7 +612,7 @@ class When extends \DateTime
 
                 $day = (int)$dateLooper->format('j');
 
-                $occurrences = array();
+                $occurrences = [];
                 while ($day <= $days)
                 {
                     if ($this->occursOn($dateLooper))
@@ -725,7 +725,7 @@ class When extends \DateTime
             }
             else if ($this->freq === 'hourly')
             {
-                $occurrence = array();
+                $occurrence = [];
                 if ($this->occursOn($dateLooper))
                 {
                     $occurrence[] = $dateLooper;
@@ -737,7 +737,7 @@ class When extends \DateTime
             }
             else if ($this->freq === 'minutely')
             {
-                $occurrence = array();
+                $occurrence = [];
                 if ($this->occursOn($dateLooper))
                 {
                     $occurrence[] = $dateLooper;
@@ -749,7 +749,7 @@ class When extends \DateTime
             }
             else if ($this->freq === 'secondly')
             {
-                $occurrence = array();
+                $occurrence = [];
                 if ($this->occursOn($dateLooper))
                 {
                     $occurrence[] = $dateLooper;
@@ -786,7 +786,7 @@ class When extends \DateTime
      */
     protected function generateTimeOccurrences($dateLooper)
     {
-        $occurrences = array();
+        $occurrences = [];
 
         foreach ($this->byhours as $hour)
         {
@@ -856,17 +856,17 @@ class When extends \DateTime
 
         if (!isset($this->byminutes))
         {
-            $this->byminutes = array((int)$this->startDate->format('i'));
+            $this->byminutes = [(int)$this->startDate->format('i')];
         }
 
         if (!isset($this->byhours))
         {
-            $this->byhours = array((int)$this->startDate->format('G'));
+            $this->byhours = [(int)$this->startDate->format('G')];
         }
 
         if (!isset($this->byseconds))
         {
-            $this->byseconds = array((int)$this->startDate->format('s'));
+            $this->byseconds = [(int)$this->startDate->format('s')];
         }
 
         if (!isset($this->wkst))
@@ -885,7 +885,7 @@ class When extends \DateTime
         {
             if (!isset($this->bymonthdays) && !isset($this->bydays))
             {
-                $this->bymonthdays = array((int)$this->startDate->format('j'));
+                $this->bymonthdays = [(int)$this->startDate->format('j')];
             }
         }
 
@@ -895,7 +895,7 @@ class When extends \DateTime
             {
                 $dayOfWeek = $this->startDate->format('l');
                 $dayOfWeekAbr = strtolower(substr($dayOfWeek, 0, 2));
-                $this->bydays = array('0' . $dayOfWeekAbr);
+                $this->bydays = ['0' . $dayOfWeekAbr];
             }
         }
     }
@@ -926,7 +926,7 @@ class When extends \DateTime
 
         if (is_numeric($items))
         {
-            $_items = array(intval($items));
+            $_items = [intval($items)];
         }
 
         if (is_string($items) && $_items === false)
@@ -957,7 +957,7 @@ class When extends \DateTime
      */
     protected static function createDaysList($days)
     {
-        $_days = array();
+        $_days = [];
 
         foreach($days as $day)
         {
