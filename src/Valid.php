@@ -2,14 +2,17 @@
 
 namespace When;
 
+/**
+ * Class Valid
+ */
 class Valid
 {
-    public static $frequencies = array(
+    public static $frequencies = [
                                     'secondly', 'minutely', 'hourly',
                                     'daily', 'weekly', 'monthly', 'yearly'
-                                );
+                                ];
 
-    public static  $weekDays = array('su', 'mo', 'tu', 'we', 'th', 'fr', 'sa');
+    public static  $weekDays = ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'];
 
     /**
      * Test if array of days is valid
@@ -22,7 +25,7 @@ class Valid
         foreach($days as $day)
         {
             // if it isn't negative, it's positive
-            $day = ltrim($day, "+");
+            $day = ltrim($day, '+');
             $day = trim($day);
 
             $ordwk = 1;
@@ -34,7 +37,7 @@ class Valid
             }
             else
             {
-                list($ordwk, $weekday) = sscanf($day, "%d%s");
+                list($ordwk, $weekday) = sscanf($day, '%d%s');
             }
 
             if (!self::weekDay($weekday) || !self::ordWk(abs($ordwk)))
@@ -66,19 +69,28 @@ class Valid
         return true;
     }
 
+    /**
+     * @param $freq
+     * @param $byweeknos
+     * @param $byyeardays
+     * @param $bymonthdays
+     *
+     * @return bool
+     * @throws InvalidCombination
+     */
     public function byFreqValid($freq, $byweeknos, $byyeardays, $bymonthdays)
     {
-        if (isset($byweeknos) && $freq !== "yearly")
+        if (isset($byweeknos) && $freq !== 'yearly')
         {
             throw new InvalidCombination();
         }
 
-        if (isset($byyeardays) && !in_array($freq, array("daily", "weekly", "monthly")))
+        if (isset($byyeardays) && !in_array($freq, ['daily', 'weekly', 'monthly']))
         {
             throw new InvalidCombination();
         }
 
-        if (isset($bymonthdays) && $freq === "weekly")
+        if (isset($bymonthdays) && $freq === 'weekly')
         {
             throw new InvalidCombination();
         }
@@ -86,26 +98,51 @@ class Valid
         return true;
     }
 
+    /**
+     * @param int $day
+     *
+     * @return bool
+     */
     public static function yearDayNum($day)
     {
         return self::ordYrDay(abs($day));
     }
 
+    /**
+     * @param int $ordyrday
+     *
+     * @return bool
+     */
     public static function ordYrDay($ordyrday)
     {
         return ($ordyrday >= 1 && $ordyrday <= 366);
     }
 
+    /**
+     * @param int $day
+     *
+     * @return bool
+     */
     public static function monthDayNum($day)
     {
         return self::ordMoDay(abs($day));
     }
 
+    /**
+     * @param int $month
+     *
+     * @return bool
+     */
     public static function monthNum($month)
     {
         return ($month >= 1 && $month <= 12);
     }
 
+    /**
+     * @param int $day
+     *
+     * @return bool
+     */
     public static function setPosDay($day)
     {
         return self::yearDayNum($day);
@@ -204,7 +241,7 @@ class Valid
     /**
      * Test for valid DateTime object
      *
-     * @param  DateTime $dateTime
+     * @param  \DateTime $dateTime
      * @return bool
      */
     public static function dateTimeObject($dateTime)
