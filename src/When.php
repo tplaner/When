@@ -23,7 +23,7 @@ class When extends \DateTime
 
     public $occurrences = array();
 
-    public function __construct($time = "now", $timezone = NULL)
+    public function __construct($time = 'now', $timezone = NULL)
     {
         $this->startDate = parent::__construct($time, $timezone);
     }
@@ -37,7 +37,7 @@ class When extends \DateTime
             return $this;
         }
 
-	    throw new \InvalidArgumentException("startDate: Accepts valid DateTime objects");
+	    throw new \InvalidArgumentException('startDate: Accepts valid DateTime objects');
     }
 
     public function freq($frequency)
@@ -49,7 +49,7 @@ class When extends \DateTime
             return $this;
         }
 
-        throw new \InvalidArgumentException("freq: Accepts " . rtrim(implode(Valid::$frequencies, ", "), ","));
+        throw new \InvalidArgumentException('freq: Accepts ' . rtrim(implode(Valid::$frequencies, ', '), ','));
     }
 
     public function until($endDate)
@@ -60,7 +60,7 @@ class When extends \DateTime
             return $this;
         }
 
-        throw new \InvalidArgumentException("until: Accepts valid DateTime objects");
+        throw new \InvalidArgumentException('until: Accepts valid DateTime objects');
     }
 
     public function count($count)
@@ -72,7 +72,7 @@ class When extends \DateTime
             return $this;
         }
 
-        throw new \InvalidArgumentException("count: Accepts numeric values");
+        throw new \InvalidArgumentException('count: Accepts numeric values');
     }
 
     public function interval($interval)
@@ -84,40 +84,40 @@ class When extends \DateTime
             return $this;
         }
 
-        throw new \InvalidArgumentException("interval: Accepts numeric values");
+        throw new \InvalidArgumentException('interval: Accepts numeric values');
     }
 
-    public function bysecond($seconds, $delimiter = ",")
+    public function bysecond($seconds, $delimiter = ',')
     {
         if ($this->byseconds = self::prepareItemsList($seconds, $delimiter, 'second'))
         {
             return $this;
         }
 
-        throw new \InvalidArgumentException("bysecond: Accepts numeric values between 0 and 60");
+        throw new \InvalidArgumentException('bysecond: Accepts numeric values between 0 and 60');
     }
 
-    public function byminute($minutes, $delimiter = ",")
+    public function byminute($minutes, $delimiter = ',')
     {
         if ($this->byminutes = self::prepareItemsList($minutes, $delimiter, 'minute'))
         {
             return $this;
         }
 
-        throw new \InvalidArgumentException("byminute: Accepts numeric values between 0 and 59");
+        throw new \InvalidArgumentException('byminute: Accepts numeric values between 0 and 59');
     }
 
-    public function byhour($hours, $delimiter = ",")
+    public function byhour($hours, $delimiter = ',')
     {
         if ($this->byhours = self::prepareItemsList($hours, $delimiter, 'hour'))
         {
             return $this;
         }
 
-        throw new \InvalidArgumentException("byhour: Accepts numeric values between 0 and 23");
+        throw new \InvalidArgumentException('byhour: Accepts numeric values between 0 and 23');
     }
 
-    public function byday($bywdaylist, $delimiter = ",")
+    public function byday($bywdaylist, $delimiter = ',')
     {
         if (is_string($bywdaylist) && strpos($bywdaylist, $delimiter) !== false)
         {
@@ -141,57 +141,57 @@ class When extends \DateTime
             return $this;
         }
 
-        throw new \InvalidArgumentException("bydays: Accepts (optional) positive and negative values between 1 and 53 followed by a valid week day");
+        throw new \InvalidArgumentException('bydays: Accepts (optional) positive and negative values between 1 and 53 followed by a valid week day');
     }
 
-    public function bymonthday($bymodaylist, $delimiter = ",")
+    public function bymonthday($bymodaylist, $delimiter = ',')
     {
         if($this->bymonthdays = self::prepareItemsList($bymodaylist, $delimiter, 'monthDayNum'))
         {
             return $this;
         }
 
-        throw new \InvalidArgumentException("bymonthday: Accepts positive and negative values between 1 and 31");
+        throw new \InvalidArgumentException('bymonthday: Accepts positive and negative values between 1 and 31');
     }
 
-    public function byyearday($byyrdaylist, $delimiter = ",")
+    public function byyearday($byyrdaylist, $delimiter = ',')
     {
         if($this->byyeardays = self::prepareItemsList($byyrdaylist, $delimiter, 'yearDayNum'))
         {
             return $this;
         }
 
-        throw new \InvalidArgumentException("byyearday: Accepts positive and negative values between 1 and 366");
+        throw new \InvalidArgumentException('byyearday: Accepts positive and negative values between 1 and 366');
     }
 
-    public function byweekno($bywknolist, $delimiter = ",")
+    public function byweekno($bywknolist, $delimiter = ',')
     {
         if($this->byweeknos = self::prepareItemsList($bywknolist, $delimiter, 'weekNum'))
         {
             return $this;
         }
 
-        throw new \InvalidArgumentException("byweekno: Accepts positive and negative values between 1 and 53");
+        throw new \InvalidArgumentException('byweekno: Accepts positive and negative values between 1 and 53');
     }
 
-    public function bymonth($bymolist, $delimiter = ",")
+    public function bymonth($bymolist, $delimiter = ',')
     {
         if($this->bymonths = self::prepareItemsList($bymolist, $delimiter, 'monthNum'))
         {
             return $this;
         }
 
-        throw new \InvalidArgumentException("bymonth: Accepts values between 1 and 12");
+        throw new \InvalidArgumentException('bymonth: Accepts values between 1 and 12');
     }
 
-    public function bysetpos($bysplist, $delimiter = ",")
+    public function bysetpos($bysplist, $delimiter = ',')
     {
         if ($this->bysetpos = self::prepareItemsList($bysplist, $delimiter, 'setPosDay'))
         {
             return $this;
         }
 
-        throw new \InvalidArgumentException("bysetpos: Accepts positive and negative values between 1 and 366");
+        throw new \InvalidArgumentException('bysetpos: Accepts positive and negative values between 1 and 366');
     }
 
     public function wkst($weekDay)
@@ -203,47 +203,47 @@ class When extends \DateTime
             return $this;
         }
 
-	    throw new \InvalidArgumentException("wkst: Accepts " . rtrim(implode(Valid::$weekDays, ", "), ","));
+        throw new \InvalidArgumentException('wkst: Accepts ' . rtrim(implode(Valid::$weekDays, ', '), ','));
     }
 
     public function rrule($rrule)
     {
         // strip off a trailing semi-colon
-        $rrule = trim($rrule, ";");
+        $rrule = trim($rrule, ';');
 
-        $parts = explode(";", $rrule);
+        $parts = explode(';', $rrule);
 
         foreach($parts as $part)
         {
-            list($rule, $param) = explode("=", $part);
+            list($rule, $param) = explode('=', $part);
 
             $rule = strtoupper($rule);
             $param = strtoupper($param);
 
             switch($rule)
             {
-                case "DTSTART":
+                case 'DTSTART':
                     $this->startDate(new \DateTime($param));
                     break;
-                case "UNTIL":
+                case 'UNTIL':
                     $this->until(new \DateTime($param));
                     break;
-                case "FREQ":
-                case "COUNT":
-                case "INTERVAL":
-                case "WKST":
+                case 'FREQ':
+                case 'COUNT':
+                case 'INTERVAL':
+                case 'WKST':
                     $this->{$rule}($param);
                     break;
-                case "BYDAY":
-                case "BYMONTHDAY":
-                case "BYYEARDAY":
-                case "BYWEEKNO":
-                case "BYMONTH":
-                case "BYSETPOS":
-                case "BYHOUR":
-                case "BYMINUTE":
-                case "BYSECOND":
-                    $params = explode(",", $param);
+                case 'BYDAY':
+                case 'BYMONTHDAY':
+                case 'BYYEARDAY':
+                case 'BYWEEKNO':
+                case 'BYMONTH':
+                case 'BYSETPOS':
+                case 'BYHOUR':
+                case 'BYMINUTE':
+                case 'BYSECOND':
+                    $params = explode(',', $param);
                     $this->{$rule}($params);
                     break;
             }
@@ -256,7 +256,7 @@ class When extends \DateTime
     {
         if (!Valid::dateTimeObject($date))
         {
-            throw new \InvalidArgumentException("occursOn: Accepts valid DateTime objects");
+            throw new \InvalidArgumentException('occursOn: Accepts valid DateTime objects');
         }
 
         // breakdown the date
@@ -398,7 +398,7 @@ class When extends \DateTime
 
         while ($dateLooper < $this->until && count($this->occurrences) < $this->count)
         {
-            if ($this->freq === "yearly")
+            if ($this->freq === 'yearly')
             {
                 if (isset($this->bymonths))
                 {
@@ -406,10 +406,10 @@ class When extends \DateTime
                     {
                         if (isset($this->bydays))
                         {
-                            $dateLooper->setDate($dateLooper->format("Y"), $month, 1);
+                            $dateLooper->setDate($dateLooper->format('Y'), $month, 1);
 
                             // get the number of days
-                            $totalDays = $dateLooper->format("t");
+                            $totalDays = $dateLooper->format('t');
                             $today = 0;
 
                             while ($today < $totalDays)
@@ -426,7 +426,7 @@ class When extends \DateTime
                         }
                         else
                         {
-                            $dateLooper->setDate($dateLooper->format("Y"), $month, $dateLooper->format("j"));
+                            $dateLooper->setDate($dateLooper->format('Y'), $month, $dateLooper->format('j'));
 
                             if ($this->occursOn($dateLooper))
                             {
@@ -438,9 +438,9 @@ class When extends \DateTime
                 }
                 else
                 {
-                    $dateLooper->setDate($dateLooper->format("Y"), 1, 1);
+                    $dateLooper->setDate($dateLooper->format('Y'), 1, 1);
 
-                    $leapYear = (int)$dateLooper->format("L");
+                    $leapYear = (int)$dateLooper->format('L');
                     if ($leapYear)
                     {
                         $days = 366;
@@ -466,11 +466,11 @@ class When extends \DateTime
                 $dateLooper = clone $this->startDate;
                 $dateLooper->add(new \DateInterval('P' . ($this->interval * ++$count) . 'Y'));
             }
-            else if ($this->freq === "monthly")
+            else if ($this->freq === 'monthly')
             {
-                $days = (int)$dateLooper->format("t");
+                $days = (int)$dateLooper->format('t');
 
-                $day = (int)$dateLooper->format("j");
+                $day = (int)$dateLooper->format('j');
 
                 $occurrences = array();
                 while ($day <= $days)
@@ -512,35 +512,35 @@ class When extends \DateTime
                 }
 
                 $dateLooper = clone $this->startDate;
-                $dateLooper->setDate($dateLooper->format("Y"), $dateLooper->format("n"), 1);
+                $dateLooper->setDate($dateLooper->format('Y'), $dateLooper->format('n'), 1);
                 $dateLooper->add(new \DateInterval('P' . ($this->interval * ++$count) . 'M'));
             }
-            else if ($this->freq === "weekly")
+            else if ($this->freq === 'weekly')
             {
-                $dateLooper->setDate($dateLooper->format("Y"), $dateLooper->format("n"), $dateLooper->format("j"));
+                $dateLooper->setDate($dateLooper->format('Y'), $dateLooper->format('n'), $dateLooper->format('j'));
 
                 switch ($this->wkst)
                 {
-                    case "su":
-                        $wkst = "Sunday";
+                    case 'su':
+                        $wkst = 'Sunday';
                         break;
-                    case "mo":
-                        $wkst = "Monday";
+                    case 'mo':
+                        $wkst = 'Monday';
                         break;
-                    case "tu":
-                        $wkst = "Tuesday";
+                    case 'tu':
+                        $wkst = 'Tuesday';
                         break;
-                    case "we":
-                        $wkst = "Wednesday";
+                    case 'we':
+                        $wkst = 'Wednesday';
                         break;
-                    case "th":
-                        $wkst = "Thursday";
+                    case 'th':
+                        $wkst = 'Thursday';
                         break;
-                    case "fr":
-                        $wkst = "Friday";
+                    case 'fr':
+                        $wkst = 'Friday';
                         break;
-                    case "sa":
-                        $wkst = "Saturday";
+                    case 'sa':
+                        $wkst = 'Saturday';
                         break;
                 }
 
@@ -550,11 +550,11 @@ class When extends \DateTime
                 if ($count === 0)
                 {
                     $startWeekDay = clone $this->startDate;
-                    $startWeekDay->modify("next " . $wkst);
+                    $startWeekDay->modify('next ' . $wkst);
 
-                    $daysLeft = $dateLooper->diff($startWeekDay)->format("%a") + 1;
+                    $daysLeft = $dateLooper->diff($startWeekDay)->format('%a') + 1;
 
-                    $startWeekDay->modify("last " . $wkst);
+                    $startWeekDay->modify('last ' . $wkst);
                 }
 
                 while ($daysLeft > 0)
@@ -569,10 +569,10 @@ class When extends \DateTime
                 }
 
                 $dateLooper = clone $this->startDate;
-                $dateLooper->setDate($startWeekDay->format("Y"), $startWeekDay->format("n"), $startWeekDay->format('j'));
+                $dateLooper->setDate($startWeekDay->format('Y'), $startWeekDay->format('n'), $startWeekDay->format('j'));
                 $dateLooper->add(new \DateInterval('P' . ($this->interval * (++$count * 7)) . 'D'));
             }
-            else if ($this->freq === "daily")
+            else if ($this->freq === 'daily')
             {
                 if ($this->occursOn($dateLooper))
                 {
@@ -580,10 +580,10 @@ class When extends \DateTime
                 }
 
                 $dateLooper = clone $this->startDate;
-                $dateLooper->setDate($dateLooper->format("Y"), $dateLooper->format("n"), $dateLooper->format('j'));
+                $dateLooper->setDate($dateLooper->format('Y'), $dateLooper->format('n'), $dateLooper->format('j'));
                 $dateLooper->add(new \DateInterval('P' . ($this->interval * ++$count) . 'D'));
             }
-            else if ($this->freq === "hourly")
+            else if ($this->freq === 'hourly')
             {
                 $occurrence = array();
                 if ($this->occursOn($dateLooper))
@@ -595,7 +595,7 @@ class When extends \DateTime
                 $dateLooper = clone $this->startDate;
                 $dateLooper->add(new \DateInterval('PT' . ($this->interval * ++$count) . 'H'));
             }
-            else if ($this->freq === "minutely")
+            else if ($this->freq === 'minutely')
             {
                 $occurrence = array();
                 if ($this->occursOn($dateLooper))
@@ -607,7 +607,7 @@ class When extends \DateTime
                 $dateLooper = clone $this->startDate;
                 $dateLooper->add(new \DateInterval('PT' . ($this->interval * ++$count) . 'M'));
             }
-            else if ($this->freq === "secondly")
+            else if ($this->freq === 'secondly')
             {
                 $occurrence = array();
                 if ($this->occursOn($dateLooper))
@@ -719,7 +719,7 @@ class When extends \DateTime
 
         if (!isset($this->wkst))
         {
-            $this->wkst = "mo";
+            $this->wkst = 'mo';
         }
 
         /*if (!isset($this->bydays))
@@ -729,7 +729,7 @@ class When extends \DateTime
             $this->bydays = array($dayOfWeekAbr);
         }*/
 
-        if ($this->freq === "monthly")
+        if ($this->freq === 'monthly')
         {
             if (!isset($this->bymonthdays) && !isset($this->bydays))
             {
@@ -737,13 +737,13 @@ class When extends \DateTime
             }
         }
 
-        if ($this->freq === "weekly")
+        if ($this->freq === 'weekly')
         {
             if (!isset($this->bymonthdays) && !isset($this->bydays))
             {
                 $dayOfWeek = $this->startDate->format('l');
                 $dayOfWeekAbr = strtolower(substr($dayOfWeek, 0, 2));
-                $this->bydays = array("0" . $dayOfWeekAbr);
+                $this->bydays = array('0' . $dayOfWeekAbr);
             }
         }
     }
@@ -755,7 +755,7 @@ class When extends \DateTime
         return array_map('intval', $items);
     }
 
-    protected static function prepareItemsList($items, $delimiter = ",", $validator=null)
+    protected static function prepareItemsList($items, $delimiter = ',', $validator=null)
     {
         $_items = false;
 
@@ -791,7 +791,7 @@ class When extends \DateTime
 
         foreach($days as $day)
         {
-            $day = ltrim($day, "+");
+            $day = ltrim($day, '+');
             $day = trim($day);
 
             $ordwk = 0;
@@ -803,7 +803,7 @@ class When extends \DateTime
             }
             else
             {
-                list($ordwk, $weekday) = sscanf($day, "%d%s");
+                list($ordwk, $weekday) = sscanf($day, '%d%s');
             }
 
             $_days[] = $ordwk . strtolower($weekday);
@@ -815,7 +815,7 @@ class When extends \DateTime
 
 class InvalidCombination extends \Exception
 {
-    public function __construct($message = "Invalid combination.", $code = 0, Exception $previous = null)
+    public function __construct($message = 'Invalid combination.', $code = 0, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
@@ -823,7 +823,7 @@ class InvalidCombination extends \Exception
 
 class FrequencyRequired extends \Exception
 {
-    public function __construct($message = "You are required to set a frequency.", $code = 0, Exception $previous = null)
+    public function __construct($message = 'You are required to set a frequency.', $code = 0, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
@@ -831,7 +831,7 @@ class FrequencyRequired extends \Exception
 
 class InvalidStartDate extends \Exception
 {
-    public function __construct($message = "The start date must be the first occurrence.", $code = 0, Exception $previous = null)
+    public function __construct($message = 'The start date must be the first occurrence.', $code = 0, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
