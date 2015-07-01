@@ -2,6 +2,9 @@
 
 namespace When;
 
+/**
+ * Class When
+ */
 class When extends \DateTime
 {
     public $startDate;
@@ -10,15 +13,46 @@ class When extends \DateTime
     public $count;
     public $interval;
 
+    /**
+     * @var array
+     */
     public $byseconds;
+    /**
+     * @var array
+     */
     public $byminutes;
+    /**
+     * @var array
+     */
     public $byhours;
+    /**
+     * @var array
+     */
     public $bydays;
+    /**
+     * @var array
+     */
     public $bymonthdays;
+    /**
+     * @var array
+     */
     public $byyeardays;
+    /**
+     * @var array
+     */
     public $byweeknos;
+    /**
+     * @var array
+     */
     public $bymonths;
+    /**
+     * @var array
+     */
     public $bysetpos;
+    /**
+     * @var array
+     */
+
     public $wkst;
 
     public $occurrences = array();
