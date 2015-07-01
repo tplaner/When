@@ -379,7 +379,7 @@ class When extends \DateTime
     }
 
     /**
-     * @param /DateTime $date
+     * @param \DateTime $date
      *
      * @return bool
      */
@@ -479,7 +479,7 @@ class When extends \DateTime
     }
 
     /**
-     * @param /DateTime $date
+     * @param \DateTime $date
      *
      * @return bool
      */
