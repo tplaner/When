@@ -23,11 +23,19 @@ class When extends \DateTime
 
     public $occurrences = array();
 
+    /**
+     * @inheritdoc
+     */
     public function __construct($time = 'now', $timezone = NULL)
     {
         $this->startDate = parent::__construct($time, $timezone);
     }
 
+    /**
+     * @param /DateTime $startDate
+     *
+     * @return $this
+     */
     public function startDate($startDate)
     {
         if (Valid::dateTimeObject($startDate))
@@ -40,6 +48,11 @@ class When extends \DateTime
 	    throw new \InvalidArgumentException('startDate: Accepts valid DateTime objects');
     }
 
+    /**
+     * @param string $frequency
+     *
+     * @return $this
+     */
     public function freq($frequency)
     {
         if (Valid::freq($frequency))
@@ -52,6 +65,11 @@ class When extends \DateTime
         throw new \InvalidArgumentException('freq: Accepts ' . rtrim(implode(Valid::$frequencies, ', '), ','));
     }
 
+    /**
+     * @param /DateTime $endDate
+     *
+     * @return $this
+     */
     public function until($endDate)
     {
         if (Valid::dateTimeObject($endDate))
@@ -63,6 +81,11 @@ class When extends \DateTime
         throw new \InvalidArgumentException('until: Accepts valid DateTime objects');
     }
 
+    /**
+     * @param int $count
+     *
+     * @return $this
+     */
     public function count($count)
     {
         if (is_numeric($count))
@@ -75,6 +98,11 @@ class When extends \DateTime
         throw new \InvalidArgumentException('count: Accepts numeric values');
     }
 
+    /**
+     * @param int $interval
+     *
+     * @return $this
+     */
     public function interval($interval)
     {
         if (is_numeric($interval))
@@ -87,6 +115,12 @@ class When extends \DateTime
         throw new \InvalidArgumentException('interval: Accepts numeric values');
     }
 
+    /**
+     * @param $seconds
+     * @param string $delimiter
+     *
+     * @return $this
+     */
     public function bysecond($seconds, $delimiter = ',')
     {
         if ($this->byseconds = self::prepareItemsList($seconds, $delimiter, 'second'))
@@ -97,6 +131,12 @@ class When extends \DateTime
         throw new \InvalidArgumentException('bysecond: Accepts numeric values between 0 and 60');
     }
 
+    /**
+     * @param $minutes
+     * @param string $delimiter
+     *
+     * @return $this
+     */
     public function byminute($minutes, $delimiter = ',')
     {
         if ($this->byminutes = self::prepareItemsList($minutes, $delimiter, 'minute'))
@@ -107,6 +147,12 @@ class When extends \DateTime
         throw new \InvalidArgumentException('byminute: Accepts numeric values between 0 and 59');
     }
 
+    /**
+     * @param $hours
+     * @param string $delimiter
+     *
+     * @return $this
+     */
     public function byhour($hours, $delimiter = ',')
     {
         if ($this->byhours = self::prepareItemsList($hours, $delimiter, 'hour'))
@@ -117,6 +163,12 @@ class When extends \DateTime
         throw new \InvalidArgumentException('byhour: Accepts numeric values between 0 and 23');
     }
 
+    /**
+     * @param $bywdaylist
+     * @param string $delimiter
+     *
+     * @return $this
+     */
     public function byday($bywdaylist, $delimiter = ',')
     {
         if (is_string($bywdaylist) && strpos($bywdaylist, $delimiter) !== false)
@@ -144,6 +196,12 @@ class When extends \DateTime
         throw new \InvalidArgumentException('bydays: Accepts (optional) positive and negative values between 1 and 53 followed by a valid week day');
     }
 
+    /**
+     * @param $bymodaylist
+     * @param string $delimiter
+     *
+     * @return $this
+     */
     public function bymonthday($bymodaylist, $delimiter = ',')
     {
         if($this->bymonthdays = self::prepareItemsList($bymodaylist, $delimiter, 'monthDayNum'))
@@ -154,6 +212,12 @@ class When extends \DateTime
         throw new \InvalidArgumentException('bymonthday: Accepts positive and negative values between 1 and 31');
     }
 
+    /**
+     * @param $byyrdaylist
+     * @param string $delimiter
+     *
+     * @return $this
+     */
     public function byyearday($byyrdaylist, $delimiter = ',')
     {
         if($this->byyeardays = self::prepareItemsList($byyrdaylist, $delimiter, 'yearDayNum'))
@@ -164,6 +228,12 @@ class When extends \DateTime
         throw new \InvalidArgumentException('byyearday: Accepts positive and negative values between 1 and 366');
     }
 
+    /**
+     * @param $bywknolist
+     * @param string $delimiter
+     *
+     * @return $this
+     */
     public function byweekno($bywknolist, $delimiter = ',')
     {
         if($this->byweeknos = self::prepareItemsList($bywknolist, $delimiter, 'weekNum'))
@@ -174,6 +244,12 @@ class When extends \DateTime
         throw new \InvalidArgumentException('byweekno: Accepts positive and negative values between 1 and 53');
     }
 
+    /**
+     * @param $bymolist
+     * @param string $delimiter
+     *
+     * @return $this
+     */
     public function bymonth($bymolist, $delimiter = ',')
     {
         if($this->bymonths = self::prepareItemsList($bymolist, $delimiter, 'monthNum'))
@@ -184,6 +260,12 @@ class When extends \DateTime
         throw new \InvalidArgumentException('bymonth: Accepts values between 1 and 12');
     }
 
+    /**
+     * @param $bysplist
+     * @param string $delimiter
+     *
+     * @return $this
+     */
     public function bysetpos($bysplist, $delimiter = ',')
     {
         if ($this->bysetpos = self::prepareItemsList($bysplist, $delimiter, 'setPosDay'))
@@ -194,6 +276,11 @@ class When extends \DateTime
         throw new \InvalidArgumentException('bysetpos: Accepts positive and negative values between 1 and 366');
     }
 
+    /**
+     * @param $weekDay
+     *
+     * @return $this
+     */
     public function wkst($weekDay)
     {
         if (Valid::weekDay($weekDay))
@@ -206,6 +293,11 @@ class When extends \DateTime
         throw new \InvalidArgumentException('wkst: Accepts ' . rtrim(implode(Valid::$weekDays, ', '), ','));
     }
 
+    /**
+     * @param string $rrule
+     *
+     * @return $this
+     */
     public function rrule($rrule)
     {
         // strip off a trailing semi-colon
@@ -252,6 +344,11 @@ class When extends \DateTime
         return $this;
     }
 
+    /**
+     * @param /DateTime $date
+     *
+     * @return bool
+     */
     public function occursOn($date)
     {
         if (!Valid::dateTimeObject($date))
@@ -347,6 +444,11 @@ class When extends \DateTime
         return true;
     }
 
+    /**
+     * @param /DateTime $date
+     *
+     * @return bool
+     */
     public function occursAt($date)
     {
         $hour = (int)$date->format('G');
@@ -378,6 +480,10 @@ class When extends \DateTime
         }
     }
 
+    /**
+     * @throws FrequencyRequired
+     * @throws InvalidStartDate
+     */
     public function generateOccurrences()
     {
         self::prepareDateElements();
@@ -623,6 +729,9 @@ class When extends \DateTime
         }
     }
 
+    /**
+     * @param array $occurrences
+     */
     protected function addOccurrence($occurrences)
     {
         foreach ($occurrences as $occurrence)
@@ -636,6 +745,11 @@ class When extends \DateTime
     }
 
     // not happy with this.
+    /**
+     * @param $dateLooper
+     *
+     * @return array
+     */
     protected function generateTimeOccurrences($dateLooper)
     {
         $occurrences = array();
@@ -663,6 +777,10 @@ class When extends \DateTime
         return $occurrences;
     }
 
+    /**
+     * @throws FrequencyRequired
+     * @throws InvalidCombination
+     */
     protected function prepareDateElements()
     {
         // if the interval isn't set, set it.
@@ -748,6 +866,12 @@ class When extends \DateTime
         }
     }
 
+    /**
+     * @param array $list
+     * @param string $delimiter
+     *
+     * @return array
+     */
     protected static function createItemsList($list, $delimiter)
     {
         $items = explode($delimiter, $list);
@@ -755,6 +879,13 @@ class When extends \DateTime
         return array_map('intval', $items);
     }
 
+    /**
+     * @param array $items
+     * @param string $delimiter
+     * @param string|null $validator
+     *
+     * @return array|bool
+     */
     protected static function prepareItemsList($items, $delimiter = ',', $validator=null)
     {
         $_items = false;
@@ -785,6 +916,11 @@ class When extends \DateTime
 	    return false;
     }
 
+    /**
+     * @param array $days
+     *
+     * @return array
+     */
     protected static function createDaysList($days)
     {
         $_days = array();
@@ -813,25 +949,43 @@ class When extends \DateTime
     }
 }
 
+/**
+ * Class InvalidCombination
+ */
 class InvalidCombination extends \Exception
 {
-    public function __construct($message = 'Invalid combination.', $code = 0, Exception $previous = null)
+    /**
+     * @inheritdoc
+     */
+    public function __construct($message = 'Invalid combination.', $code = 0, \Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
 }
 
+/**
+ * Class FrequencyRequired
+ */
 class FrequencyRequired extends \Exception
 {
-    public function __construct($message = 'You are required to set a frequency.', $code = 0, Exception $previous = null)
+    /**
+     * @inheritdoc
+     */
+    public function __construct($message = 'You are required to set a frequency.', $code = 0, \Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
 }
 
+/**
+ * Class InvalidStartDate
+ */
 class InvalidStartDate extends \Exception
 {
-    public function __construct($message = 'The start date must be the first occurrence.', $code = 0, Exception $previous = null)
+    /**
+     * @inheritdoc
+     */
+    public function __construct($message = 'The start date must be the first occurrence.', $code = 0, \Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
