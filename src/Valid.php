@@ -66,7 +66,7 @@ class Valid
         return true;
     }
 
-    public function byFreqValid($freq, $byweeknos, $byyeardays, $bymonthdays)
+    public static function byFreqValid($freq, $byweeknos, $byyeardays, $bymonthdays)
     {
         if (isset($byweeknos) && $freq !== "yearly")
         {
