@@ -524,4 +524,32 @@ class WhenYearlyTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * Every Sunday in January every other year at 8:30 am and 9:30 am
+     * DTSTART;TZID=America/New_York:19970105T083000
+     * RRULE:FREQ=YEARLY;INTERVAL=2;BYMONTH=1;BYDAY=SU;BYHOUR=8,9;BYMINUTE=30
+     */
+    function testYearlyTheninthnode()
+    {
+        $results[] = new DateTime("2015-09-17 00:00:00");
+        $results[] = new DateTime("2016-09-17 00:00:00");
+        $results[] = new DateTime("2017-09-17 00:00:00");
+        $results[] = new DateTime("2018-09-17 00:00:00");
+        $results[] = new DateTime("2019-09-17 00:00:00");
+
+        $r = new When();
+        $r->startDate(new DateTime('2015-09-17 00:00:00'));
+        $r->freq('yearly');
+        $r->interval(1);
+        $r->count(5);
+        $r->generateOccurrences();
+
+        $occurrences = $r->occurrences;
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
+
 }
