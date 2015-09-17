@@ -25,7 +25,8 @@ class When extends \DateTime
 
     public function __construct($time = "now", $timezone = NULL)
     {
-        $this->startDate = parent::__construct($time, $timezone);
+        parent::__construct($time, $timezone);
+        $this->startDate = new \DateTime($time, $timezone);
     }
 
     public function startDate($startDate)
