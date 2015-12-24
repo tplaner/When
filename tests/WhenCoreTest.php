@@ -629,6 +629,63 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $test = new When;
         $test->count('weekly');
     }
+
+    /**
+     * @expectedException \When\InvalidStartDate
+     */
+    public function testGenerateOccurrencesErrorException()
+    {
+        $test = new When;
+
+        $test->startDate(new DateTime("19970905T090000"))
+            ->rrule("FREQ=MONTHLY;COUNT=3;BYDAY=TU,WE,TH;BYSETPOS=3")
+            ->generateOccurrences();
+    }
+
+    /**
+     * @expectedException PHPUnit_Framework_Error_Notice
+     */
+    public function testGenerateOccurrencesErrorNotice()
+    {
+        $results[] = new DateTime('1997-10-07 09:00:00');
+        $results[] = new DateTime('1997-11-06 09:00:00');
+
+        $test = new When;
+
+        $test->invalidStartDateErrorLevel = When::WARNING;
+
+        $test->startDate(new DateTime("19970905T090000"))
+            ->rrule("FREQ=MONTHLY;COUNT=3;BYDAY=TU,WE,TH;BYSETPOS=3")
+            ->generateOccurrences();
+
+        $occurrences = $test->occurrences;
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
+
+    public function testGenerateOccurrencesErrorIgnored()
+    {
+        $results[] = new DateTime('1997-10-07 09:00:00');
+        $results[] = new DateTime('1997-11-06 09:00:00');
+
+        $test = new When;
+
+        $test->invalidStartDateErrorLevel = When::IGNORE;
+
+        $test->startDate(new DateTime("19970905T090000"))
+            ->rrule("FREQ=MONTHLY;COUNT=3;BYDAY=TU,WE,TH;BYSETPOS=3")
+            ->generateOccurrences();
+
+        $occurrences = $test->occurrences;
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
 }
 
 class FakeObject {}
