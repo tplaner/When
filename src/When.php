@@ -5,10 +5,10 @@ namespace When;
 class When extends \DateTime
 {
     const EXCEPTION = 0;
-    const WARNING = 1;
+    const NOTICE = 1;
     const IGNORE = 2;
 
-    public $invalidStartDateErrorLevel = self::EXCEPTION;
+    public $RFC5545_COMPLIANT = self::EXCEPTION;
     public $startDate;
     public $freq;
     public $until;
@@ -399,8 +399,8 @@ class When extends \DateTime
         }
         else
         {
-            switch ($this->invalidStartDateErrorLevel) {
-                case self::WARNING:
+            switch ($this->RFC5545_COMPLIANT) {
+                case self::NOTICE:
                     trigger_error('InvalidStartDate: startDate is outside the bounds of the occurrence parameters.');
                     break;
                 case self::IGNORE:

@@ -652,7 +652,7 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
 
         $test = new When;
 
-        $test->invalidStartDateErrorLevel = When::WARNING;
+        $test->RFC5545_COMPLIANT = When::NOTICE;
 
         $test->startDate(new DateTime("19970905T090000"))
             ->rrule("FREQ=MONTHLY;COUNT=3;BYDAY=TU,WE,TH;BYSETPOS=3")
@@ -673,7 +673,7 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
 
         $test = new When;
 
-        $test->invalidStartDateErrorLevel = When::IGNORE;
+        $test->RFC5545_COMPLIANT = When::IGNORE;
 
         $test->startDate(new DateTime("19970905T090000"))
             ->rrule("FREQ=MONTHLY;COUNT=3;BYDAY=TU,WE,TH;BYSETPOS=3")
