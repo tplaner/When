@@ -4,6 +4,11 @@ namespace When;
 
 class When extends \DateTime
 {
+    const EXCEPTION = 0;
+    const NOTICE = 1;
+    const IGNORE = 2;
+
+    public $RFC5545_COMPLIANT = self::EXCEPTION;
     public $startDate;
     public $freq;
     public $until;
@@ -394,7 +399,17 @@ class When extends \DateTime
         }
         else
         {
-            throw new InvalidStartDate();
+            switch ($this->RFC5545_COMPLIANT) {
+                case self::NOTICE:
+                    trigger_error('InvalidStartDate: startDate is outside the bounds of the occurrence parameters.');
+                    break;
+                case self::IGNORE:
+                    break;
+                case self::EXCEPTION:
+                default:
+                    throw new InvalidStartDate();
+                    break;
+            }
         }
 
         while ($dateLooper < $this->until && count($this->occurrences) < $this->count)
