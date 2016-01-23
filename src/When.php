@@ -384,6 +384,91 @@ class When extends \DateTime
         }
     }
 
+    // Get occurrences between two DateTimes, exclusive. Does not modify $this.
+    public function getOccurrencesBetween($startDate, $endDate, $limit=NULL) {
+
+        $occurrences = array();
+
+        if ($endDate <= $startDate) {
+            return $occurrences;
+        }
+
+        self::prepareDateElements(FALSE);
+
+        // Trim to the defined range of this When:
+        if ($this->startDate > $startDate) {
+            $startDate = clone $this->startDate;
+        }
+        if ($this->until && ($this->until < $endDate)) {
+            $endDate = clone $this->until;
+        }
+
+        // If we have a defined $count, we need to test from $this->startDate to ensure we stop at $count.
+        if ($this->count and ($startDate > $this->startDate)) {
+            $max_occurrences = $this->count - count($this->getOccurrencesBetween(clone $this->startDate,
+                                                                                 clone $startDate));
+            if ($max_occurrences == 0) {
+                return $occurrences;
+            }
+        }
+        else {
+            $max_occurrences = $this->count;
+        }
+
+        if ($limit) {
+            if (! $max_occurrences || ($limit < $max_occurrences)) {
+                $max_occurrences = $limit;
+            }
+        }
+
+        $dateLooper = clone $startDate;
+        while ($dateLooper < $endDate) {
+            if ($this->occursOn($dateLooper)) {
+                foreach ($this->generateTimeOccurrences($dateLooper) as $occur) {
+                    $occurrences[] = $occur;
+                    if ($max_occurrences && ($max_occurrences <= count($occurrences))) {
+                        return array_slice($occurrences, 0, $max_occurrences);
+                    }
+                }
+            }
+            $dateLooper->add(new \DateInterval('P1D'));
+        }
+        return $occurrences;
+    }
+
+    public function getNextOccurrence($occurDate, $strictly_after=TRUE) {
+
+        if (! $strictly_after) {
+            if ($this->occursOn($occurDate) && $this->occursAt($occurDate)) {
+                return $occurDate;
+            }
+        }
+
+        // Set an arbitrary end date, taking the 400Y advice from elsewhere in this module.
+        $endDate = clone $occurDate;
+        $endDate->add(new \DateInterval('P400Y'));
+        $candidates = $this->getOccurrencesBetween($occurDate, $endDate, 2);
+        foreach ($candidates as $candidate) {
+            if (! $strictly_after) {
+                return $candidate;
+            }
+            elseif ($candidate > $occurDate) {
+                return $candidate;
+            }
+        }
+        return FALSE;
+    }
+
+    public function getPrevOccurrence($occurDate) {
+
+        $startDate = $this->startDate;
+        $candidates = $this->getOccurrencesBetween($startDate, $occurDate);
+        if (count($candidates)) {
+            return array_pop($candidates);
+        }
+        return FALSE;
+    }
+
     public function generateOccurrences()
     {
         self::prepareDateElements();
@@ -433,7 +518,6 @@ class When extends \DateTime
                                 if ($this->occursOn($dateLooper))
                                 {
                                     $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
-
                                 }
 
                                 $dateLooper->add(new \DateInterval('P1D'));
@@ -637,6 +721,10 @@ class When extends \DateTime
 
             }
         }
+        // generateTimeOccurrences can overshoot $this->count, so trim:
+        if ($this->count && (count($this->occurrences) >= $this->count)) {
+            $this->occurrences = array_slice($this->occurrences, 0, $this->count);
+        }
     }
 
     protected function addOccurrence($occurrences)
@@ -662,16 +750,9 @@ class When extends \DateTime
             {
                 foreach ($this->byseconds as $second)
                 {
-                    if (count($this->occurrences) < $this->count)
-                    {
-                        $occurrence = clone $dateLooper;
-                        $occurrence->setTime($hour, $minute, $second);
-                        $occurrences[] = $occurrence;
-                    }
-                    else
-                    {
-                        break 3;
-                    }
+                    $occurrence = clone $dateLooper;
+                    $occurrence->setTime($hour, $minute, $second);
+                    $occurrences[] = $occurrence;
                 }
             }
         }
@@ -679,7 +760,8 @@ class When extends \DateTime
         return $occurrences;
     }
 
-    protected function prepareDateElements()
+    // If $limitRange is true, $this->count and $this->until will be set if not already set.
+    protected function prepareDateElements($limitRange=TRUE)
     {
         // if the interval isn't set, set it.
         if (!isset($this->interval))
@@ -693,7 +775,7 @@ class When extends \DateTime
             throw new FrequencyRequired();
         }
 
-        if (!isset($this->count))
+        if ($limitRange && !isset($this->count))
         {
             $this->count = 200;
         }
@@ -712,7 +794,7 @@ class When extends \DateTime
         // the calendar repeats itself every 400 years, so if a date
         // doesn't exist for 400 years, I don't think it will ever
         // occur
-        if (!isset($this->until))
+        if ($limitRange && !isset($this->until))
         {
             $this->until = new \DateTime();
             $this->until->add(new \DateInterval('P400Y'));
