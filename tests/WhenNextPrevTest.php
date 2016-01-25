@@ -90,5 +90,27 @@ class WhenNextPrevTest extends PHPUnit_Framework_TestCase
         
 
     /* Test getting previous occurrence */
+    function testGetPrevOccurrenceFromLastOccurence() {
+        $r = new When(); 
+        $r->startDate(new DateTime("19970902T090000")) 
+          ->rrule("FREQ=WEEKLY")
+          ->until(new DateTime("19971104T090000"));
+
+        $expected = new DateTime("1997-10-28 09:00:00");
+
+        $result = $r->getPrevOccurrence(new DateTime("19971104T090000"));
+        $this->assertEquals($expected, $result);
+    }
+
+    /* Test that getting previous occurrence from the first returns FALSE */
+    function testGetPrevOccurrenceFromFirstOccurence() {
+        $r = new When(); 
+        $r->startDate(new DateTime("19970902T090000")) 
+          ->rrule("FREQ=WEEKLY")
+          ->until(new DateTime("19971104T090000"));
+
+        $result = $r->getPrevOccurrence(new DateTime("19970902T090000"));
+        $this->assertFalse($result);
+    }
 
 }
