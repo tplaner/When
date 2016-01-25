@@ -382,6 +382,8 @@ class When extends \DateTime
                 return false;
             }
         }
+
+        return true;
     }
 
     // Get occurrences between two DateTimes, exclusive. Does not modify $this.
@@ -393,7 +395,7 @@ class When extends \DateTime
             return $occurrences;
         }
 
-        self::prepareDateElements(FALSE);
+        self::prepareDateElements(false);
 
         // Trim to the defined range of this When:
         if ($this->startDate > $startDate) {
@@ -422,9 +424,15 @@ class When extends \DateTime
         }
 
         $dateLooper = clone $startDate;
+        $firstDate = true;
         while ($dateLooper < $endDate) {
             if ($this->occursOn($dateLooper)) {
                 foreach ($this->generateTimeOccurrences($dateLooper) as $occur) {
+                    if ($firstDate) { // We might pick up an earlier time the same day. 
+                        if ($occur < $startDate) {
+                            continue;
+                        }
+                    }
                     $occurrences[] = $occur;
                     if ($max_occurrences && ($max_occurrences <= count($occurrences))) {
                         return array_slice($occurrences, 0, $max_occurrences);
@@ -432,11 +440,14 @@ class When extends \DateTime
                 }
             }
             $dateLooper->add(new \DateInterval('P1D'));
+            $firstDate = false;
         }
         return $occurrences;
     }
 
-    public function getNextOccurrence($occurDate, $strictly_after=TRUE) {
+    public function getNextOccurrence($occurDate, $strictly_after=true) {
+
+        self::prepareDateElements(false);
 
         if (! $strictly_after) {
             if ($this->occursOn($occurDate) && $this->occursAt($occurDate)) {
@@ -456,17 +467,19 @@ class When extends \DateTime
                 return $candidate;
             }
         }
-        return FALSE;
+        return false;
     }
 
     public function getPrevOccurrence($occurDate) {
+
+        self::prepareDateElements(false);
 
         $startDate = $this->startDate;
         $candidates = $this->getOccurrencesBetween($startDate, $occurDate);
         if (count($candidates)) {
             return array_pop($candidates);
         }
-        return FALSE;
+        return false;
     }
 
     public function generateOccurrences()
@@ -761,7 +774,7 @@ class When extends \DateTime
     }
 
     // If $limitRange is true, $this->count and $this->until will be set if not already set.
-    protected function prepareDateElements($limitRange=TRUE)
+    protected function prepareDateElements($limitRange=true)
     {
         // if the interval isn't set, set it.
         if (!isset($this->interval))
