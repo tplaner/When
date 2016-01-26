@@ -397,19 +397,12 @@ class When extends \DateTime
 
         self::prepareDateElements(false);
 
-        // Trim to the defined range of this When:
-        if ($this->startDate > $startDate) {
-            $startDate = clone $this->startDate;
-        }
-        if ($this->until && ($this->until < $endDate)) {
-            $endDate = clone $this->until;
-        }
+        list($startDate, $endDate) = $this->findDateRangeOverlap($startDate, $endDate);
 
         // If we have a defined $count, we need to test from $this->startDate to ensure we stop at $count.
         if ($this->count and ($startDate > $this->startDate)) {
-            $max_occurrences = $this->count - count($this->getOccurrencesBetween(clone $this->startDate,
-                                                                                 clone $startDate));
-            if ($max_occurrences == 0) {
+            $max_occurrences = $this->count - $this->countOccurrencesBefore($startDate);
+            if ($max_occurrences <= 0) {
                 return $occurrences;
             }
         }
@@ -443,6 +436,21 @@ class When extends \DateTime
             $firstDate = false;
         }
         return $occurrences;
+    }
+
+    private function findDateRangeOverlap($startDate, $endDate) {
+        // Trim to the defined range of this When:
+        if ($this->startDate > $startDate) {
+            $startDate = clone $this->startDate;
+        }
+        if ($this->until && ($this->until < $endDate)) {
+            $endDate = clone $this->until;
+        }
+        return array($startDate, $endDate);
+    }
+
+    private function countOccurrencesBefore($date) {
+        return count($this->getOccurrencesBetween($this->startDate, $date));
     }
 
     public function getNextOccurrence($occurDate, $strictly_after=true) {
