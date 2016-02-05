@@ -350,6 +350,51 @@ class When extends \DateTime
             }
         }
 
+        // If there is an interval != 1, check whether this is an nth period.
+        if ($this->interval > 1) {
+            $sinceStart = $date->diff($this->startDate);
+            switch ($this->freq) {
+            case 'yearly':
+                $numPeriods = $sinceStart->y;
+                break;
+            case 'monthly':
+                $numYears = $sinceStart->y;
+                $numMonths = $sinceStart->m;
+                $numPeriods = ($numYears * 12) + $numMonths;
+                break;
+            case 'weekly':
+                $numPeriods = ceil($sinceStart->days / 7);
+                break;
+            case 'daily':
+                $numPeriods = $sinceStart->days;
+                break;
+            case 'hourly':
+                $numDays = $sinceStart->days;
+                $numHours = $sinceStart->h;
+                $numPeriods = (24 * $numDays) + $numHours;
+                break;
+            case 'minutely':
+                $numDays = $sinceStart->days;
+                $numHours = $sinceStart->h;
+                $numMinutes = $sinceStart->i;
+                $numPeriods = (60 * ((24 * $numDays) + $numHours)) + $numMinutes;
+                break;
+            case 'secondly':
+                $numDays = $sinceStart->days;
+                $numHours = $sinceStart->h;
+                $numMinutes = $sinceStart->i;
+                $numSeconds = $sinceStart->s;
+                $numPeriods = (60 * (60 * ((24 * $numDays) + $numHours)) + $numMinutes) + $numSeconds;
+                break;
+            }
+            if (($numPeriods % $this->interval) == 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -421,12 +466,14 @@ class When extends \DateTime
         while ($dateLooper < $endDate) {
             if ($this->occursOn($dateLooper)) {
                 foreach ($this->generateTimeOccurrences($dateLooper) as $occur) {
-                    if ($firstDate) { // We might pick up an earlier time the same day. 
+                    if ($firstDate) { // We might pick up an earlier time the same day.
                         if ($occur < $startDate) {
                             continue;
                         }
                     }
-                    $occurrences[] = $occur;
+                    if ($occur < $endDate) {
+                        $occurrences[] = $occur;
+                    }
                     if ($max_occurrences && ($max_occurrences <= count($occurrences))) {
                         return array_slice($occurrences, 0, $max_occurrences);
                     }
@@ -453,6 +500,58 @@ class When extends \DateTime
         return count($this->getOccurrencesBetween($this->startDate, $date));
     }
 
+    private function abbrevToDayName($abbrev) {
+        $daynames = array('su' => 'Sunday',
+                          'mo' => 'Monday',
+                          'tu' => 'Tuesday',
+                          'we' => 'Wednesday',
+                          'th' => 'Thursday',
+                          'fr' => 'Friday',
+                          'sa' => 'Saturyday',
+        );
+        return $daynames[strtolower($abbrev)];
+    }
+
+    /**
+     * RFC 5545 specifies expanding or limiting recurrences based on interactions between FREQ and BY... parameters.
+     */
+    private function adjustStartDateByRule() {
+        if (($this->freq == 'weekly') && (isset($this->bydays))) {
+            $this->startDate(self::expandWeeklyStartDate($this->startDate, $this->freq, $this->wkst, $this->bydays));
+        }
+    }
+
+    /**
+     * "The WKST rule part specifies the day on which the workweek starts. [...]
+     * This is significant when a WEEKLY "RRULE" has an interval greater than 1,
+     * and a BYDAY rule part is specified." -- RFC 5545
+     * See http://stackoverflow.com/questions/5750586/determining-occurrences-from-icalendar-rrule-that-expands
+     */
+    public static function expandWeeklyStartDate($startDate, $freq, $wkst, $bydays) {
+        $wkst = self::abbrevToDayName($wkst);
+        $startWeekDay = clone $startDate;
+        // Get the week start for this rule.
+        $startWeekDay->modify("next " . $wkst);
+        $startWeekDay->modify("last " . $wkst);
+
+        // Find the next day that matches $bydays
+        $startWeekDay_abbrev = substr($startWeekDay->format('D'), 0, 2);
+        $best_candidate = clone $startWeekDay;
+        $best_candidate->modify("next " . $wkst); // Initialize it out to next week.
+        foreach ($bydays as $abbrev) {
+            $abbrev = substr($abbrev, 1, 2);
+            if ($abbrev == $startWeekDay_abbrev) {
+                return $startWeekDay;
+            }
+            $candidate = clone $startWeekDay;
+            $candidate->modify('next ' . self::abbrevToDayName($abbrev));
+            if ($candidate < $best_candidate) {
+                $best_candidate = $candidate;
+            }
+        }
+        return $best_candidate;
+    }
+
     public function getNextOccurrence($occurDate, $strictly_after=true) {
 
         self::prepareDateElements(false);
@@ -464,6 +563,7 @@ class When extends \DateTime
         }
 
         // Set an arbitrary end date, taking the 400Y advice from elsewhere in this module.
+        // TODO: do this in smaller chunks so we don't get a bunch of unneeded occurrences
         $endDate = clone $occurDate;
         $endDate->add(new \DateInterval('P400Y'));
         $candidates = $this->getOccurrencesBetween($occurDate, $endDate, 2);
@@ -640,30 +740,7 @@ class When extends \DateTime
             {
                 $dateLooper->setDate($dateLooper->format("Y"), $dateLooper->format("n"), $dateLooper->format("j"));
 
-                switch ($this->wkst)
-                {
-                    case "su":
-                        $wkst = "Sunday";
-                        break;
-                    case "mo":
-                        $wkst = "Monday";
-                        break;
-                    case "tu":
-                        $wkst = "Tuesday";
-                        break;
-                    case "we":
-                        $wkst = "Wednesday";
-                        break;
-                    case "th":
-                        $wkst = "Thursday";
-                        break;
-                    case "fr":
-                        $wkst = "Friday";
-                        break;
-                    case "sa":
-                        $wkst = "Saturday";
-                        break;
-                }
+                $wkst = self::abbrevToDayName($this->wkst);
 
                 $daysLeft = 7;
 
@@ -878,6 +955,8 @@ class When extends \DateTime
                 $this->bymonth($this->startDate->format('n'));
             }
         }
+
+        $this->adjustStartDateByRule();
     }
 
     protected static function createItemsList($list, $delimiter)
