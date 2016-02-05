@@ -352,17 +352,21 @@ class When extends \DateTime
 
         // If there is an interval != 1, check whether this is an nth period.
         if ($this->interval > 1) {
-            $sinceStart = $date->diff($this->startDate);
             switch ($this->freq) {
             case 'yearly':
+                $start = new \DateTime($this->startDate->format("Y-1-1\TH:i:sP"));
+                $sinceStart = $date->diff($start);
                 $numPeriods = $sinceStart->y;
                 break;
             case 'monthly':
+                $start = new \DateTime($this->startDate->format("Y-m-1\TH:i:sP"));
+                $sinceStart = $date->diff($start);
                 $numYears = $sinceStart->y;
                 $numMonths = $sinceStart->m;
                 $numPeriods = ($numYears * 12) + $numMonths;
                 break;
             case 'weekly':
+                $sinceStart = $date->diff($this->startDate); // Note we "expanded" startDate already. 
                 $numPeriods = ceil($sinceStart->days / 7);
                 break;
             case 'daily':
