@@ -366,24 +366,28 @@ class When extends \DateTime
                 $numPeriods = ($numYears * 12) + $numMonths;
                 break;
             case 'weekly':
-                $sinceStart = $date->diff($this->startDate); // Note we "expanded" startDate already. 
+                $sinceStart = $date->diff($this->startDate); // Note we "expanded" startDate already.
                 $numPeriods = ceil($sinceStart->days / 7);
                 break;
             case 'daily':
+                $sinceStart = $date->diff($this->startDate); // Note we "expanded" startDate already.
                 $numPeriods = $sinceStart->days;
                 break;
             case 'hourly':
+                $sinceStart = $date->diff($this->startDate); // Note we "expanded" startDate already.
                 $numDays = $sinceStart->days;
                 $numHours = $sinceStart->h;
                 $numPeriods = (24 * $numDays) + $numHours;
                 break;
             case 'minutely':
+                $sinceStart = $date->diff($this->startDate); // Note we "expanded" startDate already.
                 $numDays = $sinceStart->days;
                 $numHours = $sinceStart->h;
                 $numMinutes = $sinceStart->i;
                 $numPeriods = (60 * ((24 * $numDays) + $numHours)) + $numMinutes;
                 break;
             case 'secondly':
+                $sinceStart = $date->diff($this->startDate); // Note we "expanded" startDate already.
                 $numDays = $sinceStart->days;
                 $numHours = $sinceStart->h;
                 $numMinutes = $sinceStart->i;
@@ -521,7 +525,7 @@ class When extends \DateTime
      */
     private function adjustStartDateByRule() {
         if (($this->freq == 'weekly') && (isset($this->bydays))) {
-            $this->startDate(self::expandWeeklyStartDate($this->startDate, $this->freq, $this->wkst, $this->bydays));
+            $this->startDate(self::expandWeeklyStartDate($this->startDate, $this->wkst, $this->bydays));
         }
     }
 
@@ -531,17 +535,17 @@ class When extends \DateTime
      * and a BYDAY rule part is specified." -- RFC 5545
      * See http://stackoverflow.com/questions/5750586/determining-occurrences-from-icalendar-rrule-that-expands
      */
-    public static function expandWeeklyStartDate($startDate, $freq, $wkst, $bydays) {
+    public static function expandWeeklyStartDate($startDate, $wkst, $bydays) {
         $wkst = self::abbrevToDayName($wkst);
         $startWeekDay = clone $startDate;
-        // Get the week start for this rule.
+
+        // Get first $wkst in the same week as $startWeekDay.
         $startWeekDay->modify("next " . $wkst);
         $startWeekDay->modify("last " . $wkst);
 
         // Find the next day that matches $bydays
         $startWeekDay_abbrev = substr($startWeekDay->format('D'), 0, 2);
         $best_candidate = clone $startWeekDay;
-        $best_candidate->modify("next " . $wkst); // Initialize it out to next week.
         foreach ($bydays as $abbrev) {
             $abbrev = substr($abbrev, 1, 2);
             if ($abbrev == $startWeekDay_abbrev) {
