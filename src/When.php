@@ -366,8 +366,14 @@ class When extends \DateTime
                 $numPeriods = ($numYears * 12) + $numMonths;
                 break;
             case 'weekly':
-                $sinceStart = $date->diff($this->startDate); // Note we "expanded" startDate already.
-                $numPeriods = ceil($sinceStart->days / 7);
+                if (isset($this->bydays)) {
+                    $weekStartDate = self::getFirstWeekStartDate($this->startDate, $this->wkst);
+                }
+                else {
+                    $weekStartDate = $this->startDate;
+                }
+                $sinceStart = $date->diff($weekStartDate);
+                $numPeriods = floor($sinceStart->days / 7);
                 break;
             case 'daily':
                 $sinceStart = $date->diff($this->startDate); // Note we "expanded" startDate already.
@@ -521,43 +527,20 @@ class When extends \DateTime
     }
 
     /**
-     * RFC 5545 specifies expanding or limiting recurrences based on interactions between FREQ and BY... parameters.
-     */
-    private function adjustStartDateByRule() {
-        if (($this->freq == 'weekly') && (isset($this->bydays))) {
-            $this->startDate(self::expandWeeklyStartDate($this->startDate, $this->wkst, $this->bydays));
-        }
-    }
-
-    /**
      * "The WKST rule part specifies the day on which the workweek starts. [...]
      * This is significant when a WEEKLY "RRULE" has an interval greater than 1,
      * and a BYDAY rule part is specified." -- RFC 5545
      * See http://stackoverflow.com/questions/5750586/determining-occurrences-from-icalendar-rrule-that-expands
      */
-    public static function expandWeeklyStartDate($startDate, $wkst, $bydays) {
+    public static function getFirstWeekStartDate($startDate, $wkst) {
         $wkst = self::abbrevToDayName($wkst);
         $startWeekDay = clone $startDate;
 
-        // Get first $wkst in the same week as $startWeekDay.
+        // Get first $wkst before or equal to $startDate
         $startWeekDay->modify("next " . $wkst);
         $startWeekDay->modify("last " . $wkst);
 
-        // Find the next day that matches $bydays
-        $startWeekDay_abbrev = substr($startWeekDay->format('D'), 0, 2);
-        $best_candidate = clone $startWeekDay;
-        foreach ($bydays as $abbrev) {
-            $abbrev = substr($abbrev, 1, 2);
-            if ($abbrev == $startWeekDay_abbrev) {
-                return $startWeekDay;
-            }
-            $candidate = clone $startWeekDay;
-            $candidate->modify('next ' . self::abbrevToDayName($abbrev));
-            if ($candidate < $best_candidate) {
-                $best_candidate = $candidate;
-            }
-        }
-        return $best_candidate;
+        return $startWeekDay;
     }
 
     public function getNextOccurrence($occurDate, $strictly_after=true) {
@@ -964,7 +947,6 @@ class When extends \DateTime
             }
         }
 
-        $this->adjustStartDateByRule();
     }
 
     protected static function createItemsList($list, $delimiter)
