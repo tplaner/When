@@ -448,6 +448,12 @@ class When extends \DateTime
     // Get occurrences between two DateTimes, exclusive. Does not modify $this.
     public function getOccurrencesBetween($startDate, $endDate, $limit=NULL) {
 
+        // Enforce consistent time zones. Date comparisons don't require them, but +P1D loop does.
+        if ($tz = $this->getTimeZone()) {
+            $startDate->setTimeZone($tz);
+            $endDate->setTimeZone($tz);
+        }
+
         $occurrences = array();
 
         if ($endDate <= $startDate) {
