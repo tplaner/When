@@ -305,4 +305,46 @@ class WhenWeeklyTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($result, $occurrences[$key]);
         }
     }
+
+    /**
+     * Every other week - forever:
+     * DTSTART;TZID=America/New_York:19970902T000000
+     * RRULE:FREQ=WEEKLY;INTERVAL=2;WKST=TU
+     *
+     * Weekstart meets first occurrence,
+     * time is midnight.
+     *
+     * @see https://github.com/tplaner/When/issues/45
+     */
+    function testWeeklyNine()
+    {
+        $results[] = new DateTime('1997-09-02 00:00:00');
+        $results[] = new DateTime('1997-09-16 00:00:00');
+        $results[] = new DateTime('1997-09-30 00:00:00');
+        $results[] = new DateTime('1997-10-14 00:00:00');
+        $results[] = new DateTime('1997-10-28 00:00:00');
+        $results[] = new DateTime('1997-11-11 00:00:00');
+        $results[] = new DateTime('1997-11-25 00:00:00');
+        $results[] = new DateTime('1997-12-09 00:00:00');
+        $results[] = new DateTime('1997-12-23 00:00:00');
+        $results[] = new DateTime('1998-01-06 00:00:00');
+        $results[] = new DateTime('1998-01-20 00:00:00');
+        $results[] = new DateTime('1998-02-03 00:00:00');
+        $results[] = new DateTime('1998-02-17 00:00:00');
+
+        $r = new When();
+        $r->startDate(new \DateTime('1997-09-02 00:00:00'))
+            ->freq('weekly')
+            ->interval(2)
+            ->wkst('TU')
+            ->count(13)
+            ->generateOccurrences();
+
+        $occurrences = $r->occurrences;
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
 }
