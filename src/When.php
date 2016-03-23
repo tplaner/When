@@ -694,7 +694,7 @@ class When extends \DateTime
             throw new FrequencyRequired();
         }
 
-        if (!isset($this->count))
+        if (!isset($this->count) && !isset($this->until))
         {
             $this->count = 200;
         }
