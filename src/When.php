@@ -746,8 +746,9 @@ class When extends \DateTime
                 {
                     $startWeekDay = clone $this->startDate;
                     $startWeekDay->modify("next " . $wkst);
+                    $startWeekDay->setTime($dateLooper->format('H'), $dateLooper->format('i'), $dateLooper->format('s'));
 
-                    $daysLeft = $dateLooper->diff($startWeekDay)->format("%a") + 1;
+                    $daysLeft = (int) $dateLooper->diff($startWeekDay)->format("%a");
 
                     $startWeekDay->modify("last " . $wkst);
                 }
