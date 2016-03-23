@@ -520,7 +520,7 @@ class When extends \DateTime
         return count($this->getOccurrencesBetween($this->startDate, $date));
     }
 
-    private function abbrevToDayName($abbrev) {
+    private static function abbrevToDayName($abbrev) {
         $daynames = array('su' => 'Sunday',
                           'mo' => 'Monday',
                           'tu' => 'Tuesday',
