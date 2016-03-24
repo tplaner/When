@@ -350,6 +350,65 @@ class When extends \DateTime
             }
         }
 
+        // If there is an interval != 1, check whether this is an nth period.
+        if ($this->interval > 1) {
+            switch ($this->freq) {
+            case 'yearly':
+                $start = new \DateTime($this->startDate->format("Y-1-1\TH:i:sP"));
+                $sinceStart = $date->diff($start);
+                $numPeriods = $sinceStart->y;
+                break;
+            case 'monthly':
+                $start = new \DateTime($this->startDate->format("Y-m-1\TH:i:sP"));
+                $sinceStart = $date->diff($start);
+                $numYears = $sinceStart->y;
+                $numMonths = $sinceStart->m;
+                $numPeriods = ($numYears * 12) + $numMonths;
+                break;
+            case 'weekly':
+                if (isset($this->bydays)) {
+                    $weekStartDate = self::getFirstWeekStartDate($this->startDate, $this->wkst);
+                }
+                else {
+                    $weekStartDate = $this->startDate;
+                }
+                $sinceStart = $date->diff($weekStartDate);
+                $numPeriods = floor($sinceStart->days / 7);
+                break;
+            case 'daily':
+                $sinceStart = $date->diff($this->startDate); // Note we "expanded" startDate already.
+                $numPeriods = $sinceStart->days;
+                break;
+            case 'hourly':
+                $sinceStart = $date->diff($this->startDate); // Note we "expanded" startDate already.
+                $numDays = $sinceStart->days;
+                $numHours = $sinceStart->h;
+                $numPeriods = (24 * $numDays) + $numHours;
+                break;
+            case 'minutely':
+                $sinceStart = $date->diff($this->startDate); // Note we "expanded" startDate already.
+                $numDays = $sinceStart->days;
+                $numHours = $sinceStart->h;
+                $numMinutes = $sinceStart->i;
+                $numPeriods = (60 * ((24 * $numDays) + $numHours)) + $numMinutes;
+                break;
+            case 'secondly':
+                $sinceStart = $date->diff($this->startDate); // Note we "expanded" startDate already.
+                $numDays = $sinceStart->days;
+                $numHours = $sinceStart->h;
+                $numMinutes = $sinceStart->i;
+                $numSeconds = $sinceStart->s;
+                $numPeriods = (60 * (60 * ((24 * $numDays) + $numHours)) + $numMinutes) + $numSeconds;
+                break;
+            }
+            if (($numPeriods % $this->interval) == 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -382,6 +441,150 @@ class When extends \DateTime
                 return false;
             }
         }
+
+        return true;
+    }
+
+    // Get occurrences between two DateTimes, exclusive. Does not modify $this.
+    public function getOccurrencesBetween($startDate, $endDate, $limit=NULL) {
+
+        // Enforce consistent time zones. Date comparisons don't require them, but +P1D loop does.
+        if ($tz = $this->getTimeZone()) {
+            $startDate->setTimeZone($tz);
+            $endDate->setTimeZone($tz);
+        }
+
+        $occurrences = array();
+
+        if ($endDate <= $startDate) {
+            return $occurrences;
+        }
+
+        self::prepareDateElements(false);
+
+        list($startDate, $endDate) = $this->findDateRangeOverlap($startDate, $endDate);
+
+        // If we have a defined $count, we need to test from $this->startDate to ensure we stop at $count.
+        if ($this->count and ($startDate > $this->startDate)) {
+            $max_occurrences = $this->count - $this->countOccurrencesBefore($startDate);
+            if ($max_occurrences <= 0) {
+                return $occurrences;
+            }
+        }
+        else {
+            $max_occurrences = $this->count;
+        }
+
+        if ($limit) {
+            if (! $max_occurrences || ($limit < $max_occurrences)) {
+                $max_occurrences = $limit;
+            }
+        }
+
+        $dateLooper = clone $startDate;
+        $firstDate = true;
+        while ($dateLooper < $endDate) {
+            if ($this->occursOn($dateLooper)) {
+                foreach ($this->generateTimeOccurrences($dateLooper) as $occur) {
+                    if ($firstDate) { // We might pick up an earlier time the same day.
+                        if ($occur < $startDate) {
+                            continue;
+                        }
+                    }
+                    if ($occur < $endDate) {
+                        $occurrences[] = $occur;
+                    }
+                    if ($max_occurrences && ($max_occurrences <= count($occurrences))) {
+                        return array_slice($occurrences, 0, $max_occurrences);
+                    }
+                }
+            }
+            $dateLooper->add(new \DateInterval('P1D'));
+            $firstDate = false;
+        }
+        return $occurrences;
+    }
+
+    private function findDateRangeOverlap($startDate, $endDate) {
+        // Trim to the defined range of this When:
+        if ($this->startDate > $startDate) {
+            $startDate = clone $this->startDate;
+        }
+        if ($this->until && ($this->until < $endDate)) {
+            $endDate = clone $this->until;
+        }
+        return array($startDate, $endDate);
+    }
+
+    private function countOccurrencesBefore($date) {
+        return count($this->getOccurrencesBetween($this->startDate, $date));
+    }
+
+    private static function abbrevToDayName($abbrev) {
+        $daynames = array('su' => 'Sunday',
+                          'mo' => 'Monday',
+                          'tu' => 'Tuesday',
+                          'we' => 'Wednesday',
+                          'th' => 'Thursday',
+                          'fr' => 'Friday',
+                          'sa' => 'Saturyday',
+        );
+        return $daynames[strtolower($abbrev)];
+    }
+
+    /**
+     * "The WKST rule part specifies the day on which the workweek starts. [...]
+     * This is significant when a WEEKLY "RRULE" has an interval greater than 1,
+     * and a BYDAY rule part is specified." -- RFC 5545
+     * See http://stackoverflow.com/questions/5750586/determining-occurrences-from-icalendar-rrule-that-expands
+     */
+    public static function getFirstWeekStartDate($startDate, $wkst) {
+        $wkst = self::abbrevToDayName($wkst);
+        $startWeekDay = clone $startDate;
+
+        // Get first $wkst before or equal to $startDate
+        $startWeekDay->modify("next " . $wkst);
+        $startWeekDay->modify("last " . $wkst);
+
+        return $startWeekDay;
+    }
+
+    public function getNextOccurrence($occurDate, $strictly_after=true) {
+
+        self::prepareDateElements(false);
+
+        if (! $strictly_after) {
+            if ($this->occursOn($occurDate) && $this->occursAt($occurDate)) {
+                return $occurDate;
+            }
+        }
+
+        // Set an arbitrary end date, taking the 400Y advice from elsewhere in this module.
+        // TODO: do this in smaller chunks so we don't get a bunch of unneeded occurrences
+        $endDate = clone $occurDate;
+        $endDate->add(new \DateInterval('P400Y'));
+        $candidates = $this->getOccurrencesBetween($occurDate, $endDate, 2);
+        foreach ($candidates as $candidate) {
+            if (! $strictly_after) {
+                return $candidate;
+            }
+            elseif ($candidate > $occurDate) {
+                return $candidate;
+            }
+        }
+        return false;
+    }
+
+    public function getPrevOccurrence($occurDate) {
+
+        self::prepareDateElements(false);
+
+        $startDate = $this->startDate;
+        $candidates = $this->getOccurrencesBetween($startDate, $occurDate);
+        if (count($candidates)) {
+            return array_pop($candidates);
+        }
+        return false;
     }
 
     public function generateOccurrences()
@@ -433,7 +636,6 @@ class When extends \DateTime
                                 if ($this->occursOn($dateLooper))
                                 {
                                     $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
-
                                 }
 
                                 $dateLooper->add(new \DateInterval('P1D'));
@@ -535,30 +737,7 @@ class When extends \DateTime
             {
                 $dateLooper->setDate($dateLooper->format("Y"), $dateLooper->format("n"), $dateLooper->format("j"));
 
-                switch ($this->wkst)
-                {
-                    case "su":
-                        $wkst = "Sunday";
-                        break;
-                    case "mo":
-                        $wkst = "Monday";
-                        break;
-                    case "tu":
-                        $wkst = "Tuesday";
-                        break;
-                    case "we":
-                        $wkst = "Wednesday";
-                        break;
-                    case "th":
-                        $wkst = "Thursday";
-                        break;
-                    case "fr":
-                        $wkst = "Friday";
-                        break;
-                    case "sa":
-                        $wkst = "Saturday";
-                        break;
-                }
+                $wkst = self::abbrevToDayName($this->wkst);
 
                 $daysLeft = 7;
 
@@ -638,6 +817,10 @@ class When extends \DateTime
 
             }
         }
+        // generateTimeOccurrences can overshoot $this->count, so trim:
+        if ($this->count && (count($this->occurrences) >= $this->count)) {
+            $this->occurrences = array_slice($this->occurrences, 0, $this->count);
+        }
     }
 
     protected function addOccurrence($occurrences)
@@ -663,16 +846,9 @@ class When extends \DateTime
             {
                 foreach ($this->byseconds as $second)
                 {
-                    if (count($this->occurrences) < $this->count)
-                    {
-                        $occurrence = clone $dateLooper;
-                        $occurrence->setTime($hour, $minute, $second);
-                        $occurrences[] = $occurrence;
-                    }
-                    else
-                    {
-                        break 3;
-                    }
+                    $occurrence = clone $dateLooper;
+                    $occurrence->setTime($hour, $minute, $second);
+                    $occurrences[] = $occurrence;
                 }
             }
         }
@@ -680,7 +856,8 @@ class When extends \DateTime
         return $occurrences;
     }
 
-    protected function prepareDateElements()
+    // If $limitRange is true, $this->count and $this->until will be set if not already set.
+    protected function prepareDateElements($limitRange=true)
     {
         // if the interval isn't set, set it.
         if (!isset($this->interval))
@@ -694,7 +871,7 @@ class When extends \DateTime
             throw new FrequencyRequired();
         }
 
-        if (!isset($this->count))
+        if ($limitRange && !isset($this->count))
         {
             $this->count = 200;
         }
@@ -713,7 +890,7 @@ class When extends \DateTime
         // the calendar repeats itself every 400 years, so if a date
         // doesn't exist for 400 years, I don't think it will ever
         // occur
-        if (!isset($this->until))
+        if ($limitRange && !isset($this->until))
         {
             $this->until = new \DateTime();
             $this->until->add(new \DateInterval('P400Y'));
@@ -776,6 +953,7 @@ class When extends \DateTime
                 $this->bymonth($this->startDate->format('n'));
             }
         }
+
     }
 
     protected static function createItemsList($list, $delimiter)

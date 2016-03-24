@@ -290,6 +290,7 @@ class WhenWeeklyRruleTest extends PHPUnit_Framework_TestCase
         $results[] = new DateTime('2014-03-24 00:00:00');
         $results[] = new DateTime('2014-03-25 00:00:00');
         $results[] = new DateTime('2014-04-07 00:00:00');
+        $results[] = new DateTime('2014-04-08 00:00:00');
 
         $r = new When();
         $r->startDate(new DateTime("2014-02-10"))
