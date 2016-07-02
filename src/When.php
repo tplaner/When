@@ -617,6 +617,8 @@ class When extends \DateTime
 
         while ($dateLooper < $this->until && count($this->occurrences) < $this->count)
         {
+            $occurrences = array();
+
             if ($this->freq === "yearly")
             {
                 if (isset($this->bymonths))
@@ -635,7 +637,7 @@ class When extends \DateTime
                             {
                                 if ($this->occursOn($dateLooper))
                                 {
-                                    $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
+                                    $occurrences = array_merge($occurrences, $this->generateTimeOccurrences($dateLooper));
                                 }
 
                                 $dateLooper->add(new \DateInterval('P1D'));
@@ -648,8 +650,7 @@ class When extends \DateTime
 
                             if ($this->occursOn($dateLooper))
                             {
-                                $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
-
+                                $occurrences = array_merge($occurrences, $this->generateTimeOccurrences($dateLooper));
                             }
                         }
                     }
@@ -673,13 +674,15 @@ class When extends \DateTime
                     {
                         if ($this->occursOn($dateLooper))
                         {
-                            $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
-
+                            $occurrences = array_merge($occurrences, $this->generateTimeOccurrences($dateLooper));
                         }
                         $dateLooper->add(new \DateInterval('P1D'));
                         $day++;
                     }
                 }
+
+                $occurrences = $this->prepareOccurrences($occurrences, $count);
+                $this->addOccurrence($occurrences);
 
                 $dateLooper = clone $this->startDate;
                 $dateLooper->add(new \DateInterval('P' . ($this->interval * ++$count) . 'Y'));
@@ -690,7 +693,6 @@ class When extends \DateTime
 
                 $day = (int)$dateLooper->format("j");
 
-                $occurrences = array();
                 while ($day <= $days)
                 {
                     if ($this->occursOn($dateLooper))
@@ -702,32 +704,8 @@ class When extends \DateTime
                     $day++;
                 }
 
-                // if bysetpos is set we need to limit the
-                // number of occurrences to only those which
-                // meet the setpos
-                if (isset($this->bysetpos))
-                {
-                    if ($count > 0)
-                    {
-                        $occurrenceCount = count($occurrences);
-
-                        foreach ($this->bysetpos as $setpos)
-                        {
-                            if ($setpos > 0)
-                            {
-                                $this->occurrences[] = $occurrences[$setpos - 1];
-                            }
-                            else
-                            {
-                                $this->occurrences[] = $occurrences[$occurrenceCount + $setpos];
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    $this->addOccurrence($occurrences);
-                }
+                $occurrences = $this->prepareOccurrences($occurrences, $count);
+                $this->addOccurrence($occurrences);
 
                 $dateLooper = clone $this->startDate;
                 $dateLooper->setDate($dateLooper->format("Y"), $dateLooper->format("n"), 1);
@@ -757,12 +735,15 @@ class When extends \DateTime
                 {
                     if ($this->occursOn($dateLooper))
                     {
-                        $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
+                        $occurrences = array_merge($occurrences, $this->generateTimeOccurrences($dateLooper));
                     }
 
                     $dateLooper->add(new \DateInterval('P1D'));
                     $daysLeft--;
                 }
+
+                $occurrences = $this->prepareOccurrences($occurrences, $count);
+                $this->addOccurrence($occurrences);
 
                 $dateLooper = clone $this->startDate;
                 $dateLooper->setDate($startWeekDay->format("Y"), $startWeekDay->format("n"), $startWeekDay->format('j'));
@@ -821,6 +802,35 @@ class When extends \DateTime
         if ($this->count && (count($this->occurrences) >= $this->count)) {
             $this->occurrences = array_slice($this->occurrences, 0, $this->count);
         }
+    }
+
+    protected function prepareOccurrences($occurrences, $count = 0)
+    {
+        if (isset($this->bysetpos))
+        {
+            $filtered_occurrences = array();
+
+            if ($count > 0)
+            {
+                $occurrenceCount = count($occurrences);
+
+                foreach ($this->bysetpos as $setpos)
+                {
+                    if ($setpos > 0)
+                    {
+                        $filtered_occurrences[] = $occurrences[$setpos - 1];
+                    }
+                    else
+                    {
+                        $filtered_occurrences[] = $occurrences[$occurrenceCount + $setpos];
+                    }
+                }
+            }
+
+            $occurrences = $filtered_occurrences;
+        }
+
+        return $occurrences;
     }
 
     protected function addOccurrence($occurrences)
