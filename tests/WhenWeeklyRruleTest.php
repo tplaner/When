@@ -304,4 +304,30 @@ class WhenWeeklyRruleTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($result, $occurrences[$key]);
         }
     }
+
+    /**
+     * every 1st Mon or Fri every week, for 4 weeks (ticket #55)
+     * I'm sure there is a more useful way to use BYSETPOS weekly...
+     * DTSTART;TZID=America/New_York:19970808T090000
+     * RRULE:FREQ=WEEKLY;BYDAY=MO,FR;COUNT=4;BYSETPOS=1
+     */
+    function testWeeklyNine()
+    {
+        $results[] = new DateTime('1997-08-08 09:00:00');
+        $results[] = new DateTime('1997-08-11 09:00:00');
+        $results[] = new DateTime('1997-08-18 09:00:00');
+        $results[] = new DateTime('1997-08-25 09:00:00');
+
+        $r = new When();
+        $r->startDate(new DateTime("19970808T090000"))
+          ->rrule("FREQ=WEEKLY;BYDAY=MO,FR;COUNT=4;BYSETPOS=1")
+          ->generateOccurrences();
+
+        $occurrences = $r->occurrences;
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
 }
