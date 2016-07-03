@@ -211,4 +211,30 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($occurrences));
     }
 
+    /**
+     * Every 2nd Monday between Sept 1 - Dec 1 1997 (issue #58)
+     * Checking single BYDAY with BYSETPOS while Monthly
+     * DTSTART;TZID=America/New_York:19970908T090000
+     * RRULE:FREQ=MONTHLY;BYDAY=MO;BYSETPOS=2;
+     */
+    function testGetMonthlyOccurrencesBydayBysetpos()
+    {
+        $results[] = new DateTime("1997-09-08 09:00:00");
+        $results[] = new DateTime("1997-10-13 09:00:00");
+        $results[] = new DateTime("1997-11-10 09:00:00");
+
+        $r = new When();
+        $r->startDate(new DateTime("19970908T090000"))
+          ->rrule("FREQ=MONTHLY;BYDAY=MO;BYSETPOS=2;");
+        $occurrences = $r->getOccurrencesBetween(
+            new DateTime( "19970901T090000" ),
+            new DateTime( "19971201T090000" )
+        );
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
+
 }

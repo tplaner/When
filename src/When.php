@@ -27,6 +27,7 @@ class When extends \DateTime
     public $wkst;
 
     public $occurrences = array();
+    public $rangeLimit  = 200;
 
     public function __construct($time = "now", $timezone = NULL)
     {
@@ -460,48 +461,63 @@ class When extends \DateTime
             return $occurrences;
         }
 
-        self::prepareDateElements(false);
-
-        list($startDate, $endDate) = $this->findDateRangeOverlap($startDate, $endDate);
-
-        // If we have a defined $count, we need to test from $this->startDate to ensure we stop at $count.
-        if ($this->count and ($startDate > $this->startDate)) {
-            $max_occurrences = $this->count - $this->countOccurrencesBefore($startDate);
-            if ($max_occurrences <= 0) {
-                return $occurrences;
-            }
+        // if existing UNTIL < startDate - we have nothing
+        if (isset($this->until) && $this->until < $startDate) {
+            return $occurrences;
         }
-        else {
-            $max_occurrences = $this->count;
+        // prevent unnecessary leg-work - our endDate is our new UNTIL
+        elseif (!isset($this->until)) {
+            $this->until = $endDate;
         }
 
-        if ($limit) {
-            if (! $max_occurrences || ($limit < $max_occurrences)) {
-                $max_occurrences = $limit;
-            }
+        $this->generateOccurrences();
+        $all_occurrences = $this->occurrences;
+
+        // nothing found in $this->generateOccurrences();
+        if (empty($all_occurrences)) {
+            return $occurrences;
         }
 
-        $dateLooper = clone $startDate;
-        $firstDate = true;
-        while ($dateLooper < $endDate) {
-            if ($this->occursOn($dateLooper)) {
-                foreach ($this->generateTimeOccurrences($dateLooper) as $occur) {
-                    if ($firstDate) { // We might pick up an earlier time the same day.
-                        if ($occur < $startDate) {
-                            continue;
-                        }
-                    }
-                    if ($occur < $endDate) {
-                        $occurrences[] = $occur;
-                    }
-                    if ($max_occurrences && ($max_occurrences <= count($occurrences))) {
-                        return array_slice($occurrences, 0, $max_occurrences);
-                    }
+        $last_occurrence = end($all_occurrences);
+
+        // if our last occurrence is is before our startDate, we have nothing
+        if ($last_occurrence < $startDate) {
+            // but if this is because we've hit a rangeLimit, it's not legit
+            // so restart looking, but start at this last_occurrence
+            if ($this->rangeLimit == count($all_occurrences)) {
+                $this->occurrences = array();
+                $this->startDate = clone $last_occurrence;
+                // IF limit is actually > 200... we should update our limit as well
+                if (isset($this->limit)) {
+                    $this->limit = $this->limit - 200;
                 }
+                return $this->getOccurrencesBetween($startDate, $endDate, $limit);
             }
-            $dateLooper->add(new \DateInterval('P1D'));
-            $firstDate = false;
+            return $occurrences;
         }
+
+        // we have something to report, so reset our array pointer
+        reset($all_occurrences);
+
+        $count = 0;
+
+        foreach($all_occurrences as $occurrence) {
+            // fastforward our pointer to where it's >= startDate
+            if ($occurrence < $startDate) {
+                continue;
+            }
+            // if current occurence is past our endDate - we're done
+            if ($occurrence > $endDate) {
+                break;
+            }
+            // if we reach getOccurrencesBetween()'s limit - we're done
+            if (NULL != $limit && ++$count > $limit) {
+                break;
+            }
+
+            $occurrences[] = $occurrence;
+        }
+
         return $occurrences;
     }
 
@@ -582,7 +598,12 @@ class When extends \DateTime
         $startDate = $this->startDate;
         $candidates = $this->getOccurrencesBetween($startDate, $occurDate);
         if (count($candidates)) {
-            return array_pop($candidates);
+            $lastDate = array_pop($candidates);
+            if ( $lastDate == $occurDate )
+            {
+                $lastDate = array_pop($candidates);
+            }
+            return $lastDate;
         }
         return false;
     }
@@ -883,7 +904,7 @@ class When extends \DateTime
 
         if ($limitRange && !isset($this->count))
         {
-            $this->count = 200;
+            $this->count = $this->rangeLimit;
         }
 
         // "Similarly, if the BYMINUTE, BYHOUR, BYDAY,
