@@ -837,11 +837,11 @@ class When extends \DateTime
 
                 foreach ($this->bysetpos as $setpos)
                 {
-                    if ($setpos > 0)
+                    if ($setpos > 0 && isset($occurrences[$setpos - 1]))
                     {
                         $filtered_occurrences[] = $occurrences[$setpos - 1];
                     }
-                    else
+                    elseif(isset($occurrences[$occurrenceCount + $setpos]))
                     {
                         $filtered_occurrences[] = $occurrences[$occurrenceCount + $setpos];
                     }

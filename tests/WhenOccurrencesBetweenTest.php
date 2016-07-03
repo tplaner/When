@@ -237,4 +237,31 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * First 4 2nd Fridays between July 3 - Nov 3 2016
+     * Checking against BYSETPOS caused undefined offset
+     * DTSTART;TZID=America/New_York:20160610T090000
+     * RRULE:FREQ=MONTHLY;BYDAY=FR;BYSETPOS=2;COUNT=3;
+     */
+    function testGetMonthlyOccurrencesBysetposUndefinedOffset()
+    {
+        $results[] = new DateTime("2016-07-08 09:00:00");
+        $results[] = new DateTime("2016-08-12 09:00:00");
+        $results[] = new DateTime("2016-09-09 09:00:00");
+        $results[] = new DateTime("2016-10-14 09:00:00");
+
+        $r = new When();
+        $r->startDate(new DateTime("20160610T090000"))
+          ->rrule("FREQ=MONTHLY;BYDAY=FR;BYSETPOS=2");
+        $occurrences = $r->getOccurrencesBetween(
+            new DateTime( "20160703T090000" ),
+            new DateTime( "20161103T090000" )
+        );
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
+
 }
