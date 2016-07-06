@@ -449,8 +449,10 @@ class When extends \DateTime
     // Get occurrences between two DateTimes, exclusive. Does not modify $this.
     public function getOccurrencesBetween($startDate, $endDate, $limit=NULL) {
 
+    	$thisClone = clone $this;
+
         // Enforce consistent time zones. Date comparisons don't require them, but +P1D loop does.
-        if ($tz = $this->getTimeZone()) {
+        if ($tz = $thisClone->getTimeZone()) {
             $startDate->setTimeZone($tz);
             $endDate->setTimeZone($tz);
         }
@@ -462,37 +464,47 @@ class When extends \DateTime
         }
 
         // if existing UNTIL < startDate - we have nothing
-        if (isset($this->until) && $this->until < $startDate) {
+        if (isset($thisClone->until) && $thisClone->until < $startDate) {
             return $occurrences;
         }
         // prevent unnecessary leg-work - our endDate is our new UNTIL
-        elseif (!isset($this->until)) {
-            $this->until = $endDate;
+        elseif (!isset($thisClone->until)) {
+            $thisClone->until = $endDate;
         }
 
-        $this->generateOccurrences();
-        $all_occurrences = $this->occurrences;
+        $thisClone->generateOccurrences();
+        $all_occurrences = $thisClone->occurrences;
 
-        // nothing found in $this->generateOccurrences();
+        // nothing found in $thisClone->generateOccurrences();
         if (empty($all_occurrences)) {
             return $occurrences;
         }
 
         $last_occurrence = end($all_occurrences);
 
+        // if we've hit the rangeLimit, restart looking but start at this last_occurrence
+        if ($thisClone->rangeLimit == count($all_occurrences)
+        	&& $thisClone->startDate != $last_occurrence)
+        {
+            $thisClone->startDate = clone $last_occurrence;
+
+            if (isset($thisClone->limit)) {
+                $thisClone->limit = $thisClone->limit - 200;
+            }
+
+            // clear all occurrences before our start date
+            foreach ($thisClone->occurrences as $key => $occurrence) {
+            	if ( $occurrence < $startDate )
+            	{
+            		unset($thisClone->occurrences[$key]);
+            	}
+            }
+
+            return $thisClone->getOccurrencesBetween($startDate, $endDate, $limit);
+        }
+
         // if our last occurrence is is before our startDate, we have nothing
         if ($last_occurrence < $startDate) {
-            // but if this is because we've hit a rangeLimit, it's not legit
-            // so restart looking, but start at this last_occurrence
-            if ($this->rangeLimit == count($all_occurrences)) {
-                $this->occurrences = array();
-                $this->startDate = clone $last_occurrence;
-                // IF limit is actually > 200... we should update our limit as well
-                if (isset($this->limit)) {
-                    $this->limit = $this->limit - 200;
-                }
-                return $this->getOccurrencesBetween($startDate, $endDate, $limit);
-            }
             return $occurrences;
         }
 
