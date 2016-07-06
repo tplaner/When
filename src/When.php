@@ -27,6 +27,7 @@ class When extends \DateTime
     public $wkst;
 
     public $occurrences = array();
+    public $rangeLimit  = 200;
 
     public function __construct($time = "now", $timezone = NULL)
     {
@@ -448,8 +449,10 @@ class When extends \DateTime
     // Get occurrences between two DateTimes, exclusive. Does not modify $this.
     public function getOccurrencesBetween($startDate, $endDate, $limit=NULL) {
 
+    	$thisClone = clone $this;
+
         // Enforce consistent time zones. Date comparisons don't require them, but +P1D loop does.
-        if ($tz = $this->getTimeZone()) {
+        if ($tz = $thisClone->getTimeZone()) {
             $startDate->setTimeZone($tz);
             $endDate->setTimeZone($tz);
         }
@@ -460,48 +463,73 @@ class When extends \DateTime
             return $occurrences;
         }
 
-        self::prepareDateElements(false);
+        // if existing UNTIL < startDate - we have nothing
+        if (isset($thisClone->until) && $thisClone->until < $startDate) {
+            return $occurrences;
+        }
+        // prevent unnecessary leg-work - our endDate is our new UNTIL
+        elseif (!isset($thisClone->until)) {
+            $thisClone->until = $endDate;
+        }
 
-        list($startDate, $endDate) = $this->findDateRangeOverlap($startDate, $endDate);
+        $thisClone->generateOccurrences();
+        $all_occurrences = $thisClone->occurrences;
 
-        // If we have a defined $count, we need to test from $this->startDate to ensure we stop at $count.
-        if ($this->count and ($startDate > $this->startDate)) {
-            $max_occurrences = $this->count - $this->countOccurrencesBefore($startDate);
-            if ($max_occurrences <= 0) {
-                return $occurrences;
+        // nothing found in $thisClone->generateOccurrences();
+        if (empty($all_occurrences)) {
+            return $occurrences;
+        }
+
+        $last_occurrence = end($all_occurrences);
+
+        // if we've hit the rangeLimit, restart looking but start at this last_occurrence
+        if ($thisClone->rangeLimit == count($all_occurrences)
+        	&& $thisClone->startDate != $last_occurrence)
+        {
+            $thisClone->startDate = clone $last_occurrence;
+
+            if (isset($thisClone->limit)) {
+                $thisClone->limit = $thisClone->limit - 200;
             }
-        }
-        else {
-            $max_occurrences = $this->count;
+
+            // clear all occurrences before our start date
+            foreach ($thisClone->occurrences as $key => $occurrence) {
+            	if ( $occurrence < $startDate )
+            	{
+            		unset($thisClone->occurrences[$key]);
+            	}
+            }
+
+            return $thisClone->getOccurrencesBetween($startDate, $endDate, $limit);
         }
 
-        if ($limit) {
-            if (! $max_occurrences || ($limit < $max_occurrences)) {
-                $max_occurrences = $limit;
-            }
+        // if our last occurrence is is before our startDate, we have nothing
+        if ($last_occurrence < $startDate) {
+            return $occurrences;
         }
 
-        $dateLooper = clone $startDate;
-        $firstDate = true;
-        while ($dateLooper < $endDate) {
-            if ($this->occursOn($dateLooper)) {
-                foreach ($this->generateTimeOccurrences($dateLooper) as $occur) {
-                    if ($firstDate) { // We might pick up an earlier time the same day.
-                        if ($occur < $startDate) {
-                            continue;
-                        }
-                    }
-                    if ($occur < $endDate) {
-                        $occurrences[] = $occur;
-                    }
-                    if ($max_occurrences && ($max_occurrences <= count($occurrences))) {
-                        return array_slice($occurrences, 0, $max_occurrences);
-                    }
-                }
+        // we have something to report, so reset our array pointer
+        reset($all_occurrences);
+
+        $count = 0;
+
+        foreach($all_occurrences as $occurrence) {
+            // fastforward our pointer to where it's >= startDate
+            if ($occurrence < $startDate) {
+                continue;
             }
-            $dateLooper->add(new \DateInterval('P1D'));
-            $firstDate = false;
+            // if current occurence is past our endDate - we're done
+            if ($occurrence > $endDate) {
+                break;
+            }
+            // if we reach getOccurrencesBetween()'s limit - we're done
+            if (NULL != $limit && ++$count > $limit) {
+                break;
+            }
+
+            $occurrences[] = $occurrence;
         }
+
         return $occurrences;
     }
 
@@ -582,7 +610,12 @@ class When extends \DateTime
         $startDate = $this->startDate;
         $candidates = $this->getOccurrencesBetween($startDate, $occurDate);
         if (count($candidates)) {
-            return array_pop($candidates);
+            $lastDate = array_pop($candidates);
+            if ( $lastDate == $occurDate )
+            {
+                $lastDate = array_pop($candidates);
+            }
+            return $lastDate;
         }
         return false;
     }
@@ -617,6 +650,8 @@ class When extends \DateTime
 
         while ($dateLooper < $this->until && count($this->occurrences) < $this->count)
         {
+            $occurrences = array();
+
             if ($this->freq === "yearly")
             {
                 if (isset($this->bymonths))
@@ -635,7 +670,7 @@ class When extends \DateTime
                             {
                                 if ($this->occursOn($dateLooper))
                                 {
-                                    $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
+                                    $occurrences = array_merge($occurrences, $this->generateTimeOccurrences($dateLooper));
                                 }
 
                                 $dateLooper->add(new \DateInterval('P1D'));
@@ -648,8 +683,7 @@ class When extends \DateTime
 
                             if ($this->occursOn($dateLooper))
                             {
-                                $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
-
+                                $occurrences = array_merge($occurrences, $this->generateTimeOccurrences($dateLooper));
                             }
                         }
                     }
@@ -673,13 +707,15 @@ class When extends \DateTime
                     {
                         if ($this->occursOn($dateLooper))
                         {
-                            $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
-
+                            $occurrences = array_merge($occurrences, $this->generateTimeOccurrences($dateLooper));
                         }
                         $dateLooper->add(new \DateInterval('P1D'));
                         $day++;
                     }
                 }
+
+                $occurrences = $this->prepareOccurrences($occurrences, $count);
+                $this->addOccurrence($occurrences);
 
                 $dateLooper = clone $this->startDate;
                 $dateLooper->add(new \DateInterval('P' . ($this->interval * ++$count) . 'Y'));
@@ -690,7 +726,6 @@ class When extends \DateTime
 
                 $day = (int)$dateLooper->format("j");
 
-                $occurrences = array();
                 while ($day <= $days)
                 {
                     if ($this->occursOn($dateLooper))
@@ -702,32 +737,8 @@ class When extends \DateTime
                     $day++;
                 }
 
-                // if bysetpos is set we need to limit the
-                // number of occurrences to only those which
-                // meet the setpos
-                if (isset($this->bysetpos))
-                {
-                    if ($count > 0)
-                    {
-                        $occurrenceCount = count($occurrences);
-
-                        foreach ($this->bysetpos as $setpos)
-                        {
-                            if ($setpos > 0)
-                            {
-                                $this->occurrences[] = $occurrences[$setpos - 1];
-                            }
-                            else
-                            {
-                                $this->occurrences[] = $occurrences[$occurrenceCount + $setpos];
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    $this->addOccurrence($occurrences);
-                }
+                $occurrences = $this->prepareOccurrences($occurrences, $count);
+                $this->addOccurrence($occurrences);
 
                 $dateLooper = clone $this->startDate;
                 $dateLooper->setDate($dateLooper->format("Y"), $dateLooper->format("n"), 1);
@@ -757,12 +768,15 @@ class When extends \DateTime
                 {
                     if ($this->occursOn($dateLooper))
                     {
-                        $this->addOccurrence($this->generateTimeOccurrences($dateLooper));
+                        $occurrences = array_merge($occurrences, $this->generateTimeOccurrences($dateLooper));
                     }
 
                     $dateLooper->add(new \DateInterval('P1D'));
                     $daysLeft--;
                 }
+
+                $occurrences = $this->prepareOccurrences($occurrences, $count);
+                $this->addOccurrence($occurrences);
 
                 $dateLooper = clone $this->startDate;
                 $dateLooper->setDate($startWeekDay->format("Y"), $startWeekDay->format("n"), $startWeekDay->format('j'));
@@ -823,6 +837,35 @@ class When extends \DateTime
         }
     }
 
+    protected function prepareOccurrences($occurrences, $count = 0)
+    {
+        if (isset($this->bysetpos))
+        {
+            $filtered_occurrences = array();
+
+            if ($count > 0)
+            {
+                $occurrenceCount = count($occurrences);
+
+                foreach ($this->bysetpos as $setpos)
+                {
+                    if ($setpos > 0 && isset($occurrences[$setpos - 1]))
+                    {
+                        $filtered_occurrences[] = $occurrences[$setpos - 1];
+                    }
+                    elseif(isset($occurrences[$occurrenceCount + $setpos]))
+                    {
+                        $filtered_occurrences[] = $occurrences[$occurrenceCount + $setpos];
+                    }
+                }
+            }
+
+            $occurrences = $filtered_occurrences;
+        }
+
+        return $occurrences;
+    }
+
     protected function addOccurrence($occurrences)
     {
         foreach ($occurrences as $occurrence)
@@ -873,7 +916,7 @@ class When extends \DateTime
 
         if ($limitRange && !isset($this->count))
         {
-            $this->count = 200;
+            $this->count = $this->rangeLimit;
         }
 
         // "Similarly, if the BYMINUTE, BYHOUR, BYDAY,

@@ -488,4 +488,51 @@ class WhenYearlyRruleTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * Every 1st Monday in April every year for 2 years (ticket #55)
+     * DTSTART;TZID=America/New_York:19970407T090000
+     * RRULE:FREQ=YEARLY;BYDAY=MO;BYSETPOS=1;BYMONTH=4;COUNT=2
+     */
+    function testYearlyTwelve()
+    {
+        $results[] = new DateTime("1997-04-07 09:00:00");
+        $results[] = new DateTime("1998-04-06 09:00:00");
+
+        $r = new When();
+        $r->startDate(new DateTime("19970407T090000"))
+          ->rrule("FREQ=YEARLY;BYDAY=MO;BYSETPOS=1;BYMONTH=4;COUNT=2")
+          ->generateOccurrences();
+
+        $occurrences = $r->occurrences;
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
+
+    /**
+     * Every 1st Monday, Tuesday, or Wednesday in April every year for 3 years (ticket #55)
+     * DTSTART;TZID=America/New_York:19970407T090000
+     * RRULE:FREQ=YEARLY;BYDAY=MO,TU,WE;BYSETPOS=1;BYMONTH=4;COUNT=3
+     */
+    function testYearlyThirteen()
+    {
+        $results[] = new DateTime("1997-04-07 09:00:00");
+        $results[] = new DateTime("1998-04-01 09:00:00");
+        $results[] = new DateTime("1999-04-05 09:00:00");
+
+        $r = new When();
+        $r->startDate(new DateTime("19970407T090000"))
+          ->rrule("FREQ=YEARLY;BYDAY=MO,TU,WE;BYSETPOS=1;BYMONTH=4;COUNT=3")
+          ->generateOccurrences();
+
+        $occurrences = $r->occurrences;
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
+
 }

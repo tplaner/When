@@ -211,4 +211,158 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($occurrences));
     }
 
+    /**
+     * Every 2nd Monday between Sept 1 - Dec 1 1997 (issue #58)
+     * Checking single BYDAY with BYSETPOS while Monthly
+     * DTSTART;TZID=America/New_York:19970908T090000
+     * RRULE:FREQ=MONTHLY;BYDAY=MO;BYSETPOS=2;
+     */
+    function testGetMonthlyOccurrencesBydayBysetpos()
+    {
+        $results[] = new DateTime("1997-09-08 09:00:00");
+        $results[] = new DateTime("1997-10-13 09:00:00");
+        $results[] = new DateTime("1997-11-10 09:00:00");
+
+        $r = new When();
+        $r->startDate(new DateTime("19970908T090000"))
+          ->rrule("FREQ=MONTHLY;BYDAY=MO;BYSETPOS=2;");
+        $occurrences = $r->getOccurrencesBetween(
+            new DateTime( "19970901T090000" ),
+            new DateTime( "19971201T090000" )
+        );
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
+
+    /**
+     * First 4 2nd Fridays between July 3 - Nov 3 2016
+     * Checking against BYSETPOS caused undefined offset
+     * DTSTART;TZID=America/New_York:20160610T090000
+     * RRULE:FREQ=MONTHLY;BYDAY=FR;BYSETPOS=2;COUNT=3;
+     */
+    function testGetMonthlyOccurrencesBysetposUndefinedOffset()
+    {
+        $results[] = new DateTime("2016-07-08 09:00:00");
+        $results[] = new DateTime("2016-08-12 09:00:00");
+        $results[] = new DateTime("2016-09-09 09:00:00");
+        $results[] = new DateTime("2016-10-14 09:00:00");
+
+        $r = new When();
+        $r->startDate(new DateTime("20160610T090000"))
+          ->rrule("FREQ=MONTHLY;BYDAY=FR;BYSETPOS=2");
+        $occurrences = $r->getOccurrencesBetween(
+            new DateTime( "20160703T090000" ),
+            new DateTime( "20161103T090000" )
+        );
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
+
+    /**
+     * Check if we capture occurrences beyond rangeLimit (200)
+     * DTSTART;TZID=America/New_York:19970902T090000
+     * RRULE:FREQ=WEEKLY;
+     *
+     * '2001-07-03 09:00:00' = #201
+     * '2001-07-31 09:00:00' = #205
+     */
+    function testOutsideRangeLimit()
+    {
+        $results[] = new DateTime('2001-07-03 09:00:00');
+        $results[] = new DateTime('2001-07-10 09:00:00');
+        $results[] = new DateTime('2001-07-17 09:00:00');
+        $results[] = new DateTime('2001-07-24 09:00:00');
+        $results[] = new DateTime('2001-07-31 09:00:00');
+
+        $r = new When();
+        $r->startDate(new DateTime("19970902T090000"))
+          ->rrule("FREQ=WEEKLY;");
+        $occurrences = $r->getOccurrencesBetween(
+            new DateTime( "20010702T090000" ),
+            new DateTime( "20010801T090000" )
+        );
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
+
+    /**
+     * Check if we capture occurrences within and beyond rangeLimit (200)
+     * DTSTART;TZID=America/New_York:19970902T090000
+     * RRULE:FREQ=WEEKLY;
+     *
+     * '2001-05-22 09:00:00' = #195
+     * '2001-07-31 09:00:00' = #205
+     */
+    function testRangeLimit()
+    {
+        $results[] = new DateTime('2001-05-22 09:00:00');
+        $results[] = new DateTime('2001-05-29 09:00:00');
+        $results[] = new DateTime('2001-06-05 09:00:00');
+        $results[] = new DateTime('2001-06-12 09:00:00');
+        $results[] = new DateTime('2001-06-19 09:00:00');
+        $results[] = new DateTime('2001-06-26 09:00:00');
+        $results[] = new DateTime('2001-07-03 09:00:00');
+        $results[] = new DateTime('2001-07-10 09:00:00');
+        $results[] = new DateTime('2001-07-17 09:00:00');
+        $results[] = new DateTime('2001-07-24 09:00:00');
+        $results[] = new DateTime('2001-07-31 09:00:00');
+
+        $r = new When();
+        $r->startDate(new DateTime("19970902T090000"))
+          ->rrule("FREQ=WEEKLY;");
+        $occurrences = $r->getOccurrencesBetween(
+            new DateTime( "20010521T090000" ),
+            new DateTime( "20010801T090000" )
+        );
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
+
+    /**
+     * Check that we don't alter results
+     * DTSTART;TZID=America/New_York:19970902T090000
+     * RRULE:FREQ=WEEKLY;
+     *
+     * '2001-07-03 09:00:00' = #201
+     * '2001-07-31 09:00:00' = #205
+     */
+    function testCurruptingThis()
+    {
+        $results[] = new DateTime('2001-07-03 09:00:00');
+        $results[] = new DateTime('2001-07-10 09:00:00');
+        $results[] = new DateTime('2001-07-17 09:00:00');
+        $results[] = new DateTime('2001-07-24 09:00:00');
+        $results[] = new DateTime('2001-07-31 09:00:00');
+
+        $r = new When();
+        $r->startDate(new DateTime("19970902T090000"))
+          ->rrule("FREQ=WEEKLY;");
+        $occurrences = $r->getOccurrencesBetween(
+            new DateTime( "20010521T090000" ),
+            new DateTime( "20010612T090000" )
+        );
+
+        $occurrences2 = $r->getOccurrencesBetween(
+            new DateTime( "20010702T090000" ),
+            new DateTime( "20010801T090000" )
+        );
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences2[$key]);
+        }
+    }
+
 }
