@@ -1,14 +1,11 @@
-##When
+# When
 Date/Calendar recursion library for PHP 5.3+
 
 [![Build Status](https://travis-ci.org/tplaner/When.png?branch=develop)](https://travis-ci.org/tplaner/When)
 
 Author: Tom Planer
 
-###About
-When version 2.
-
-###Installation
+## Installation
 ```
 $ composer require tplaner/when
 ```
@@ -21,7 +18,7 @@ $ composer require tplaner/when
 }
 ```
 
-###Current Features
+## Current Features
 Currently this version does everything version 1 was capable of, it also supports `byhour`, `byminute`, and `bysecond`. Please check the [unit tests](https://github.com/tplaner/When/tree/develop/tests) for information about how to use it.
 
 Here are some basic examples.
@@ -61,5 +58,5 @@ $occurrences = $r->getOccurrencesBetween(new DateTime('2018-01-01 09:00:00'),
 print_r($occurrences);
 ```
 
-###License
+## License
 When is licensed under the MIT License, see `LICENSE` for specific details.
