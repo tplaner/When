@@ -718,7 +718,15 @@ class When extends \DateTime
                 $this->addOccurrence($occurrences);
 
                 $dateLooper = clone $this->startDate;
+                // if we are on feb 29th and we must jump a year, we end up on march 1st, so if the rule is to
+                // always go to the end of february we enforce that
+                $correctForLeap = ($dateLooper->format('m-d') === '02-29'
+                    && in_array('2', $this->bymonths, true)
+                    && in_array('-1', $this->bymonthdays, true));
                 $dateLooper->add(new \DateInterval('P' . ($this->interval * ++$count) . 'Y'));
+                if ($correctForLeap) {
+                    $dateLooper->modify('last day of february');
+                }
             }
             else if ($this->freq === "monthly")
             {
