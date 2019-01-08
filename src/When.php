@@ -360,8 +360,13 @@ class When extends \DateTime
                 $numPeriods = $sinceStart->y;
                 break;
             case 'monthly':
-                $start = new \DateTime($this->startDate->format("Y-m-1\TH:i:sP"));
-                $sinceStart = $date->diff($start);
+                // Normalize to the first of the month, so patterns that land on nth weekday
+                // aren't affected by the shift of the nth weekday back and forth by day of month.
+                // Use UTC so timezone offset shifts don't cause fencepost errors.
+                $utc = new \DateTimezone("UTC");
+                $start = new \DateTime($this->startDate->format("Y-m-1\TH:i:s"), $utc);
+                $dateMonthStart = new \DateTime($date->format("Y-m-1\TH:i:s"), $utc);
+                $sinceStart = $dateMonthStart->diff($start);
                 $numYears = $sinceStart->y;
                 $numMonths = $sinceStart->m;
                 $numPeriods = ($numYears * 12) + $numMonths;
