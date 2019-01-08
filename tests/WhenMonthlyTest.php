@@ -561,4 +561,44 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($result, $occurrences[$key]);
         }
     }
+
+    /**
+     * Every three months (quarterly) on the first Monday of the month,
+     * starting January 7 2019, until February 2, 2021 (issue #TODO)
+     * DTSTART;TZID=America/New_York:20190107T170000
+     * RRULE:FREQ=MONTHLY;INTERVAL=3;BYDAY=1MO;WKST=MO;UNTIL=2021-02-01T18:00:00-0500
+     */
+    function testQuarterlyOne()
+    {
+        $tz = new DateTimeZone("America/New_York");
+
+        $results[] = new DateTime('2019-01-07 17:00:00', $tz);
+        $results[] = new DateTime('2019-04-01 17:00:00', $tz);
+        $results[] = new DateTime('2019-07-01 17:00:00', $tz);
+        $results[] = new DateTime('2019-10-07 17:00:00', $tz);
+        $results[] = new DateTime('2020-01-06 17:00:00', $tz);
+        $results[] = new DateTime('2020-04-06 17:00:00', $tz);
+        $results[] = new DateTime('2020-07-06 17:00:00', $tz);
+        $results[] = new DateTime('2020-10-05 17:00:00', $tz);
+        $results[] = new DateTime('2021-01-04 17:00:00', $tz);
+
+        $r = new When();
+        $r->startDate(new DateTime("20190107T170000", $tz))
+          ->freq("monthly")
+          ->interval(3)
+          ->byday('1MO')
+          ->until(new DateTime("2021-02-01T18:00:00", $tz))
+          ->generateOccurrences();
+
+        $occurrences = $r->occurrences;
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+
+        /* Check that $occurrences doesn't have extra results, as well */
+        $this->assertEquals(count($occurrences), count($results));
+    }
+
 }
