@@ -564,7 +564,7 @@ class WhenMonthlyTest extends PHPUnit_Framework_TestCase
 
     /**
      * Every three months (quarterly) on the first Monday of the month,
-     * starting January 7 2019, until February 2, 2021 (issue #TODO)
+     * starting January 7 2019, until February 2, 2021 (issue #71)
      * DTSTART;TZID=America/New_York:20190107T170000
      * RRULE:FREQ=MONTHLY;INTERVAL=3;BYDAY=1MO;WKST=MO;UNTIL=2021-02-01T18:00:00-0500
      */
