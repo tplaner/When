@@ -19,16 +19,19 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
         $results[] = new DateTime('1997-10-28 09:00:00');
         $results[] = new DateTime('1997-11-04 09:00:00');
 
-        $r = new When(); 
-        $r->startDate(new DateTime("19970902T090000")) 
+        $r = new When();
+        $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY");
-        
+
         $occurrences = $r->getOccurrencesBetween(new DateTime('1997-09-02 09:00:00'),
         new DateTime('1997-11-04 09:01:00'));
 
         foreach ($results as $key => $result) {
-             $this->assertEquals($result, $occurrences[$key]); 
+             $this->assertEquals($result, $occurrences[$key]);
         }
+
+        /* Check that $occurrences doesn't have extra dates, as well */
+        $this->assertEquals(count($occurrences), count($results));
     }
 
     /* Get slices of an unbounded weekly recurrence */
@@ -45,16 +48,19 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
         $results[] = new DateTime('2016-03-15 09:00:00');
         $results[] = new DateTime('2016-03-22 09:00:00');
 
-        $r = new When(); 
-        $r->startDate(new DateTime("19970902T090000")) 
+        $r = new When();
+        $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY");
-        
+
         $occurrences = $r->getOccurrencesBetween(new DateTime('2016-01-25 09:00:00'),
         new DateTime('2016-03-22 09:01:00'));
 
         foreach ($results as $key => $result) {
-             $this->assertEquals($result, $occurrences[$key]); 
+             $this->assertEquals($result, $occurrences[$key]);
         }
+
+        /* Check that $occurrences doesn't have extra dates, as well */
+        $this->assertEquals(count($occurrences), count($results));
     }
 
 
@@ -65,15 +71,15 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
         $results[] = new DateTime('1997-09-09 09:00:00');
         $results[] = new DateTime('1997-09-16 09:00:00');
 
-        $r = new When(); 
-        $r->startDate(new DateTime("19970902T090000")) 
+        $r = new When();
+        $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY");
-        
+
         $occurrences = $r->getOccurrencesBetween(new DateTime('1997-09-02 09:00:00'),
-        new DateTime('1997-11-04 09:01:00'), 3); 
+        new DateTime('1997-11-04 09:01:00'), 3);
 
         foreach ($results as $key => $result) {
-             $this->assertEquals($result, $occurrences[$key]); 
+             $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -91,15 +97,15 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
         $results[] = new DateTime('1997-10-28 09:00:00');
         $results[] = new DateTime('1997-11-04 09:00:00');
 
-        $r = new When(); 
-        $r->startDate(new DateTime("19970902T090000")) 
+        $r = new When();
+        $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY");
-        
+
         $occurrences = $r->getOccurrencesBetween(new DateTime('1987-09-02 09:00:00'),
         new DateTime('1997-11-04 09:01:00'));
 
         foreach ($results as $key => $result) {
-             $this->assertEquals($result, $occurrences[$key]); 
+             $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -118,17 +124,17 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
         $results[] = new DateTime('1997-10-28 09:00:00');
         $results[] = new DateTime('1997-11-04 09:00:00');
 
-        $r = new When(); 
-        $r->startDate(new DateTime("19970902T090000")) 
+        $r = new When();
+        $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY")
           ->until(new DateTime("19971105T090000"));;
-        
+
         $occurrences = $r->getOccurrencesBetween(new DateTime('1997-09-02 09:00:00'),
         new DateTime('2007-11-04 09:01:00'));
 
         $this->assertEquals(count($results), count($occurrences));
         foreach ($results as $key => $result) {
-             $this->assertEquals($result, $occurrences[$key]); 
+             $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -146,17 +152,17 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
         $results[] = new DateTime('1997-10-28 09:00:00');
         $results[] = new DateTime('1997-11-04 09:00:00');
 
-        $r = new When(); 
-        $r->startDate(new DateTime("19970902T090000")) 
+        $r = new When();
+        $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY")
           ->count(10);
-        
+
         $occurrences = $r->getOccurrencesBetween(new DateTime('1997-09-02 09:00:00'),
         new DateTime('2007-11-04 09:01:00'));
 
         $this->assertEquals(count($results), count($occurrences));
         foreach ($results as $key => $result) {
-             $this->assertEquals($result, $occurrences[$key]); 
+             $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
@@ -171,28 +177,28 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
         $results[] = new DateTime('1997-10-28 09:00:00');
         $results[] = new DateTime('1997-11-04 09:00:00');
 
-        $r = new When(); 
-        $r->startDate(new DateTime("19970902T090000")) 
+        $r = new When();
+        $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY")
           ->count(10);
-        
+
         $occurrences = $r->getOccurrencesBetween(new DateTime('1997-09-23 09:00:00'),
         new DateTime('2007-11-04 09:01:00'));
 
         $this->assertEquals(count($results), count($occurrences));
         foreach ($results as $key => $result) {
-             $this->assertEquals($result, $occurrences[$key]); 
+             $this->assertEquals($result, $occurrences[$key]);
         }
     }
 
     /* Test use of count on bounded occurrence, where no events match window */
     function testGetWeeklyOccurrenceWindowCountAndStartDateNoResults() {
 
-        $r = new When(); 
-        $r->startDate(new DateTime("19970902T090000")) 
+        $r = new When();
+        $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY")
           ->count(10);
-        
+
         $occurrences = $r->getOccurrencesBetween(new DateTime('1997-11-05 09:00:00'),
         new DateTime('2007-11-04 09:01:00'));
 
@@ -201,12 +207,12 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
 
     /* Empty results on backwards date range */
     function testGetWeeklyOccurrencesBackwardsDateRange() {
-        $r = new When(); 
-        $r->startDate(new DateTime("19970902T090000")) 
+        $r = new When();
+        $r->startDate(new DateTime("19970902T090000"))
           ->rrule("FREQ=WEEKLY");
-        
+
         $occurrences = $r->getOccurrencesBetween(new DateTime('1997-11-04 09:01:00'),
-        new DateTime('1997-09-02 09:00:00')); 
+        new DateTime('1997-09-02 09:00:00'));
 
         $this->assertEquals(0, count($occurrences));
     }
@@ -364,5 +370,47 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($result, $occurrences2[$key]);
         }
     }
+
+    /**
+     * Every three months (quarterly) on the first Monday of the month,
+     * starting January 7 2019, until February 2, 2021 (issue #71)
+     * DTSTART;TZID=America/Los_Angeles:20190107T170000
+     * RRULE:FREQ=MONTHLY;INTERVAL=3;BYDAY=1MO;WKST=MO;UNTIL=2021-02-01T18:00:00-0800
+     */
+    function testGetQuarterlyOccurrencesByDay()
+    {
+        $tz = new DateTimeZone("America/New_York");
+
+        $results[] = new DateTime('2019-01-07 17:00:00', $tz);
+        $results[] = new DateTime('2019-04-01 17:00:00', $tz);
+        $results[] = new DateTime('2019-07-01 17:00:00', $tz);
+        $results[] = new DateTime('2019-10-07 17:00:00', $tz);
+        $results[] = new DateTime('2020-01-06 17:00:00', $tz);
+
+        $startDt = new DateTime("20190107T170000", $tz);
+
+        $r = new When();
+        $r->startDate($startDt)
+          ->freq("monthly")
+          ->interval(3)
+          ->byday("1MO")
+          ->wkst("MO")
+          ->until(new DateTime("2021-02-01T18:00:00", $tz))
+          ->generateOccurrences();
+
+        $occurrences = $r->getOccurrencesBetween(
+            new DateTime("20190101T170000"),
+            new DateTime("20200301T170000")
+        );
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+
+        /* Check that $occurrences doesn't have extra dates, as well */
+        $this->assertEquals(count($occurrences), count($results));
+    }
+
 
 }
