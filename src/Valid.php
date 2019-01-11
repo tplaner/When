@@ -211,4 +211,15 @@ class Valid
     {
         return (is_object($dateTime) && $dateTime instanceof \DateTime);
     }
+    
+    /**
+     * Test for a list of valid DateTime objects
+     *
+     * @param  aray $dateTimes
+     * @return bool
+     */
+    public static function dateTimeList($dateTimes)
+    {
+        return is_array($dateTimes) && array_filter($dateTimes, [__CLASS__, 'dateTimeObject']);
+    }
 }
