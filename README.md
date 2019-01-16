@@ -47,6 +47,20 @@ print_r($r->occurrences);
 ```
 
 ```php
+// friday the 13th for the next 5 occurrences, skipping known friday the 13ths
+$r = new When();
+$r->startDate(new DateTime("19980213T090000"))
+  ->freq("monthly")
+  ->count(5)
+  ->byday("fr")
+  ->bymonthday(13)
+  ->exclusions('19990813T090000,20001013T090000')
+  ->generateOccurrences();
+
+print_r($r->occurrences);
+```
+
+```php
 // friday the 13th forever; see which ones occur in 2018
 $r = new When();
 $r->startDate(new DateTime("19980213T090000"))

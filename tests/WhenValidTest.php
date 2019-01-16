@@ -266,4 +266,19 @@ class WhenValidTest extends \PHPUnit_Framework_TestCase {
     {
 
     }
+    
+    public function testValidDateTimeList()
+    {
+        $this->assertTrue(Valid::dateTimeList([date_create()]));
+        $this->assertTrue(Valid::dateTimeList([date_create(),date_create()]));
+        $this->assertTrue(Valid::dateTimeList([date_create(), 'string']));
+    }
+    public function testInvalidDateTimeList() {
+        $this->assertFalse(Valid::dateTimeList([]));
+        $this->assertFalse(Valid::dateTimeList('string'));
+        $this->assertFalse(Valid::dateTimeList('string, string2'));
+        $this->assertFalse(Valid::dateTimeList(['string', 'string2']));
+    }
 }
+
+class FakeObject {}

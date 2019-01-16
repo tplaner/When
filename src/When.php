@@ -14,6 +14,7 @@ class When extends \DateTime
     public $until;
     public $count;
     public $interval;
+    public $exclusions = array();
 
     public $byseconds;
     public $byminutes;
@@ -149,6 +150,34 @@ class When extends \DateTime
         }
 
         throw new \InvalidArgumentException("bydays: Accepts (optional) positive and negative values between 1 and 53 followed by a valid week day");
+    }
+    
+    public function exclusions ($exclusionList, $delimiter = ",") {
+        
+        if (is_string($exclusionList)) {
+            if (strpos($exclusionList, $delimiter) !== false)
+            {
+                // remove any accidental delimiters
+                $exclusionList = trim($exclusionList, $delimiter);
+    
+                $exclusionList = explode($delimiter, $exclusionList);
+            }
+            else
+            {
+                // remove any accidental delimiters
+                $exclusionList = trim($exclusionList, $delimiter);
+    
+                $exclusionList = array($exclusionList);
+            }
+            
+            $exclusionList = array_map('date_create',$exclusionList);
+        }
+        if (is_array($exclusionList)  && Valid::dateTimeList($exclusionList))
+        {
+            $this->exclusions = array_filter($exclusionList,['When\Valid','dateTimeObject']);
+            return $this;
+        }
+        throw new \InvalidArgumentException("exclusions: Accepts (optional) a array of date time objects or a string seperated by a specified delimiter.");
     }
 
     public function bymonthday($bymodaylist, $delimiter = ",")
@@ -876,7 +905,7 @@ class When extends \DateTime
         foreach ($occurrences as $occurrence)
         {
             // make sure that this occurrence isn't already in the list
-            if (!in_array($occurrence, $this->occurrences))
+            if (!in_array($occurrence, $this->occurrences) && (!count($this->exclusions) || !in_array($occurrence,$this->exclusions)))
             {
                 $this->occurrences[] = $occurrence;
             }
