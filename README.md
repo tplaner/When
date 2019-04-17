@@ -1,21 +1,14 @@
 # When
-Date/Calendar recursion library for PHP 5.3+
+Date/Calendar recursion library for PHP 7.1+
 
-[![Build Status](https://travis-ci.org/tplaner/When.png?branch=develop)](https://travis-ci.org/tplaner/When)
+[![Build Status](https://img.shields.io/travis/tplaner/When/master.svg?style=flat-square)](https://travis-ci.org/tplaner/When)
+[![Total Downloads](https://img.shields.io/packagist/dt/tplaner/When.svg?style=flat-square)](https://packagist.org/packages/tplaner/When)
 
 Author: Tom Planer
 
 ## Installation
 ```
-$ composer require tplaner/when
-```
-
-```
-{
-    "require": {
-        "tplaner/when": "2.*"
-    }
-}
+composer require tplaner/When
 ```
 
 ## Current Features
@@ -65,7 +58,6 @@ print_r($r->occurrences);
 $r = new When();
 $r->startDate(new DateTime("19980213T090000"))
   ->rrule("FREQ=MONTHLY;BYDAY=FR;BYMONTHDAY=13");
-
 
 $occurrences = $r->getOccurrencesBetween(new DateTime('2018-01-01 09:00:00'),
                                          new DateTime('2019-01-01 09:00:00'));

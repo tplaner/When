@@ -2,7 +2,7 @@
     "name": "tplaner/when",
     "type": "library",
     "description": "Date/Calendar recursion library.",
-    "keywords": ["recurrence", "date", "time", "DateTime"],
+    "keywords": ["recurrence", "date", "time", "DateTime", "repeat"],
     "homepage": "https://github.com/tplaner/When",
     "license": "MIT",
     "authors": [
@@ -12,10 +12,10 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=7.1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "^8"
     },
     "autoload": {
         "psr-4": {
