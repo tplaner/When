@@ -1,8 +1,9 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use When\When;
 
-class WhenWeeklyRruleTest extends PHPUnit_Framework_TestCase
+class WhenWeeklyRruleTest extends TestCase
 {
     /**
      * Weekly for 10 occurrences:

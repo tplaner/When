@@ -1,8 +1,10 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+use When\InvalidStartDate;
 use When\When;
 
-class WhenCoreTest extends \PHPUnit_Framework_TestCase {
+class WhenCoreTest extends TestCase {
 
     /*public function testValidDateString()
     {
@@ -12,11 +14,10 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('DateTime', $test);
     }*/
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidDateString()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When();
         $test->startDate('asdasd');
     }
@@ -45,20 +46,18 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->freq, "hourly");
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidFreq()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When();
         $test->freq("monthy");
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidStartDate()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When();
         $test->startDate("test");
     }
@@ -73,22 +72,20 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->until, $date);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidUntil()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When();
         $test->until("test");
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidDateObject()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When();
-        $test->startDate(new FakeObject);
+        $test->startDate(new WhenFakeObject);
     }
 
     /* it is important we have this working */
@@ -100,15 +97,15 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('DateTime', $test);
     }
 
-    public function testPrepareList()
+    /*public function testPrepareList()
     {
-        /*$method = new ReflectionMethod('When\\When', 'prepareList');
+        $method = new ReflectionMethod('When\\When', 'prepareList');
         $method->setAccessible(true);
 
         $response = array(1, 2, 3, 4);
 
-        $this->assertEquals($method::prepareList(1, 2, "3", 4), $response);*/
-    }
+        $this->assertEquals($method::prepareList(1, 2, "3", 4), $response);
+    }*/
 
     public function testValidWkst()
     {
@@ -118,11 +115,10 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->wkst, 'mo');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidWkst()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->wkst('va');
     }
@@ -169,11 +165,10 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->bymonthdays, array(1, 2, 3));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidByMonthDay()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->bymonthday(32);
     }
@@ -220,11 +215,10 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->byyeardays, array(1, 2, 3));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidByYearDay()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->byyearday(367);
     }
@@ -271,11 +265,10 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->byweeknos, array(1, 2, 3));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidByWeekNo()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->byweekno(55);
     }
@@ -317,11 +310,10 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->bymonths, array(1, 2, 3));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidByMonth()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->bymonth(-1);
     }
@@ -368,77 +360,76 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->bysetpos, array(1, 2, 3));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidBySetPos()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->bysetpos(367);
     }
-    
+
     public function testValidExclusions()
     {
         $validDateTimes = array(
             new DateTime('2019-01-01'),
             new DateTime('2019-01-02')
         );
-        
+
         //Verify exclusion list can be generated with a string
         $test = new When;
         $test->exclusions('2019-01-01');
         $this->assertEquals($test->exclusions,array($validDateTimes[0]));
-        
+
         //Verify exclusion list with multiple values can be generated by a comma separate string
         $test = new When;
-        $test->exclusions('2019-01-01, 2019-01-02'); 
+        $test->exclusions('2019-01-01, 2019-01-02');
         $this->assertEquals($test->exclusions,array(
                 $validDateTimes[0],
                 $validDateTimes[1]
         ));
-        
+
         //Verify exclusion list can be generated with multiple values separate by a custom delimiter
         $test = new When;
-        $test->exclusions('2019-01-01|2019-01-02',"|"); 
+        $test->exclusions('2019-01-01|2019-01-02',"|");
         $this->assertEquals($test->exclusions,array(
                 $validDateTimes[0],
                 $validDateTimes[1]
         ));
-        
+
         //Verify exclusion list can be generated after trimming a single trailing delimiters
         $test = new When;
-        $test->exclusions('2019-01-01,2019-01-02,,'); 
+        $test->exclusions('2019-01-01,2019-01-02,,');
         $this->assertEquals($test->exclusions,array(
                 $validDateTimes[0],
                 $validDateTimes[1]
         ));
-        
+
         //Verify exclusion list can be generated after trimming a multiple trailing delimiters
         $test = new When;
-        $test->exclusions('2019-01-01,2019-01-02,,,,'); 
+        $test->exclusions('2019-01-01,2019-01-02,,,,');
         $this->assertEquals($test->exclusions,array(
                 $validDateTimes[0],
                 $validDateTimes[1]
         ));
-        
+
         //Verify exclusion list can be generated by passing in an array of date_times
         $test = new When;
-        $test->exclusions(array($validDateTimes[0],$validDateTimes[1])); 
+        $test->exclusions(array($validDateTimes[0],$validDateTimes[1]));
         $this->assertEquals($test->exclusions,array(
                 $validDateTimes[0],
                 $validDateTimes[1]
         ));
-        
+
     }
-    /**
-     * @expectedException InvalidArgumentException
-     */
+
     public function testInvalidExclusions()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->exclusions('notDateStringOrArray');
     }
-    
+
     public function testValidbyDay()
     {
         $test = new When;
@@ -474,11 +465,10 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->bydays, array("5mo"));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidbyDay()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->byday(array("+5MO", "-20MO", "31TU", "-92SA"));
     }
@@ -520,20 +510,18 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->byhours, array(1, 2, 3));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidByHourOne()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->byhour(24);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidByHourTwo()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->byhour('-1, -2');
     }
@@ -575,20 +563,18 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->byminutes, array(1, 2, 3));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidByMinuteOne()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->byminute(65);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidByMinuteTwo()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->byminute('-1, -2');
     }
@@ -630,20 +616,18 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->byseconds, array(1, 2, 3));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidBySecondOne()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->bysecond(65);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidBySecondTwo()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->bysecond('-1, -2');
     }
@@ -661,11 +645,10 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->interval, 20);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidInterval()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->interval('week');
     }
@@ -683,49 +666,23 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($test->count, 20);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidCount()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $test = new When;
         $test->count('weekly');
     }
 
-    /**
-     * @expectedException \When\InvalidStartDate
-     */
     public function testGenerateOccurrencesErrorException()
     {
+        $this->expectException(InvalidStartDate::class);
+
         $test = new When;
 
         $test->startDate(new DateTime("19970905T090000"))
             ->rrule("FREQ=MONTHLY;COUNT=3;BYDAY=TU,WE,TH;BYSETPOS=3")
             ->generateOccurrences();
-    }
-
-    /**
-     * @expectedException PHPUnit_Framework_Error_Notice
-     */
-    public function testGenerateOccurrencesErrorNotice()
-    {
-        $results[] = new DateTime('1997-10-07 09:00:00');
-        $results[] = new DateTime('1997-11-06 09:00:00');
-
-        $test = new When;
-
-        $test->RFC5545_COMPLIANT = When::NOTICE;
-
-        $test->startDate(new DateTime("19970905T090000"))
-            ->rrule("FREQ=MONTHLY;COUNT=3;BYDAY=TU,WE,TH;BYSETPOS=3")
-            ->generateOccurrences();
-
-        $occurrences = $test->occurrences;
-
-        foreach ($results as $key => $result)
-        {
-            $this->assertEquals($result, $occurrences[$key]);
-        }
     }
 
     public function testGenerateOccurrencesErrorIgnored()
@@ -748,6 +705,27 @@ class WhenCoreTest extends \PHPUnit_Framework_TestCase {
             $this->assertEquals($result, $occurrences[$key]);
         }
     }
+
+    public function testIgnoreRrulePrefix()
+    {
+        $results[] = new DateTime('1997-09-02 09:00:00');
+        $results[] = new DateTime('1997-09-12 09:00:00');
+        $results[] = new DateTime('1997-09-22 09:00:00');
+        $results[] = new DateTime('1997-10-02 09:00:00');
+        $results[] = new DateTime('1997-10-12 09:00:00');
+
+        $r = new When();
+        $r->startDate(new DateTime("19970902T090000"))
+            ->rrule("RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5")
+            ->generateOccurrences();
+
+        $occurrences = $r->occurrences;
+
+        foreach ($results as $key => $result)
+        {
+            $this->assertEquals($result, $occurrences[$key]);
+        }
+    }
 }
 
-class FakeObject {}
+class WhenFakeObject {}

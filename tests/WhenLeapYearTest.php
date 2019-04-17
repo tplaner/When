@@ -1,11 +1,8 @@
 <?php
 
-/**
- * @author Jordi Boggiano <j.boggiano@seld.be>
- * @author Andrea Faulds <ajf@ajf.me>
- */
+use PHPUnit\Framework\TestCase;
 
-class WhenLeapYearTest extends PHPUnit_Framework_TestCase
+class WhenLeapYearTest extends TestCase
 {
     public function testRRuleEndOfMonthOnLeapYear()
     {

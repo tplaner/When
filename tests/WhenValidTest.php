@@ -1,8 +1,10 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use When\Valid;
 
-class WhenValidTest extends \PHPUnit_Framework_TestCase {
+class WhenValidTest extends TestCase
+{
 
     public function testValidDateTimeObject()
     {
@@ -262,17 +264,18 @@ class WhenValidTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse(Valid::ordMoDay(32));
     }
 
-    public function testByFreqValid()
+    /*public function testByFreqValid()
     {
 
-    }
-    
+    }*/
+
     public function testValidDateTimeList()
     {
         $this->assertTrue(Valid::dateTimeList([date_create()]));
         $this->assertTrue(Valid::dateTimeList([date_create(),date_create()]));
         $this->assertTrue(Valid::dateTimeList([date_create(), 'string']));
     }
+
     public function testInvalidDateTimeList() {
         $this->assertFalse(Valid::dateTimeList([]));
         $this->assertFalse(Valid::dateTimeList('string'));

@@ -1,8 +1,9 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use When\When;
 
-class WhenMinutelyTest extends \PHPUnit_Framework_TestCase
+class WhenMinutelyTest extends TestCase
 {
     /**
      * Every hour and a half for 4 occurrences:

@@ -1,8 +1,9 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use When\When;
 
-class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
+class WhenOccurrencesBetweenTest extends TestCase
 {
 
     /* Get slices of an unbounded weekly recurrence */
@@ -269,12 +270,12 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($result, $occurrences[$key]);
         }
     }
-    
+
     function testGetOccurrencesBetweenWithExclusions() {
         $results[] = new DateTime("2016-07-08 09:00:00");
         $results[] = new DateTime("2016-09-09 09:00:00");
         $results[] = new DateTime("2016-10-14 09:00:00");
-        
+
         $r = new When();
         $r->startDate(new DateTime("20160610T090000"))
           ->rrule("FREQ=MONTHLY;BYDAY=FR;BYSETPOS=2")
@@ -283,14 +284,14 @@ class WhenOccurrencesBetweenTest extends PHPUnit_Framework_TestCase
             new DateTime( "20160703T090000" ),
             new DateTime( "20161103T090000" )
         );
-        
+
          foreach ($results as $key => $result)
         {
             $this->assertEquals($result, $occurrences[$key]);
         }
-        
+
     }
-    
+
     /**
      * Check if we capture occurrences beyond rangeLimit (200)
      * DTSTART;TZID=America/New_York:19970902T090000

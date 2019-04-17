@@ -1,8 +1,9 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use When\When;
 
-class WhenHourlyTest extends \PHPUnit_Framework_TestCase
+class WhenHourlyTest extends TestCase
 {
     /**
      * I believe this rrule has a typo, the time zones don't match.

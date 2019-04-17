@@ -1,8 +1,9 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use When\When;
 
-class WhenYearlyRruleTest extends \PHPUnit_Framework_TestCase
+class WhenYearlyRruleTest extends TestCase
 {
     /**
      * DTSTART;TZID=US-Eastern:19970610T090000
