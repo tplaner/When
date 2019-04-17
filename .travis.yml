@@ -6,7 +6,8 @@ php:
   - 7.3
 
 before_script:
-  - composer selfupdate
-  - composer install
+  - travis_retry composer self-update
+  - travis_retry composer update --no-interaction --prefer-source
 
-script: phpunit
+script:
+  - vendor/bin/phpunit
