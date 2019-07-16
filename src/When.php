@@ -906,6 +906,31 @@ class When extends DateTime
         }
     }
 
+    public function toRRule()
+  	{
+  		$rrule = array();
+
+  		if($this->startDate) $rrule['DTSTART']=$this->startDate->format('Ymd\THis\Z');
+  		if($this->freq) $rrule['FREQ']=$this->freq;
+  		if($this->until) $rrule['UNTIL']=$this->until->format('Ymd\THis\Z');
+  		if($this->count) $rrule['COUNT']=$this->count;
+  		if($this->interval) $rrule['INTERVAL']=$this->interval;
+  		if($this->bydays) $rrule['BYDAY']=implode(',', $this->bydays);
+  		if($this->bymonthdays) $rrule['BYMONTHDAY']=implode(',', $this->bymonthdays);
+  		if($this->byyeardays) $rrule['BYYEARDAY']=implode(',', $this->byyeardays);
+  		if($this->byweeknos) $rrule['BYWEEKNO']=implode(',', $this->byweeknos);
+  		if($this->bymonths) $rrule['BYMONTH']=implode(',', $this->bymonths);
+  		if($this->bysetpos) $rrule['BYSETPOS']=implode(',', $this->bysetpos);
+  		if($this->wkst) $rrule['WKST']=$this->wkst;
+
+  		$data = array();
+  		foreach($rrule as $key => $val) {
+  			$data[] = $key.'='.(string)$val;
+  		}
+  		$data = implode(';', $data);
+  		return $data;
+  	}
+
     protected function prepareOccurrences($occurrences, $count = 0)
     {
         if (isset($this->bysetpos))
@@ -1129,6 +1154,7 @@ class When extends DateTime
 
         return $_days;
     }
+
 }
 
 class InvalidCombination extends Exception
