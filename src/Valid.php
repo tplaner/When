@@ -143,7 +143,7 @@ class Valid
      */
     public static function ordWk($ordwk)
     {
-        return ($ordwk >= 1 && $ordwk <= 53);
+        return ($ordwk >= 0 && $ordwk <= 53);
     }
 
     /**
