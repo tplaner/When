@@ -1116,6 +1116,7 @@ class When extends DateTime
                 !isset($this->bysetpos))
             {
                 $this->bymonth($this->startDate->format('n'));
+                $this->bymonthdays = [$this->startDate->format('j')];
             }
         }
 
