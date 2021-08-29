@@ -567,11 +567,6 @@ class When extends DateTime
         {
             $thisClone->startDate = clone $last_occurrence;
 
-            if (isset($thisClone->limit))
-            {
-                $thisClone->limit = $thisClone->limit - 200;
-            }
-
             // clear all occurrences before our start date
             foreach ($thisClone->occurrences as $key => $occurrence)
             {
