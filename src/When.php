@@ -62,7 +62,7 @@ class When extends DateTime
             return $this;
         }
 
-        throw new InvalidArgumentException("freq: Accepts " . rtrim(implode(Valid::$frequencies, ", "), ","));
+        throw new InvalidArgumentException("freq: Accepts " . rtrim(implode(", ", Valid::$frequencies), ","));
     }
 
     public function until($endDate)
@@ -244,7 +244,7 @@ class When extends DateTime
             return $this;
         }
 
-        throw new InvalidArgumentException("wkst: Accepts " . rtrim(implode(Valid::$weekDays, ", "), ","));
+        throw new InvalidArgumentException("wkst: Accepts " . rtrim(implode(", ", Valid::$weekDays), ","));
     }
 
     public function rrule($rrule)
