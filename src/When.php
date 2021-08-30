@@ -614,7 +614,7 @@ class When extends DateTime
         return $occurrences;
     }
 
-    public function toRrule($glue = ';')
+    public function torrule($glue = ';')
     {
         $rrule = [];
 
