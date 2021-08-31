@@ -433,9 +433,9 @@ class WhenCoreTest extends TestCase {
     public function testValidbyDay()
     {
         $test = new When;
-        $test->byday(array("+5MO", "-20MO", "31TU", "SA"));
+        $test->byday(array("+5MO", "-20MO", "31TU", "SA", "0TU"));
 
-        $this->assertEquals($test->bydays, array("5mo", "-20mo", "31tu", "0sa"));
+        $this->assertEquals($test->bydays, array("5mo", "-20mo", "31tu", "0sa", "0tu"));
 
         $test = new When;
         $test->byday(array("+5mo", "-20MO", "31tU", "SA"));

@@ -154,7 +154,7 @@ class When extends DateTime
             return $this;
         }
 
-        throw new InvalidArgumentException("bydays: Accepts (optional) positive and negative values between 1 and 53 followed by a valid week day");
+        throw new InvalidArgumentException("bydays: Accepts (optional) positive and negative values between -53 and 53 followed by a valid week day");
     }
 
     public function exclusions($exclusionList, $delimiter = ",")

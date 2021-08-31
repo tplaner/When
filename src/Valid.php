@@ -23,6 +23,8 @@ class Valid
         {
             // if it isn't negative, it's positive
             $day = ltrim($day, "+");
+            // zero is allowed, but we don't need to validate it
+            $day = ltrim($day, "0");
             $day = trim($day);
 
             $ordwk = 1;
@@ -211,7 +213,7 @@ class Valid
     {
         return (is_object($dateTime) && $dateTime instanceof \DateTime);
     }
-    
+
     /**
      * Test for a list of valid DateTime objects
      *
