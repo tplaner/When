@@ -331,4 +331,15 @@ class WhenWeeklyRruleTest extends TestCase
             $this->assertEquals($result, $occurrences[$key]);
         }
     }
+
+    function testGeneratedTimeGreaterThanUntilDateTimeBug()
+    {
+        $r = new When();
+        $r->startDate(new \DateTime("2021-08-31 09:00:00"))
+            ->rrule("FREQ=WEEKLY;BYDAY=TU;BYHOUR=18;BYMINUTE=0;BYSECOND=0")
+            ->until(new \DateTime("2021-08-31 17:00:00"))
+            ->generateOccurrences();
+
+        $this->assertEquals([], $r->occurrences);
+    }
 }

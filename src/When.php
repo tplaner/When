@@ -1008,7 +1008,10 @@ class When extends DateTime
                 {
                     $occurrence = clone $dateLooper;
                     $occurrence->setTime($hour, $minute, $second);
-                    $occurrences[] = $occurrence;
+
+                    if ($occurrence <= $this->until) {
+                        $occurrences[] = $occurrence;
+                    }
                 }
             }
         }
