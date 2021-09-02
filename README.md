@@ -1,8 +1,10 @@
 # When
 Date/Calendar recursion library for PHP 7.1+
 
-[![Build Status](https://img.shields.io/travis/tplaner/When/master.svg?style=flat-square)](https://travis-ci.org/tplaner/When)
-[![Total Downloads](https://img.shields.io/packagist/dt/tplaner/When.svg?style=flat-square)](https://packagist.org/packages/tplaner/When)
+[![Build Status](https://github.com/tplaner/When/actions/workflows/tests.yml/badge.svg)](https://github.com/tplaner/When/actions)
+[![Total Downloads](https://img.shields.io/packagist/dt/tplaner/When)](https://packagist.org/packages/tplaner/When)
+[![Latest Stable Version](https://img.shields.io/packagist/v/tplaner/When)](https://packagist.org/packages/tplaner/When)
+[![License](https://img.shields.io/packagist/l/tplaner/When)](https://packagist.org/packages/tplaner/When)
 
 Author: [Tom Planer](https://twitter.com/tplaner)
 
@@ -194,6 +196,3 @@ $r->startDate(new DateTime())
 // 400 occurrences, limited by the rangeLimit
 print_r($r->occurrences);
 ```
-
-## License
-When is licensed under the MIT License, see `LICENSE` for specific details.
