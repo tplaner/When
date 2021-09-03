@@ -1,0 +1,39 @@
+name: tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: true
+      matrix:
+        php: ['7.1', '7.2', '7.3', '7.4']
+        stability: [prefer-lowest, prefer-stable]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+
+    - name: Check PHP Version
+      run: php -v
+
+    - name: Composer install
+      run: composer install --prefer-dist --no-progress
+      
+    - name: phpunit tests
+      run: ./vendor/bin/phpunit
