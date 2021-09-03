@@ -624,6 +624,9 @@ class When extends DateTime
         if (isset($this->count)) $rrule['COUNT'] = $this->count;
         if (isset($this->interval)) $rrule['INTERVAL'] = $this->interval;
         if (isset($this->bydays)) $rrule['BYDAY'] = implode(',', $this->bydays);
+        if (isset($this->byhours)) $rrule['BYHOUR'] = implode(',', $this->byhours);
+        if (isset($this->byminutes)) $rrule['BYMINUTE'] = implode(',', $this->byminutes);
+        if (isset($this->byseconds)) $rrule['BYSECOND'] = implode(',', $this->byseconds);
         if (isset($this->bymonthdays)) $rrule['BYMONTHDAY'] = implode(',', $this->bymonthdays);
         if (isset($this->byyeardays)) $rrule['BYYEARDAY'] = implode(',', $this->byyeardays);
         if (isset($this->byweeknos)) $rrule['BYWEEKNO'] = implode(',', $this->byweeknos);
