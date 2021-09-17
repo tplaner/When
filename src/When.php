@@ -305,7 +305,7 @@ class When extends DateTime
         return $this;
     }
 
-    public function occursOn(DateTime $date)
+    public function occursOn(\DateTimeInterface $date)
     {
         if (!Valid::dateTimeObject($date))
         {

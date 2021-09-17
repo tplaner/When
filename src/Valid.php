@@ -211,7 +211,7 @@ class Valid
      */
     public static function dateTimeObject($dateTime)
     {
-        return (is_object($dateTime) && $dateTime instanceof \DateTime);
+        return (is_object($dateTime) && ($dateTime instanceof \DateTimeInterface));
     }
 
     /**
