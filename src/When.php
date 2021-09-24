@@ -666,14 +666,15 @@ class When extends DateTime
 
     private static function abbrevToDayName($abbrev)
     {
-        $daynames = array('su' => 'Sunday',
+        $daynames = [
+            'su' => 'Sunday',
             'mo' => 'Monday',
             'tu' => 'Tuesday',
             'we' => 'Wednesday',
             'th' => 'Thursday',
             'fr' => 'Friday',
-            'sa' => 'Saturyday',
-        );
+            'sa' => 'Saturday',
+        ];
         return $daynames[strtolower($abbrev)];
     }
 
