@@ -1190,7 +1190,7 @@ class When extends DateTime
 
 class InvalidCombination extends Exception
 {
-    public function __construct($message = "Invalid combination.", $code = 0, Exception $previous = null)
+    public function __construct($message = "Invalid combination.", $code = 0, ?Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
@@ -1198,7 +1198,7 @@ class InvalidCombination extends Exception
 
 class FrequencyRequired extends Exception
 {
-    public function __construct($message = "You are required to set a frequency.", $code = 0, Exception $previous = null)
+    public function __construct($message = "You are required to set a frequency.", $code = 0, ?Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
@@ -1206,7 +1206,7 @@ class FrequencyRequired extends Exception
 
 class InvalidStartDate extends Exception
 {
-    public function __construct($message = "The start date must be the first occurrence.", $code = 0, Exception $previous = null)
+    public function __construct($message = "The start date must be the first occurrence.", $code = 0, ?Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
