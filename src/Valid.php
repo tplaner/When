@@ -184,11 +184,14 @@ class Valid
     /**
      * Test for valid weekDay
      *
-     * @param  string $weekDay
+     * @param  string|null $weekDay
      * @return bool
      */
     public static function weekDay($weekDay)
     {
+        if ($weekDay === null) {
+            return false;
+        }
         return in_array(strtolower($weekDay), self::$weekDays);
     }
 
