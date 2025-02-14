@@ -695,7 +695,7 @@ class WhenCoreTest extends TestCase {
         $test->RFC5545_COMPLIANT = When::IGNORE;
 
         $test->startDate(new DateTime("19970905T090000"))
-            ->rrule("FREQ=MONTHLY;COUNT=3;BYDAY=TU,WE,TH;BYSETPOS=3")
+            ->rrule("FREQ=MONTHLY;COUNT=2;BYDAY=TU,WE,TH;BYSETPOS=3")
             ->generateOccurrences();
 
         $occurrences = $test->occurrences;
